@@ -30,6 +30,12 @@
   /* Fontes */
   --font-heading: 'Merriweather', Georgia, serif;
   --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Aliases extras (referenciados em várias páginas) */
+  --header-teal: var(--palette-teal-dark);
+  --header-teal-dark: var(--palette-teal-dark);
+  --accent-wine: var(--palette-burgundy);
+  --text-dark: var(--palette-navy-dark);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -373,4 +379,442 @@ footer {
   padding-top: 20px;
   font-size: 0.8rem;
   color: #94a3b8;
+}
+
+/* ==========================================================================
+   CLASSES REUTILIZÁVEIS — Usadas em todas as páginas
+   ========================================================================== */
+
+/* Aviso no topo da página (ex: mensagem do carrinho) */
+.top-notice {
+  background: var(--palette-sand);
+  color: var(--palette-navy-dark);
+  text-align: center;
+  padding: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Seção com fundo branco e borda (padrão para formulários e tabelas) */
+.section-card {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  margin-bottom: 25px;
+}
+
+/* Fieldset estilizado para formulários */
+.form-fieldset {
+  border: 1px solid #cbd5e1;
+  padding: 20px;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.form-fieldset legend {
+  font-weight: bold;
+  color: var(--palette-navy-dark);
+  font-family: var(--font-heading);
+  padding: 0 8px;
+  font-size: 1rem;
+}
+
+/* Grid para campos de formulário */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+/* Label e input padrão */
+.form-label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--palette-teal-dark);
+  box-shadow: 0 0 0 2px rgba(42, 157, 143, 0.15);
+}
+
+/* Tabela padrão reutilizável */
+.table-default {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.table-default thead tr {
+  border-bottom: 2px solid var(--border-color);
+  color: var(--text-title);
+}
+
+.table-default th,
+.table-default td {
+  padding: 12px 10px;
+}
+
+.table-default tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.15s;
+}
+
+.table-default tbody tr:hover {
+  background: #f8fafc;
+}
+
+/* Badges de status (usadas em pedidos, clientes, estoque) */
+.badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.78rem;
+  display: inline-block;
+}
+
+.badge-success { background: #dcfce7; color: #15803d; }
+.badge-warning { background: #fef3c7; color: #92400e; }
+.badge-info    { background: #e0f2fe; color: #0369a1; }
+.badge-danger  { background: #fee2e2; color: #b91c1c; }
+
+/* Botões secundários e de ação */
+.btn-secondary {
+  background: #94a3b8;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.85rem;
+  transition: background 0.2s;
+}
+
+.btn-secondary:hover { background: #64748b; }
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+  transition: opacity 0.2s;
+}
+
+.btn-sm:hover { opacity: 0.85; }
+
+/* Cards de módulo (usados no painel admin) */
+.module-card {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.module-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px -3px rgba(0,0,0,0.1);
+}
+
+.module-card .module-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.module-card h4 {
+  font-family: var(--font-heading);
+  color: var(--palette-navy-dark);
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.module-card p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+/* Modal — Overlay com fade */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.modal-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+.modal-box {
+  background: white;
+  width: 90%;
+  max-width: 750px;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(10px);
+  transition: transform 0.25s ease;
+}
+
+.modal-overlay.active .modal-box {
+  transform: translateY(0);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.modal-header h4 {
+  font-family: var(--font-heading);
+  color: var(--palette-navy-dark);
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+
+.modal-close:hover { color: var(--palette-terracotta); }
+
+/* Navegação por Abas (Tab Pattern) */
+.tabs {
+  display: flex;
+  gap: 10px;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 10px;
+  margin-bottom: 25px;
+}
+
+.tab-link {
+  padding: 10px 18px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  background: #e2e8f0;
+  color: var(--text-body);
+  transition: background 0.2s, color 0.2s;
+}
+
+.tab-link:hover {
+  background: #cbd5e1;
+}
+
+.tab-link.active {
+  background: var(--palette-navy-dark);
+  color: white;
+  font-weight: bold;
+}
+
+/* Barra de ações superior (título + botão) */
+.page-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Resumo lateral (checkout) */
+.summary-box {
+  background: white;
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  border-radius: 8px;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.summary-box h4 {
+  font-family: var(--font-heading);
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+  color: var(--palette-navy-dark);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--accent-wine);
+  margin-bottom: 20px;
+}
+
+/* Bloco dinâmico de endereço/cartão no cadastro */
+.dynamic-block {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.dynamic-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.dynamic-block-header strong {
+  color: var(--palette-navy-dark);
+}
+
+.btn-remove {
+  color: #b91c1c;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.btn-remove:hover { text-decoration: underline; }
+
+/* ==========================================================================
+   RESPONSIVIDADE — Telas menores
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Header empilhado no celular */
+  header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 4%;
+  }
+
+  .header-search {
+    max-width: 100%;
+  }
+
+  .user-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px !important;
+    justify-content: center;
+  }
+
+  .user-nav a {
+    font-size: 0.8rem !important;
+    margin-left: 0 !important;
+  }
+
+  /* Grid de livros: 2 colunas no celular */
+  .book-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* Hero banner menor */
+  .hero-banner {
+    padding: 25px 15px;
+  }
+
+  .hero-banner h2 {
+    font-size: 1.5rem;
+  }
+
+  /* Tabelas com scroll horizontal no celular */
+  .section-card {
+    overflow-x: auto;
+  }
+
+  /* Checkout em coluna única */
+  .checkout-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Pílulas menores */
+  .action-pills {
+    gap: 8px;
+  }
+
+  .pill {
+    padding: 6px 14px;
+    font-size: 0.78rem;
+  }
+
+  /* Footer em coluna única */
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* Barra de categorias esconde no celular */
+  .category-nav {
+    padding: 8px 3%;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Grid de livros: 1 coluna no celular pequeno */
+  .book-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+  }
+
+  /* Formulários em coluna única */
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
 }

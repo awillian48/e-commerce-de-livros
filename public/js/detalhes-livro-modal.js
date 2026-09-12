@@ -24,7 +24,7 @@ const detalhesLivros = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  const containerAcervo = document.querySelector('.books-grid') || document.body;
+  const containerAcervo = document.querySelector('.book-grid') || document.body;
 
   containerAcervo.addEventListener('click', (e) => {
     const card = e.target.closest('.book-card');

@@ -65,7 +65,7 @@ function renderizarTabelaEstoque() {
       <td style="padding: 12px 10px; text-align: center;">
         <button onclick="ajustarEstoque('${item.id}', 1)" style="background: var(--palette-teal-dark); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: bold;">+1</button>
         <button onclick="ajustarEstoque('${item.id}', -1)" style="background: var(--palette-terracotta); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-left: 2px;">-1</button>
-        <button onclick="darEntradaLote('${item.id}')" style="background: var(--palette-navy-dark); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: font-size: 0.75rem; margin-left: 6px;">+ Lote</button>
+        <button onclick="darEntradaLote('${item.id}')" style="background: var(--palette-navy-dark); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; margin-left: 6px;">+ Lote</button>
       </td>
     `;
     tbody.appendChild(tr);
@@ -91,7 +91,7 @@ function salvarNovoLivro(e) {
   const quantidade = parseInt(document.getElementById('book-quantidade').value, 10);
   const estoqueMinimo = parseInt(document.getElementById('book-estoque-minimo').value, 10);
 
-  const itens = obtainingEstoque();
+  const itens = obterEstoque();
 
   const novoLivro = {
     id: String(Date.now()),
@@ -110,9 +110,7 @@ function salvarNovoLivro(e) {
   renderizarTabelaEstoque();
 }
 
-function obterEstoque() {
-  return JSON.parse(localStorage.getItem(STOCK_STORAGE_KEY)) || [];
-}
+// Nota: a função obterEstoque() já está definida na linha 26, não precisa duplicar
 
 function ajustarEstoque(id, delta) {
   const itens = obterEstoque();
