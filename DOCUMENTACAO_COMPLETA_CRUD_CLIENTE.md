@@ -1,4 +1,4 @@
-# 🛡️ Livraria Alexandria — Documentação Técnica do Módulo de Clientes (CRUD)
+# Livraria Alexandria — Documentação Técnica do Módulo de Clientes (CRUD)
 ### Laboratório de Engenharia de Software (LES 2026) — Prof. Rodrigo Rocha Silva
 **Equipe:** Anderson Barros & João Pedro Scandiuzzi  
 **Entrega:** Apresentação do CRUD Completo de Clientes (Cadastrar, Consultar, Alterar e Inativar/Excluir)
@@ -19,21 +19,21 @@ A tabela abaixo correlaciona diretamente cada requisito do DRS com sua implement
 
 | Código | Descrição do Requisito | Tipo | Implementação no Sistema | Como Demonstrar / Testar |
 | :--- | :--- | :---: | :--- | :--- |
-| **RF0021** | Cadastrar cliente | RF | `POST /api/clientes` | Botão "➕ Novo Cliente", preenchimento completo de formulário e persistência. |
-| **RF0022** | Alterar cliente | RF | `PUT /api/clientes/:id` | Botão "✏️ Editar" na tabela. Permite alterar nome, nascimento, telefone, etc. (CPF imutável). |
+| **RF0021** | Cadastrar cliente | RF | `POST /api/clientes` | Botão "Novo Cliente", preenchimento completo de formulário e persistência. |
+| **RF0022** | Alterar cliente | RF | `PUT /api/clientes/:id` | Botão "Editar" na tabela. Permite alterar nome, nascimento, telefone, etc. (CPF imutável). |
 | **RF0023** | Inativar cadastro de cliente | RF | `PATCH /api/clientes/:id/status` | Botão "Inativar" / "Reativar" alternando status `ATIVO` / `INATIVO` com badges coloridos. |
 | **RF0024** | Consulta de clientes com filtros | RF | `GET /api/clientes?nome=...` | Formulário de busca no topo com filtros combinados e isolados (Nome, CPF, E-mail, Status, Ranking). |
-| **RF0025** | Consulta de transações do cliente | RF | `GET /api/clientes/:id/transacoes` | Botão "📦 Transações" abrindo modal detalhado com pedidos, datas, itens e valores. |
+| **RF0025** | Consulta de transações do cliente | RF | `GET /api/clientes/:id/transacoes` | Botão "Transações" abrindo modal detalhado com pedidos, datas, itens e valores. |
 | **RF0026** | Cadastro de múltiplos endereços com frase curta | RF | Coleção 1:N no cadastro/edição | Bloco de endereços dinâmico com campo `fraseIdentificadora` obrigatório ("Minha Residência", etc.). |
 | **RF0027** | Cadastro de múltiplos cartões com preferencial | RF | Coleção 1:N no cadastro/edição | Bloco de cartões dinâmico com bandeira e botão rádio exclusivo para `preferencial`. |
-| **RF0028** | Alteração exclusiva de senha | RF | `PATCH /api/clientes/:id/senha` | Botão "🔑 Senha" abrindo modal dedicado, sem necessidade de editar outros dados. |
+| **RF0028** | Alteração exclusiva de senha | RF | `PATCH /api/clientes/:id/senha` | Botão "Senha" abrindo modal dedicado, sem necessidade de editar outros dados. |
 | **RN0021** | Endereço de cobrança obrigatório | RN | `clienteValidator.js` | Validação impedindo salvar sem ao menos um endereço com finalidade `COBRANCA` ou `AMBOS`. |
 | **RN0022** | Endereço de entrega obrigatório | RN | `clienteValidator.js` | Validação impedindo salvar sem ao menos um endereço com finalidade `ENTREGA` ou `AMBOS`. |
 | **RN0023** | Composição detalhada do registro de endereços | RN | Objeto estruturado de endereço | Campos: Frase, Tipo Residência, Logradouro, Número, Bairro, CEP, Cidade, Estado, País, Observações. |
 | **RN0024** | Composição do registro de cartões de crédito | RN | Objeto estruturado de cartão | Campos: Número, Nome impresso, Bandeira homologada, CVV (3 ou 4 dígitos) e Preferencial. |
 | **RN0025** | Bandeiras de cartão homologadas | RN | Validação de Bandeiras | Suporte a: `VISA`, `MASTERCARD`, `ELO`, `AMERICAN EXPRESS`. Outras são recusadas. |
 | **RN0026** | Dados cadastrais obrigatórios e telefone composto | RN | Modelo de Dados de Cliente | Nome, CPF único, E-mail, Nascimento, Gênero e Telefone Composto (Tipo, DDD e Número). |
-| **RN0027** | Ranking do cliente | RN | Campo `ranking` (1 a 5 estrelas) | Apresentado na tabela em estrelas (`⭐` a `⭐⭐⭐⭐⭐`) com filtro dedicado. |
+| **RN0027** | Ranking do cliente | RN | Campo `ranking` (1 a 5 estrelas) | Apresentado na tabela em escala numérica (1 a 5) com filtro dedicado. |
 | **RNF0031** | Senha forte | RNF | Regex de Complexidade | Mínimo 8 caracteres, contendo letra maiúscula, letra minúscula e caractere especial (@#$%&*). |
 | **RNF0032** | Confirmação dupla de senha | RNF | Comparador de campos | Obrigatoriedade de confirmação idêntica da senha no cadastro e na alteração de senha. |
 | **RNF0033** | Criptografia / Hashing de senha | RNF | SHA-256 no backend | A senha em texto claro é convertida em hash seguro antes de persistir no banco JSON. |
@@ -45,26 +45,31 @@ A tabela abaixo correlaciona diretamente cada requisito do DRS com sua implement
 
 Uma das principais regras de negócio de governança contábil e fiscal do sistema é a distinção estrita entre **Inativação** e **Exclusão Física**:
 
-### 🔴 Bloqueio de Exclusão Física para Clientes com Histórico de Compras:
+### Bloqueio de Exclusão Física para Clientes com Histórico de Compras:
 - Se um cliente possui pedidos ou transações registradas no sistema (como o cliente `CLI-001 - Machado de Assis`), a tentativa de exclusão física é **imediatamente bloqueada** pela API REST (retornando HTTP 400).
 - **Justificativa de Negócio / Auditoria:** A exclusão física de um cliente que realizou compras destruiria a integridade referencial dos registros fiscais, contábeis e de emissão de notas fiscais dos pedidos já faturados.
 - **Solução preconizada:** O sistema exibe um modal didático explicando que o cliente deve ser **Inativado (RF0023)**, preservando a auditoria contábil.
 
-### 🟢 Exclusão Física Permitida:
+### Exclusão Física Permitida:
 - Apenas clientes recém-cadastrados que **nunca realizaram pedidos** (ex: o cliente de teste `CLI-003`) podem ser fisicamente removidos da base de dados, garantindo a conformidade com as leis de privacidade (LGPD).
 
 ---
 
 ## 4. Como Executar e Demonstrar os Testes
 
-O projeto conta com **execução de testes no Cypress Desktop App** de forma profissional e isolada, sem scripts em lote (.bat) e sem poluir a interface do usuário:
+O projeto conta com **execução de testes no Cypress Desktop App** de forma profissional e isolada, sem poluir a interface do usuário:
 
 ### Opção 1: Cypress Desktop App Direto (Recomendado para a Apresentação)
 Com o aplicativo do Cypress já aberto:
 1. No Cypress, selecione ou adicione o projeto apontando para:
    `C:\Users\anderson.barros\.gemini\antigravity-ide\scratch\e-commerce-de-livros`
-2. Clique em **E2E Testing** $\rightarrow$ escolha o navegador (Chrome ou Electron) $\rightarrow$ clique em **`crud_cliente.cy.js`**.
+2. Clique em **E2E Testing** -> escolha o navegador (Chrome ou Electron) -> clique em **`crud_cliente.cy.js`**.
 3. O Cypress executará todos os 10 testes com visualização passo a passo e ritmo pausado para o professor acompanhar.
+
+Ou inicie o app via terminal a partir da pasta do projeto:
+```powershell
+npm run test:e2e:open
+```
 
 ---
 
@@ -86,6 +91,15 @@ npm run test:e2e
 
 ---
 
+### Opção 4: Gravação no Cypress Cloud
+Envia a execução para o painel de monitoramento do Cypress Cloud:
+
+```powershell
+npm run test:record
+```
+
+---
+
 ## 5. Roteiro Sugerido para Apresentação em Sala de Aula (5 a 8 Minutos)
 
 1. **Abertura (1 minuto):**
@@ -93,7 +107,7 @@ npm run test:e2e
    - Destacar o design editorial limpo, a paleta retrô original (Navy, Teal, Sand, Terracotta e Cream), os cards de KPIs no topo e o **modal ampliado (1140px)** com layout espaçoso sem quebra de linhas.
 
 2. **Demonstração em Tempo Real no Cypress Desktop App (3 a 4 minutos):**
-   - Executar a spec `crud_cliente.cy.js` diretamente no aplicativo do Cypress.
+   - Executar a spec `crud_cliente.cy.js` diretamente no aplicativo do Cypress (`npm run test:e2e:open`).
    - Conforme cada teste é executado, comentar a conformidade com os requisitos e regras de negócio:
      - *"Aqui vemos o RF0024 com filtro dinâmico por nome e status..."*
      - *"Aqui o RNF0031 e RNF0032 barrando senhas fracas e confirmações divergentes..."*
