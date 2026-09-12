@@ -47,25 +47,27 @@ function renderizarTabelaEstoque() {
     tr.style.borderBottom = '1px solid #f1f5f9';
 
     const statusBadge = {
-      'DISPONÍVEL': '<span style="background: #dcfce7; color: #15803d; padding: 4px 8px; border-radius: 4px; font-weight: bold;">DISPONÍVEL</span>',
-      'BAIXO_ESTOQUE': '<span style="background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 4px; font-weight: bold;">⚠️ BAIXO ESTOQUE</span>',
-      'ESGOTADO': '<span style="background: #fee2e2; color: #b91c1c; padding: 4px 8px; border-radius: 4px; font-weight: bold;">ESGOTADO</span>'
+      'DISPONÍVEL': '<span class="pill-status ativo">● DISPONÍVEL</span>',
+      'BAIXO_ESTOQUE': '<span class="pill-status" style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">● BAIXO ESTOQUE</span>',
+      'ESGOTADO': '<span class="pill-status inativo">● ESGOTADO</span>'
     }[item.status];
 
     tr.innerHTML = `
-      <td style="padding: 12px 10px;">
-        <strong>${item.titulo}</strong><br>
-        <small style="color: var(--text-muted);">${item.autor}</small>
+      <td style="padding: 12px 14px;">
+        <strong style="color: var(--palette-navy-dark); font-size: 0.95rem;">${item.titulo}</strong><br>
+        <small style="color: #64748b;">${item.autor}</small>
       </td>
-      <td style="padding: 12px 10px; font-family: monospace;">${item.isbn}</td>
-      <td style="padding: 12px 10px; font-weight: bold;">R$ ${Number(item.preco).toFixed(2).replace('.', ',')}</td>
-      <td style="padding: 12px 10px; text-align: center; font-size: 1.1rem; font-weight: bold; color: var(--palette-navy-dark);">${item.quantidade} un.</td>
-      <td style="padding: 12px 10px; text-align: center; color: var(--text-muted);">${item.estoqueMinimo} un.</td>
-      <td style="padding: 12px 10px;">${statusBadge}</td>
-      <td style="padding: 12px 10px; text-align: center;">
-        <button onclick="ajustarEstoque('${item.id}', 1)" style="background: var(--palette-teal-dark); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: bold;">+1</button>
-        <button onclick="ajustarEstoque('${item.id}', -1)" style="background: var(--palette-terracotta); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-left: 2px;">-1</button>
-        <button onclick="darEntradaLote('${item.id}')" style="background: var(--palette-navy-dark); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; margin-left: 6px;">+ Lote</button>
+      <td style="padding: 12px 14px; font-family: monospace; font-size: 0.85rem; color: #334155;">${item.isbn}</td>
+      <td style="padding: 12px 14px; font-weight: bold; color: var(--palette-navy-dark);">R$ ${Number(item.preco).toFixed(2).replace('.', ',')}</td>
+      <td style="padding: 12px 14px; text-align: center; font-size: 1.05rem; font-weight: bold; color: var(--palette-navy-dark);">${item.quantidade} un.</td>
+      <td style="padding: 12px 14px; text-align: center; color: #64748b;">${item.estoqueMinimo} un.</td>
+      <td style="padding: 12px 14px;">${statusBadge}</td>
+      <td style="padding: 12px 18px; text-align: right;">
+        <div class="action-toolbar">
+          <button type="button" class="btn-tbl btn-tbl-outline" onclick="ajustarEstoque('${item.id}', 1)" title="Adicionar 1 unidade">+1</button>
+          <button type="button" class="btn-tbl btn-tbl-outline" onclick="ajustarEstoque('${item.id}', -1)" title="Remover 1 unidade">-1</button>
+          <button type="button" class="btn-tbl btn-tbl-primary" onclick="darEntradaLote('${item.id}')" title="Dar entrada em lote de estoque">+ Lote</button>
+        </div>
       </td>
     `;
     tbody.appendChild(tr);
