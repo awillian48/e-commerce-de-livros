@@ -93,9 +93,11 @@ describe('Suíte de Testes Automatizados — CRUD Completo de Cliente (LES 2026)
   it('[RF0021][RN0026][RNF0035][RF0026][RF0027] Deve cadastrar um novo cliente com dados pessoais, endereço e cartão válidos', () => {
     cy.get('#btn-novo-cliente').click();
     cy.get('#modal-cliente').should('be.visible');
-    cy.wait(1000); // Pausa para visualização do modal aberto
+    cy.wait(800);
 
-    // 1. Dados Pessoais (RN0026)
+    // 1. Dados Pessoais e Telefone Composto (RN0026)
+    cy.get('#secao-dados-pessoais').scrollIntoView({ duration: 500 });
+    cy.wait(400);
     cy.get('#field-nome').type('José de Alencar');
     cy.get('#field-cpf').type('333.444.555-66');
     cy.get('#field-email').type('alencar@alexandria.com.br');
@@ -109,13 +111,17 @@ describe('Suíte de Testes Automatizados — CRUD Completo de Cliente (LES 2026)
     cy.get('#field-tel-numero').type('98888-1234');
     cy.wait(600);
 
-    // 2. Senha Forte e Confirmação Dupla (RNF0031 e RNF0032)
+    // 2. Senha Forte e Confirmação Dupla (RNF0031 e RNF0032) - Animação de rolagem suave
+    cy.get('#secao-seguranca').scrollIntoView({ duration: 600 });
+    cy.wait(500);
     cy.get('#field-senha').type('Alencar@2026');
     cy.get('#field-senha-confirma').type('Alencar@2026');
     cy.get('#indicador-forca-senha').should('contain', 'Senha Forte');
     cy.wait(600);
 
-    // 3. Endereço com Frase Curta e Finalidade (RF0026, RN0021, RN0022, RN0023)
+    // 3. Endereço com Frase Curta e Finalidade (RF0026, RN0021, RN0022, RN0023) - Rolagem suave
+    cy.get('#secao-enderecos').scrollIntoView({ duration: 600 });
+    cy.wait(500);
     cy.get('#container-enderecos-form').within(() => {
       cy.get('input[placeholder*="Minha Casa"]').clear().type('Solar dos Românticos');
       cy.get('input[placeholder*="rua"]').clear().type('Rua da Literatura');
@@ -127,7 +133,9 @@ describe('Suíte de Testes Automatizados — CRUD Completo de Cliente (LES 2026)
     });
     cy.wait(600);
 
-    // 4. Cartão de Crédito com Bandeira Homologada e Preferencial (RN0024, RN0025, RF0027)
+    // 4. Cartão de Crédito com Bandeira Homologada e Preferencial (RN0024, RN0025, RF0027) - Rolagem suave
+    cy.get('#secao-cartoes').scrollIntoView({ duration: 600 });
+    cy.wait(500);
     cy.get('#container-cartoes-form').within(() => {
       cy.get('input[placeholder*="0000 0000"]').clear().type('4532 9999 8888 7777');
       cy.get('input[placeholder*="como no plástico"]').clear().type('JOSE M ALENCAR');
@@ -135,18 +143,20 @@ describe('Suíte de Testes Automatizados — CRUD Completo de Cliente (LES 2026)
       cy.get('input[placeholder="123"]').clear().type('888');
       cy.get('input[type="radio"]').check();
     });
-    cy.wait(1000); // Pausa para o professor ver o formulário preenchido
+    cy.wait(800);
 
-    // Salvar e verificar fechamento do modal e listagem
+    // 5. Rolagem suave até o botão de salvar no rodapé
+    cy.get('#btn-salvar-cliente').scrollIntoView({ duration: 500 });
+    cy.wait(600);
     cy.get('#btn-salvar-cliente').click();
     cy.get('#modal-cliente').should('not.be.visible');
     cy.get('#mensagem-alerta').should('contain', 'sucesso');
-    cy.wait(1200);
+    cy.wait(1000);
 
     // Verifica que o novo cliente foi listado com código único (RNF0035)
     cy.get('#tabela-clientes-body').should('contain', 'José de Alencar');
     cy.get('#tabela-clientes-body').should('contain', 'CLI-003');
-    cy.wait(1000);
+    cy.wait(800);
   });
 
   // --------------------------------------------------------------------------

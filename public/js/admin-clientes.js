@@ -38,7 +38,37 @@ let cartoesBuffer = [];
 // Inicialização ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {
   carregarClientes();
+  configurarScrollDinamicoModal();
 });
+
+function configurarScrollDinamicoModal() {
+  const modalBox = document.querySelector('#modal-cliente .modal-box');
+  if (!modalBox) return;
+
+  // Ao focar em qualquer input/select, faz scroll suave no modal para centralizar o campo
+  modalBox.addEventListener('focusin', (e) => {
+    if (e.target.matches('input, select, textarea')) {
+      e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const secaoPai = e.target.closest('.modal-form-section');
+      if (secaoPai && secaoPai.id) {
+        document.querySelectorAll('.pill-nav-item').forEach(p => p.classList.remove('active'));
+        const linkAtivo = document.querySelector(`.pill-nav-item[href="#${secaoPai.id}"]`);
+        if (linkAtivo) linkAtivo.classList.add('active');
+      }
+    }
+  });
+}
+
+function navegarSecaoModal(e, idSecao) {
+  if (e) e.preventDefault();
+  const el = document.getElementById(idSecao);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.pill-nav-item').forEach(p => p.classList.remove('active'));
+    const linkAtivo = document.querySelector(`.pill-nav-item[href="#${idSecao}"]`);
+    if (linkAtivo) linkAtivo.classList.add('active');
+  }
+}
 
 /**
  * Exibe mensagens de feedback com cores adequadas
@@ -148,7 +178,7 @@ function renderizarTabelaClientes(clientes) {
     const totalTransacoes = cliente.transacoes ? cliente.transacoes.length : 0;
 
     // Formatação do ranking por estrelas (RN0027)
-    const estrelas = '⭐'.repeat(cliente.ranking || 1);
+    const rankingBadge = `<span style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 3px 8px; border-radius: 9999px; font-size: 0.78rem; font-weight: 600; color: #334155;">Nível ${cliente.ranking || 1} / 5</span>`;
 
     // Formatação do telefone composto (RN0026)
     const telFormatado = cliente.telefone
@@ -169,11 +199,11 @@ function renderizarTabelaClientes(clientes) {
       </td>
       <td>
         <span style="color: #334155;">${cliente.email}</span><br>
-        <small style="color: #64748b;">📞 ${telFormatado}</small><br>
-        <small style="color: var(--palette-teal-dark); font-weight: 600;">📍 ${totalEnderecos} end. &nbsp;|&nbsp; 💳 ${totalCartoes} cartão(ões)</small>
+        <small style="color: #64748b;">Tel: ${telFormatado}</small><br>
+        <small style="color: var(--palette-teal-dark); font-weight: 600;">Endereços: ${totalEnderecos} &nbsp;|&nbsp; Cartões: ${totalCartoes}</small>
       </td>
       <td>
-        <span style="font-size: 0.85rem;" title="Ranking: ${cliente.ranking} estrela(s)">${estrelas}</span>
+        ${rankingBadge}
       </td>
       <td>
         <span class="pill-status ${isAtivo ? 'ativo' : 'inativo'}" data-cy="badge-status-${cliente.codigo}">
@@ -183,19 +213,19 @@ function renderizarTabelaClientes(clientes) {
       <td style="text-align: center;">
         <div style="display: flex; gap: 5px; justify-content: center; flex-wrap: wrap;">
           <button type="button" class="btn-action-row" style="background: #0284c7;" onclick="abrirModalTransacoes('${cliente.id}')" title="Ver Compras (RF0025)" data-cy="btn-transacoes-${cliente.codigo}">
-            📦 Transações (${totalTransacoes})
+            Transações (${totalTransacoes})
           </button>
           <button type="button" class="btn-action-row" style="background: var(--palette-navy-dark);" onclick="abrirModalEdicao('${cliente.id}')" title="Editar Dados (RF0022)" data-cy="btn-editar-${cliente.codigo}">
-            ✏️ Editar
+            Editar
           </button>
           <button type="button" class="btn-action-row" style="background: #475569;" onclick="abrirModalSenha('${cliente.id}')" title="Alterar Senha (RF0028)" data-cy="btn-senha-${cliente.codigo}">
-            🔑 Senha
+            Senha
           </button>
           <button type="button" class="btn-action-row" style="background: ${isAtivo ? 'var(--palette-terracotta)' : 'var(--palette-teal-dark)'};" onclick="alternarStatus('${cliente.id}')" title="Inativar/Reativar (RF0023)" data-cy="btn-inativar-${cliente.codigo}">
             ${isAtivo ? 'Inativar' : 'Reativar'}
           </button>
           <button type="button" class="btn-action-row" style="background: #dc2626;" onclick="tentarExcluirCliente('${cliente.id}')" title="Excluir" data-cy="btn-excluir-${cliente.codigo}">
-            🗑️ Excluir
+            Excluir
           </button>
         </div>
       </td>
@@ -338,7 +368,7 @@ function renderizarBlocosEnderecos() {
     div.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 6px;">
         <strong style="color: var(--palette-navy-dark); font-size: 0.9rem;">
-          📍 Endereço #${idx + 1}
+          Endereço #${idx + 1}
         </strong>
         <button type="button" onclick="removerBlocoEnderecoForm(${idx})" style="color: #b91c1c; border: none; background: none; cursor: pointer; font-weight: 600; font-size: 0.8rem;">
           ✕ Remover
@@ -473,8 +503,8 @@ function renderizarBlocosCartoes() {
     div.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 6px;">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <strong style="color: var(--palette-navy-dark); font-size: 0.9rem;">💳 Cartão #${idx + 1}</strong>
-          ${card.preferencial ? '<span style="background: #fef08a; color: #854d0e; font-size: 0.75rem; font-weight: bold; padding: 3px 8px; border-radius: 4px;">⭐ PREFERENCIAL (RF0027)</span>' : ''}
+          <strong style="color: var(--palette-navy-dark); font-size: 0.9rem;">Cartão #${idx + 1}</strong>
+          ${card.preferencial ? '<span style="background: #fef08a; color: #854d0e; font-size: 0.75rem; font-weight: bold; padding: 3px 8px; border-radius: 4px;">PREFERENCIAL (RF0027)</span>' : ''}
         </div>
         <button type="button" onclick="removerBlocoCartaoForm(${idx})" style="color: #b91c1c; border: none; background: none; cursor: pointer; font-weight: 600; font-size: 0.8rem;">
           ✕ Remover
@@ -531,10 +561,10 @@ function validarIndicadorSenha(senha) {
   const temEsp = /[^A-Za-z0-9]/.test(senha);
 
   if (temTam && temMai && temMin && temEsp) {
-    box.textContent = '✅ Senha Forte (atende a RNF0031)';
+    box.textContent = 'Senha Forte (atende a RNF0031)';
     box.style.color = '#15803d';
   } else {
-    box.textContent = '❌ Senha Fraca: precisa de 8+ caracteres, letra MAIÚSCULA, minúscula e caractere especial (@#$...).';
+    box.textContent = 'Senha Fraca: precisa de 8+ caracteres, letra maiúscula, minúscula e caractere especial (@#$...).';
     box.style.color = '#b91c1c';
   }
 }

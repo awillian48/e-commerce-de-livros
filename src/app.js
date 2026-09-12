@@ -6,7 +6,7 @@ const app = express();
 
 app.use(express.json());
 
-// Rotas da API REST de Clientes (conforme especificado no DRS e Estimativa)
+// Rotas da API REST de Clientes 
 app.use('/api/clientes', clientesRoutes);
 app.use('/clientes', clientesRoutes); // Alias para flexibilidade
 
