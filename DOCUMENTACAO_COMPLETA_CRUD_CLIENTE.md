@@ -57,38 +57,21 @@ Uma das principais regras de negócio de governança contábil e fiscal do siste
 
 ## 4. Como Executar e Demonstrar os Testes
 
-O projeto oferece **3 formas complementares** de execução dos testes:
+O projeto conta com **execução de testes no Cypress Desktop App** de forma profissional e isolada, sem poluir a interface do usuário:
 
-### Opção 1: Direto no Navegador com Demonstração Visual (Recomendado para a Aula)
-Abre diretamente o Google Chrome / navegador padrão do Windows sem passar por telas de setup ou pelo Cypress:
-
-```powershell
-# 1. Iniciar o servidor (se ainda não estiver rodando)
-npm run dev
-
-# 2. Em outro terminal, disparar o navegador diretamente
-npm run test:browser
-```
-> **Ou simplesmente:** Abra o navegador em `http://localhost:3000/admin/clientes.html` e clique no botão **`▶️ Executar Testes no Navegador`**.
-
-O motor de testes interativo executará na tela:
-1. Digitação visual no campo de filtro ("Clarice") e verificação de busca.
-2. Abertura do modal e rejeição visual de senha fraca ("123").
-3. Preenchimento de senha forte ("Livro@2026") com confirmação dupla.
-4. Preenchimento completo de cliente (João Guimarães Rosa) com telefone composto, endereço e cartão de crédito.
-5. Gravação e verificação do novo código `CLI-003`.
-6. Edição de dados e comprovação de que o CPF é imutável.
-7. Alteração exclusiva de senha via modal dedicado.
-8. Consulta do histórico de pedidos e transações do Machado de Assis.
-9. Tentativa de exclusão do Machado de Assis e exibição da regra de bloqueio contábil.
-10. Inativação e reativação de cadastro com atualização dos badges.
-11. Exclusão física permitida do cliente recém-criado sem histórico.
-12. Exibição do relatório comemorativo com 100% dos requisitos validados.
+### Opção 1: Cypress Desktop App Direto (Sem CMD — Recomendado para a Apresentação)
+Para abrir o aplicativo interativo do Cypress com 1 clique, sem precisar digitar comandos no terminal:
+1. Abra a pasta do projeto no Windows Explorer:
+   `C:\Users\anderson.barros\.gemini\antigravity-ide\scratch\e-commerce-de-livros`
+2. Dê um **duplo clique no arquivo `Abrir_Cypress.bat`**.
+3. A janela oficial do Cypress Desktop abrirá na tela.
+4. Clique em **E2E Testing** -> Escolha o navegador (Chrome ou Electron) -> Clique em **`crud_cliente.cy.js`**.
+5. O Cypress executará todos os 10 testes com visualização passo a passo e ritmo pausado para o professor acompanhar.
 
 ---
 
-### Opção 2: Cypress Headed (Janela do Navegador pelo Cypress)
-Executa a suíte E2E automatizada completa abrindo a janela do navegador em velocidade controlada para a apresentação:
+### Opção 2: Cypress Headed (Janela do Navegador Automatizada)
+Executa a suíte E2E automatizada pelo Cypress com o navegador visível em velocidade controlada:
 
 ```powershell
 npm run test:headed
@@ -109,18 +92,19 @@ npm run test:e2e
 
 1. **Abertura (1 minuto):**
    - Apresentar a dupla (Anderson e João) e contextualizar o módulo de Gestão de Clientes da Livraria Alexandria.
-   - Destacar que o design utiliza a paleta original retrô (Navy, Teal, Sand, Terracotta e Cream) com visual limpo, moderno e cards de KPIs no topo.
+   - Destacar o design editorial limpo, a paleta retrô original (Navy, Teal, Sand, Terracotta e Cream), os cards de KPIs no topo e o **modal ampliado (1140px)** com layout espaçoso sem quebra de linhas.
 
-2. **Demonstração em Tempo Real (3 a 4 minutos):**
-   - Disparar `npm run test:browser` ou clicar no botão "▶️ Executar Testes no Navegador".
-   - Conforme cada passo é executado pelo motor de testes no navegador, explicar o requisito correspondente ao professor Rodrigo:
-     - *"Aqui vemos o RF0024 com filtro dinâmico..."*
-     - *"Aqui o RNF0031 barrando a senha fraca..."*
-     - *"Aqui o RF0021 com todas as regras de composição de telefone (RN0026), endereço (RN0021/RN0022/RN0023) e cartão homologado (RN0024/RN0025)..."*
-     - *"Aqui o RF0022 comprovando o CPF imutável..."*
-     - *"Aqui a consulta exclusiva de transações do RF0025..."*
-     - *"Aqui a regra crítica de distinção: tentamos excluir o Machado de Assis e o sistema bloqueia, exigindo a Inativação pelo RF0023 para proteger o histórico fiscal..."*
+2. **Demonstração em Tempo Real no Cypress Desktop App (3 a 4 minutos):**
+   - Executar os testes pelo aplicativo do Cypress (via `Abrir_Cypress.bat` ou `npm run cypress:open`).
+   - Conforme cada teste é executado, comentar a conformidade com os requisitos e regras de negócio:
+     - *"Aqui vemos o RF0024 com filtro dinâmico por nome e status..."*
+     - *"Aqui o RNF0031 e RNF0032 barrando senhas fracas e confirmações divergentes..."*
+     - *"Aqui o RF0021 com todas as regras de composição: telefone (RN0026), múltiplos endereços (RN0021/RN0022/RN0023) e múltiplos cartões homologados (RN0024/RN0025) com definição de preferencial (RF0027)..."*
+     - *"Aqui o RF0022 comprovando que o CPF é imutável na edição..."*
+     - *"Aqui a consulta exclusiva de transações do cliente (RF0025)..."*
+     - *"Aqui a regra crítica de distinção de negócio: tentamos excluir o Machado de Assis e o sistema BLOQUEIA a exclusão física, exigindo a Inativação pelo RF0023 para proteger o histórico fiscal..."*
+     - *"Por fim, a exclusão física é testada com sucesso para um cliente sem pedidos associados."*
 
 3. **Conclusão (1 minuto):**
-   - Mostrar o modal final com todos os 100% dos requisitos aprovados.
-   - Informar que o código está completamente documentado e versionado no GitHub (`awillian48/e-commerce-de-livros`).
+   - Mostrar o relatório final do Cypress com **10 testes aprovados (100% de sucesso)**.
+   - Informar que o código está completamente versionado no repositório GitHub: [awillian48/e-commerce-de-livros](https://github.com/awillian48/e-commerce-de-livros).

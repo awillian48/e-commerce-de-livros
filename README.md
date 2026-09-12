@@ -32,25 +32,29 @@ O servidor iniciará em `http://localhost:3000`.
 
 ---
 
-## 🧪 Bateria de Testes Automatizados
+## 🧪 Bateria de Testes Automatizados (Cypress)
 
-O sistema conta com três modalidades de teste para demonstrar a conformidade com o DRS_LES_2_2026:
+O sistema conta com testes automatizados desenvolvidos em **Cypress** com cobertura de 100% dos requisitos do DRS:
 
-### 🌟 1. Direto no Navegador (Recomendado para Apresentação em Aula)
-Abre diretamente o Google Chrome ou o navegador padrão e executa a demonstração passo a passo com HUD visual na tela:
+### 🌟 1. Direto pelo App do Cypress (Sem CMD — Recomendado)
+Abra a pasta do projeto no Windows Explorer e dê um **duplo clique no arquivo `Abrir_Cypress.bat`**. O Cypress Desktop App abrirá diretamente na tela:
+1. Escolha **E2E Testing**
+2. Selecione o navegador desejado
+3. Clique em **`crud_cliente.cy.js`**
+
+*Ou via comando:*
 ```bash
-npm run test:browser
+npm run cypress:open
 ```
-*Ou acesse no navegador:* `http://localhost:3000/admin/clientes.html?autoRun=1`
 
-### 💻 2. Cypress Headed (Janela do Cypress)
-Executa a suíte E2E automatizada pelo Cypress com o navegador visível:
+### 💻 2. Cypress Headed (Janela Automatizada)
+Executa a suíte E2E automatizada pelo Cypress com o navegador visível em velocidade controlada:
 ```bash
 npm run test:headed
 ```
 
 ### ⚙️ 3. Cypress Headless (Modo CI / Terminal)
-Executa todos os testes no terminal sem abrir interface gráfica:
+Executa todos os 10 testes no terminal com relatório detalhado:
 ```bash
 npm run test:e2e
 ```

@@ -88,7 +88,7 @@ describe('Suíte de Testes Automatizados — CRUD Completo de Cliente (LES 2026)
     // 3. Endereço com Frase Curta e Finalidade (RF0026, RN0021, RN0022, RN0023)
     cy.get('#container-enderecos-form').within(() => {
       cy.get('input[placeholder*="Minha Casa"]').clear().type('Solar dos Românticos');
-      cy.get('input[placeholder="Nome da rua/av"]').clear().type('Rua da Literatura');
+      cy.get('input[placeholder*="rua"]').clear().type('Rua da Literatura');
       cy.get('input[placeholder="Nº"]').clear().type('150');
       cy.get('input[placeholder="Bairro"]').clear().type('Meireles');
       cy.get('input[placeholder="00000-000"]').clear().type('60165-000');
