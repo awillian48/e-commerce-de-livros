@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
           respostaBot = "Para arquitetura e engenharia de software, a melhor opção é <strong>Clean Code</strong> de Robert C. Martin.";
         }
 
-        adicionarMensagem('bot', `🤖 <strong>Livreiro Virtual:</strong> ${respostaBot}`);
+        adicionarMensagem('bot', `<strong>Livreiro Virtual:</strong> ${respostaBot}`);
       }, 500);
     });
   }

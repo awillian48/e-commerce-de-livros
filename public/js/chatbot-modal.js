@@ -3,10 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('chat-toggle-btn')) return;
 
   const modalHTML = `
-    <button id="chat-toggle-btn" class="chat-btn-floating">💬 Recomendador Virtual</button>
+    <button id="chat-toggle-btn" class="chat-btn-floating">Recomendador Virtual</button>
     <div id="chat-modal-window" class="chat-modal-box">
       <div class="chat-modal-header">
-        <span>🤖 Livreiro Virtual</span>
+        <span>Livreiro Virtual</span>
         <button id="chat-close-btn" style="background:none; border:none; color:white; font-size:1.1rem; cursor:pointer; font-weight:bold;">✕</button>
       </div>
       
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       const botMsg = document.createElement('div');
       botMsg.style.cssText = 'background: #e2e8f0; color: var(--text-title, #1b2a47); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color, #e2e8f0); max-width: 85%; font-family: var(--font-ui, sans-serif); font-size: 0.85rem; word-break: break-word;';
-      botMsg.innerHTML = `🤖 Para "<strong>${texto}</strong>", recomendo a leitura de <strong>Dom Casmurro</strong> de Machado de Assis!`;
+      botMsg.innerHTML = `Para "<strong>${texto}</strong>", recomendo a leitura de <strong>Dom Casmurro</strong> de Machado de Assis!`;
       chatLog.appendChild(botMsg);
       chatLog.scrollTop = chatLog.scrollHeight;
     }, 400);

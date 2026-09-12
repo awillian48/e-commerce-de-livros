@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap');
 
 :root {
-  /* Paleta Vintage/Retro (Extraída da imagem) */
+  /* Paleta Moderna e Equilibrada (Navy, Teal, Sand, Terracotta, Clean Slate) */
   --palette-navy-dark: #1b2a47;
   --palette-navy: #264653;
   --palette-teal-dark: #2a9d8f;
   --palette-teal: #00a896;
   --palette-sage: #8ab17d;
-  --palette-cream: #fbf7ee;
+  --palette-cream: #f8fafc;
   --palette-sand: #f4a261;
   --palette-orange: #e76f51;
   --palette-terracotta: #c1121f;
@@ -19,17 +19,17 @@
   --header-bg: var(--palette-navy-dark);
   --header-accent: var(--palette-teal-dark);
   --text-title: var(--palette-navy-dark);
-  --text-body: #2d3748;
-  --text-muted: #718096;
+  --text-body: #1e293b;
+  --text-muted: #64748b;
   --accent-price: var(--palette-burgundy);
   --accent-highlight: var(--palette-sand);
   --btn-primary: var(--palette-terracotta);
   --btn-primary-hover: var(--palette-burgundy);
   --border-color: #e2e8f0;
 
-  /* Fontes */
-  --font-heading: 'Merriweather', Georgia, serif;
-  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Fontes Modernas e Fluidas */
+  --font-heading: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   /* Aliases extras (referenciados em várias páginas) */
   --header-teal: var(--palette-teal-dark);
@@ -46,6 +46,13 @@ body {
   font-family: var(--font-ui);
   line-height: 1.5;
   padding-bottom: 60px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6, .logo {
+  font-family: var(--font-heading);
+  letter-spacing: -0.015em;
 }
 
 /* Header */
@@ -875,8 +882,8 @@ footer {
 }
 
 /* ==========================================================================
-   DESIGN LIMPO E MODERNO — Módulo de Clientes (LES 2026)
-   Mantém rigorosamente as cores da paleta original (Navy, Teal, Sand, Terracotta, Cream)
+   DESIGN LIMPO E MODERNO — Módulo de Clientes
+   Mantém rigorosamente as cores da paleta original (Navy, Teal, Sand, Terracotta, Slate)
    ========================================================================== */
 
 /* Cards de Métricas e KPIs do Topo */

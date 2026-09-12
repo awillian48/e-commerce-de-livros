@@ -22,7 +22,7 @@
 
   <!-- Header Principal da Loja -->
   <header style="background: var(--palette-navy-dark); color: white; padding: 14px 5%; display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.12);">
-    <a href="/index.html" class="logo" style="font-family: Georgia, serif; font-size: 1.4rem; font-weight: bold; color: #ffffff; text-decoration: none; white-space: nowrap;">
+    <a href="/index.html" class="logo" style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 700; color: #ffffff; text-decoration: none; white-space: nowrap; letter-spacing: -0.02em;">
       Livraria Alexandria
     </a>
     
@@ -60,7 +60,7 @@
       
       <!-- Bloco 1: Dados Pessoais e Acesso -->
       <fieldset style="border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-        <legend style="font-weight: bold; color: var(--palette-navy-dark); font-family: Georgia, serif; padding: 0 8px; font-size: 1rem;">1. Dados Pessoais & Credenciais</legend>
+        <legend style="font-weight: bold; color: var(--palette-navy-dark); font-family: var(--font-heading); padding: 0 8px; font-size: 1rem;">1. Dados Pessoais & Credenciais</legend>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
           <div>
             <label style="font-weight: bold; display: block; margin-bottom: 4px;">Nome Completo *</label>
@@ -99,7 +99,7 @@
 
       <!-- Bloco 2: Múltiplos Endereços Granulados (1:N) -->
       <fieldset style="border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-        <legend style="font-weight: bold; color: var(--palette-navy-dark); font-family: Georgia, serif; padding: 0 8px; font-size: 1rem;">2. Meus Endereços (Entrega & Cobrança)</legend>
+        <legend style="font-weight: bold; color: var(--palette-navy-dark); font-family: var(--font-heading); padding: 0 8px; font-size: 1rem;">2. Meus Endereços (Entrega & Cobrança)</legend>
         <div id="container-enderecos-cliente" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px;">
           <!-- Renderizado dinamicamente via cliente-cadastro.js -->
         </div>
@@ -110,7 +110,7 @@
 
       <!-- Bloco 3: Múltiplos Cartões de Crédito (1:N) -->
       <fieldset style="border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-        <legend style="font-weight: bold; color: var(--palette-navy-dark); font-family: Georgia, serif; padding: 0 8px; font-size: 1rem;">3. Meus Cartões de Crédito</legend>
+        <legend style="font-weight: bold; color: var(--palette-navy-dark); font-family: var(--font-heading); padding: 0 8px; font-size: 1rem;">3. Meus Cartões de Crédito</legend>
         <div id="container-cartoes-cliente" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px;">
           <!-- Renderizado dinamicamente via cliente-cadastro.js -->
         </div>
@@ -122,7 +122,7 @@
       <!-- Ação de Submissão -->
       <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
         <button type="submit" class="btn-buy" style="background: var(--palette-teal-dark); padding: 12px 28px; font-size: 0.95rem;">
-          💾 Salvar Meu Perfil Completo
+          Salvar Meu Perfil Completo
         </button>
       </div>
     </form>

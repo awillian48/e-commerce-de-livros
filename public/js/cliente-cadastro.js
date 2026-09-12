@@ -101,8 +101,8 @@ function renderizarEnderecosPublicos() {
     div.style.cssText = 'background: #f8fafc; border: 1px solid #cbd5e1; padding: 12px; border-radius: 6px;';
     div.innerHTML = `
       <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-        <strong style="color: var(--palette-navy-dark);">📍 ${end.fraseIdentificadora || `Endereço #${idx + 1}`}</strong>
-        <button type="button" onclick="removerEnderecoPublico(${idx})" style="color: #b91c1c; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 0.8rem;">✕ Remover</button>
+        <strong style="color: var(--palette-navy-dark);">${end.fraseIdentificadora || `Endereço #${idx + 1}`}</strong>
+        <button type="button" onclick="removerEnderecoPublico(${idx})" style="color: #b91c1c; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 0.8rem;">Remover</button>
       </div>
       <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; margin-bottom: 8px;">
         <input type="text" placeholder="Identificador / Frase Curta" value="${end.fraseIdentificadora || ''}" onchange="enderecosTemporarios[${idx}].fraseIdentificadora = this.value" required style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
@@ -149,8 +149,8 @@ function renderizarCartoesPublicos() {
     div.style.cssText = 'background: #f8fafc; border: 1px solid #cbd5e1; padding: 12px; border-radius: 6px;';
     div.innerHTML = `
       <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-        <strong style="color: var(--palette-navy-dark);">💳 Cartão #${idx + 1} ${card.preferencial ? '⭐ (Preferencial)' : ''}</strong>
-        <button type="button" onclick="removerCartaoPublico(${idx})" style="color: #b91c1c; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 0.8rem;">✕ Remover</button>
+        <strong style="color: var(--palette-navy-dark);">Cartão #${idx + 1} ${card.preferencial ? '(Preferencial)' : ''}</strong>
+        <button type="button" onclick="removerCartaoPublico(${idx})" style="color: #b91c1c; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 0.8rem;">Remover</button>
       </div>
       <div style="display: grid; grid-template-columns: 2fr 2fr 1fr; gap: 8px;">
         <input type="text" placeholder="Número do Cartão" value="${card.numero || ''}" onchange="cartoesTemporarios[${idx}].numero = this.value" required style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
@@ -194,7 +194,7 @@ async function salvarPerfilCliente(e) {
     });
     const result = await res.json();
     if (!res.ok) throw new Error(result.erro || 'Erro ao atualizar dados');
-    alert('✅ Seu perfil, endereços e cartões foram atualizados com sucesso (RF0022)!');
+    alert('Seu perfil, endereços e cartões foram atualizados com sucesso (RF0022)!');
     carregarPerfilCliente(CLIENTE_SESSAO_ID);
   } catch (err) {
     alert(err.message);

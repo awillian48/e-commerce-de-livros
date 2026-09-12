@@ -63,7 +63,7 @@ function tratarMensagemVazia(encontrou) {
       msgContainer = document.createElement('div');
       msgContainer.id = 'mensagem-busca-vazia';
       msgContainer.style.cssText = 'text-align: center; padding: 40px; background: white; border: 1px solid var(--border-color); border-radius: 8px; margin: 20px 0; font-family: var(--font-ui); color: var(--text-muted); width: 100%;';
-      msgContainer.innerHTML = '<h4>📖 Nenhum livro encontrado no acervo</h4><p>Tente buscar por outros termos, autores ou altere a opção de filtro.</p>';
+      msgContainer.innerHTML = '<h4>Nenhum livro encontrado no acervo</h4><p>Tente buscar por outros termos, autores ou altere a opção de filtro.</p>';
       main.appendChild(msgContainer);
     }
   } else if (msgContainer) {

@@ -166,11 +166,11 @@ function validarEAplicarCupom(cupom) {
   const possuiTroca = cuponsAplicados.some(c => c.tipo === 'TROCA');
 
   if (cupom.tipo === 'PROMOCIONAL' && (possuiTroca || possuiPromo)) {
-    return alert('⚠️ Não é possível combinar cupons promocionais com cupons de troca ou usar mais de 1 cupom promocional.');
+    return alert('Não é possível combinar cupons promocionais com cupons de troca ou usar mais de 1 cupom promocional.');
   }
 
   if (cupom.tipo === 'TROCA' && possuiPromo) {
-    return alert('⚠️ Não é possível utilizar cupons de troca com um cupom promocional ativo. Remova o promocional primeiro.');
+    return alert('Não é possível utilizar cupons de troca com um cupom promocional ativo. Remova o promocional primeiro.');
   }
 
   cuponsAplicados.push(cupom);
@@ -200,7 +200,7 @@ function renderizarCuponsAplicados() {
     const div = document.createElement('div');
     div.style.cssText = 'display: flex; justify-content: space-between; align-items: center; background: #dcfce7; color: #166534; padding: 6px 10px; border-radius: 4px; margin-bottom: 4px; font-size: 0.8rem;';
     div.innerHTML = `
-      <span>🏷️ <strong>${cupom.codigo}</strong> [${cupom.tipo}] (- ${currencyFormatter.format(cupom.valor)})</span>
+      <span><strong>${cupom.codigo}</strong> [${cupom.tipo}] (- ${currencyFormatter.format(cupom.valor)})</span>
       <button type="button" onclick="removerCupom('${cupom.codigo}')" style="background: none; border: none; color: #b91c1c; font-weight: bold; cursor: pointer;">✕</button>
     `;
     containerAplicados.appendChild(div);
