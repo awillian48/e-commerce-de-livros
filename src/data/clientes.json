@@ -109,50 +109,5 @@
         ]
       }
     ]
-  },
-  {
-    "id": "CLI-003",
-    "codigo": "CLI-003",
-    "nome": "José de Alencar (Edição Histórica)",
-    "cpf": "333.444.555-66",
-    "email": "alencar@alexandria.com.br",
-    "senhaHash": "6caced530a126d028e66584a1da68b6bf055005a71f1909461259627caa37d4b",
-    "telefone": {
-      "tipo": "CELULAR",
-      "ddd": "85",
-      "numero": "98888-1234"
-    },
-    "dataNascimento": "1929-05-01",
-    "genero": "Masculino",
-    "ranking": 5,
-    "status": "ATIVO",
-    "enderecos": [
-      {
-        "id": "end-1789232319212-0",
-        "fraseIdentificadora": "Solar dos Românticos",
-        "tipoResidencia": "Casa",
-        "tipoLogradouro": "Rua",
-        "logradouro": "Rua da Literatura",
-        "numero": "150",
-        "bairro": "Meireles",
-        "cep": "60165-000",
-        "cidade": "Fortaleza",
-        "estado": "CE",
-        "pais": "Brasil",
-        "observacoes": "",
-        "finalidade": "AMBOS"
-      }
-    ],
-    "cartoes": [
-      {
-        "id": "card-1789232319212-0",
-        "numero": "4532 9999 8888 7777",
-        "nomeImpresso": "JOSE M ALENCAR",
-        "bandeira": "VISA",
-        "cvv": "888",
-        "preferencial": true
-      }
-    ],
-    "transacoes": []
   }
 ]

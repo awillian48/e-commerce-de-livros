@@ -7,7 +7,8 @@
     "dev": "node --watch server.js",
     "cypress:open": "cypress open",
     "test:headed": "cypress run --headed --no-runner-ui",
-    "test:e2e": "cypress run"
+    "test:e2e": "cypress run",
+    "test:record": "cypress run --record --key dbb870cb-ae6c-4585-b0b7-006a6027746d"
   },
   "dependencies": {
     "express": "^4.22.2"
