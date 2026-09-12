@@ -143,7 +143,9 @@ function limparFiltros() {
 function renderizarTabelaClientes(clientes) {
   const tbody = document.getElementById('tabela-clientes-body');
   const badgeTotal = document.getElementById('total-clientes-badge');
-  if (badgeTotal) badgeTotal.textContent = clientes.length;
+  if (badgeTotal) {
+    badgeTotal.textContent = `${clientes.length} ${clientes.length === 1 ? 'cliente cadastrado' : 'clientes cadastrados'}`;
+  }
 
   // Atualiza os Cards de KPIs no topo
   const kpiTotal = document.getElementById('kpi-total-clientes');
@@ -177,8 +179,8 @@ function renderizarTabelaClientes(clientes) {
     const totalCartoes = cliente.cartoes ? cliente.cartoes.length : 0;
     const totalTransacoes = cliente.transacoes ? cliente.transacoes.length : 0;
 
-    // Formatação do ranking por estrelas (RN0027)
-    const rankingBadge = `<span style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 3px 8px; border-radius: 9999px; font-size: 0.78rem; font-weight: 600; color: #334155;">Nível ${cliente.ranking || 1} / 5</span>`;
+    // Formatação do ranking com estética editorial (RN0027)
+    const rankingBadge = `<span class="ranking-pill">Nível <strong>${cliente.ranking || 1}</strong> / 5</span>`;
 
     // Formatação do telefone composto (RN0026)
     const telFormatado = cliente.telefone
@@ -189,7 +191,7 @@ function renderizarTabelaClientes(clientes) {
     tr.setAttribute('data-cy', `linha-cliente-${cliente.codigo}`);
     tr.innerHTML = `
       <td style="font-weight: bold; color: var(--palette-navy-dark);">
-        <span style="background: #f1f5f9; border: 1px solid #e2e8f0; padding: 3px 8px; border-radius: 4px; font-family: monospace; font-size: 0.85rem;">
+        <span style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 3px 8px; border-radius: 4px; font-family: monospace; font-size: 0.85rem;">
           ${cliente.codigo || cliente.id}
         </span>
       </td>
@@ -210,21 +212,21 @@ function renderizarTabelaClientes(clientes) {
           ● ${cliente.status}
         </span>
       </td>
-      <td style="text-align: center;">
-        <div style="display: flex; gap: 5px; justify-content: center; flex-wrap: wrap;">
-          <button type="button" class="btn-action-row" style="background: #0284c7;" onclick="abrirModalTransacoes('${cliente.id}')" title="Ver Compras (RF0025)" data-cy="btn-transacoes-${cliente.codigo}">
-            Transações (${totalTransacoes})
+      <td style="text-align: right; padding-right: 18px;">
+        <div class="action-toolbar">
+          <button type="button" class="btn-tbl btn-tbl-primary" onclick="abrirModalTransacoes('${cliente.id}')" title="Ver Compras (RF0025)" data-cy="btn-transacoes-${cliente.codigo}">
+            Transações <span class="btn-tbl-badge">${totalTransacoes}</span>
           </button>
-          <button type="button" class="btn-action-row" style="background: var(--palette-navy-dark);" onclick="abrirModalEdicao('${cliente.id}')" title="Editar Dados (RF0022)" data-cy="btn-editar-${cliente.codigo}">
+          <button type="button" class="btn-tbl btn-tbl-outline" onclick="abrirModalEdicao('${cliente.id}')" title="Editar Dados (RF0022)" data-cy="btn-editar-${cliente.codigo}">
             Editar
           </button>
-          <button type="button" class="btn-action-row" style="background: #475569;" onclick="abrirModalSenha('${cliente.id}')" title="Alterar Senha (RF0028)" data-cy="btn-senha-${cliente.codigo}">
+          <button type="button" class="btn-tbl btn-tbl-outline" onclick="abrirModalSenha('${cliente.id}')" title="Alterar Senha (RF0028)" data-cy="btn-senha-${cliente.codigo}">
             Senha
           </button>
-          <button type="button" class="btn-action-row" style="background: ${isAtivo ? 'var(--palette-terracotta)' : 'var(--palette-teal-dark)'};" onclick="alternarStatus('${cliente.id}')" title="Inativar/Reativar (RF0023)" data-cy="btn-inativar-${cliente.codigo}">
+          <button type="button" class="btn-tbl ${isAtivo ? 'btn-tbl-warning' : 'btn-tbl-success'}" onclick="alternarStatus('${cliente.id}')" title="Inativar/Reativar (RF0023)" data-cy="btn-inativar-${cliente.codigo}">
             ${isAtivo ? 'Inativar' : 'Reativar'}
           </button>
-          <button type="button" class="btn-action-row" style="background: #dc2626;" onclick="tentarExcluirCliente('${cliente.id}')" title="Excluir" data-cy="btn-excluir-${cliente.codigo}">
+          <button type="button" class="btn-tbl btn-tbl-danger" onclick="tentarExcluirCliente('${cliente.id}')" title="Excluir" data-cy="btn-excluir-${cliente.codigo}">
             Excluir
           </button>
         </div>

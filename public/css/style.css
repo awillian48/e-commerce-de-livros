@@ -1018,7 +1018,7 @@ footer {
   border: 1px solid #fecaca;
 }
 
-/* Botões de Ação na Linha */
+/* Botões de Ação na Linha (Legado mantido para compatibilidade) */
 .btn-action-row {
   display: inline-flex;
   align-items: center;
@@ -1037,6 +1037,171 @@ footer {
   transform: translateY(-1px);
   filter: brightness(1.1);
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* ==========================================================================
+   TOOLBAR DE AÇÕES DO SISTEMA (INSPIRAÇÃO MARTINS FONTES PAULISTA)
+   Organização horizontal contínua, sem quebras, com hierarquia sóbria e fluida
+   ========================================================================== */
+.action-toolbar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+
+.btn-tbl {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 6px;
+  font-family: var(--font-ui);
+  font-size: 0.77rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: #ffffff;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.btn-tbl:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+}
+
+.btn-tbl:active {
+  transform: translateY(0);
+}
+
+/* 1. Botão Primário: Transações (Editorial Ink Martins Fontes) */
+.btn-tbl-primary {
+  background: var(--palette-navy-dark);
+  color: #ffffff;
+  border-color: var(--palette-navy-dark);
+}
+
+.btn-tbl-primary:hover {
+  background: #111d32;
+  border-color: #111d32;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(27, 42, 71, 0.25);
+}
+
+.btn-tbl-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  border-radius: 9999px;
+  font-size: 0.70rem;
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+/* 2. Botão Outline Sóbrio: Editar e Senha */
+.btn-tbl-outline {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.btn-tbl-outline:hover {
+  background: #f8fafc;
+  border-color: var(--palette-navy-dark);
+  color: var(--palette-navy-dark);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* 3. Botão Warning: Inativar (Tom Âmbar Suave) */
+.btn-tbl-warning {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #b45309;
+}
+
+.btn-tbl-warning:hover {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+/* 4. Botão Success: Reativar (Tom Esmeralda Suave) */
+.btn-tbl-success {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #15803d;
+}
+
+.btn-tbl-success:hover {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #166534;
+}
+
+/* 5. Botão Danger: Excluir (Ghost Danger Suave, Destaque ao Hover) */
+.btn-tbl-danger {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.btn-tbl-danger:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+}
+
+/* Refinamento da Tabela Editorial & Fluidez */
+.table-default tbody tr {
+  transition: background-color 0.18s ease;
+}
+
+.table-default tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+
+.table-default td {
+  vertical-align: middle;
+}
+
+.ranking-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  font-size: 0.77rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.badge-editorial {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  color: var(--palette-navy-dark);
+  border: 1px solid #e2e8f0;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
 /* Seções Limpas dentro dos Modais */
