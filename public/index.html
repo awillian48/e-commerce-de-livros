@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livraria Alexandria - Acervo & Obras Históricas</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Header Unificado da Loja Pública -->
+  <header style="background: #1b2a47; color: white; padding: 16px 5%; display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+    <a href="/index.html" class="logo" style="font-family: Georgia, serif; font-size: 1.4rem; font-weight: bold; color: #ffffff; text-decoration: none; white-space: nowrap;">📚 Livraria Alexandria</a>
+    
+    <form class="header-search" onsubmit="return false;" style="display: flex; flex: 1; max-width: 400px; background: white; border-radius: 6px; overflow: hidden; border: 2px solid #2a9d8f;">
+      <select style="border: none; padding: 8px; background: #f1f5f9; font-size: 0.8rem;">
+        <option>Título ou Autor</option>
+        <option>ISBN</option>
+      </select>
+      <input type="text" placeholder="Buscar no acervo..." style="flex: 1; border: none; padding: 8px; outline: none; font-size: 0.85rem;">
+      <button type="submit" style="background: #2a9d8f; color: white; border: none; padding: 0 14px; cursor: pointer;">🔍</button>
+    </form>
+
+    <nav class="user-nav" style="display: flex !important; gap: 10px !important; align-items: center !important; flex-shrink: 0 !important;">
+      <a href="/cliente-pedidos.html" style="background: #f4a261 !important; color: #1b2a47 !important; padding: 8px 14px !important; border-radius: 4px !important; font-weight: bold !important; text-decoration: none !important; white-space: nowrap !important; font-size: 0.85rem !important;">📦 Meus Pedidos</a>
+      <a href="/cliente-cadastro.html" style="color: #ffffff !important; text-decoration: none !important; font-weight: 500 !important; white-space: nowrap !important; font-size: 0.85rem !important;">👤 Entrar</a>
+      <a href="/carrinho.html" style="color: #ffffff !important; text-decoration: none !important; font-weight: 500 !important; white-space: nowrap !important; font-size: 0.85rem !important;">🛒 Carrinho (1)</a>
+      <a href="/admin/index.html" style="background: #2a9d8f !important; color: #ffffff !important; padding: 8px 12px !important; border-radius: 4px !important; font-weight: bold !important; text-decoration: none !important; white-space: nowrap !important; font-size: 0.85rem !important;">Painel Admin</a>
+    </nav>
+  </header>
+
+  <!-- Barra Secundária de Categorias -->
+  <nav class="category-nav">
+    <a href="#">📍 Informe seu CEP</a>
+    <a href="#">📖 Literatura Brasileira</a>
+    <a href="#">🏛️ Obras Raras</a>
+    <a href="#">📜 Filosofia & Humanidades</a>
+    <a href="#">💻 Tecnologia & Engenharia</a>
+    <a href="#">🔥 Mais Vendidos</a>
+  </nav>
+
+  <main class="container">
+    <section class="hero-banner">
+      <h2>Acervo Clássico & Obras Históricas</h2>
+      <p>Edições especiais e bibliografias essenciais para a sua coleção.</p>
+    </section>
+
+    <!-- Pílulas de Atalho -->
+    <section class="action-pills">
+      <a href="#" class="pill pill-wine">🔥 Mais Vendidos</a>
+      <a href="#" class="pill pill-teal">🚚 Frete Grátis</a>
+      <a href="#" class="pill pill-orange">✨ Coleções Especiais</a>
+      <a href="#" class="pill pill-navy">🏛️ Obras Raras</a>
+    </section>
+
+    <!-- Vitrine de Acervo Ampliada (15 Obras) -->
+    <h3 class="section-title">Acervo Principal</h3>
+    <section class="book-grid" style="margin-bottom: 40px;">
+      
+      <!-- 1. Dom Casmurro -->
+      <article class="book-card" data-title="Dom Casmurro" data-author="Machado de Assis" data-isbn="9788535910841">
+        <img src="https://covers.openlibrary.org/b/id/8313436-L.jpg" alt="Dom Casmurro">
+        <h4 class="book-title">Dom Casmurro</h4>
+        <p class="book-author">Machado de Assis</p>
+        <div class="book-price">R$ 45,90</div>
+        <div style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+          <button class="btn-buy" style="background: var(--palette-navy); flex: 1;">🔍 Ver Detalhes</button>
+          <a href="/carrinho.html" class="btn-buy btn-buy-direct" style="background: var(--palette-teal-dark); padding: 8px 12px; text-decoration: none;">🛒</a>
+        </div>
+      </article>
+
+      <!-- 2. O Cortiço -->
+      <article class="book-card" data-title="O Cortiço" data-author="Aluísio Azevedo" data-isbn="9788508040377">
+        <img src="https://covers.openlibrary.org/b/id/10543210-L.jpg" alt="O Cortiço">
+        <h4 class="book-title">O Cortiço</h4>
+        <p class="book-author">Aluísio Azevedo</p>
+        <div class="book-price">R$ 38,00</div>
+        <div style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+          <button class="btn-buy" style="background: var(--palette-navy); flex: 1;">🔍 Ver Detalhes</button>
+          <a href="/carrinho.html" class="btn-buy btn-buy-direct" style="background: var(--palette-teal-dark); padding: 8px 12px; text-decoration: none;">🛒</a>
+        </div>
+      </article>
+
+      <!-- 3. Clean Code -->
+      <article class="book-card" data-title="Clean Code" data-author="Robert C. Martin" data-isbn="9780132350884">
+        <img src="https://covers.openlibrary.org/b/id/9255566-L.jpg" alt="Clean Code">
+        <h4 class="book-title">Clean Code</h4>
+        <p class="book-author">Robert C. Martin</p>
+        <div class="book-price">R$ 89,90</div>
+        <div style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+          <button class="btn-buy" style="background: var(--palette-navy); flex: 1;">🔍 Ver Detalhes</button>
+          <a href="/carrinho.html" class="btn-buy btn-buy-direct" style="background: var(--palette-teal-dark); padding: 8px 12px; text-decoration: none;">🛒</a>
+        </div>
+      </article>
+
+      <!-- 4. A Hora da Estrela -->
+      <article class="book-card" data-title="A Hora da Estrela" data-author="Clarice Lispector" data-isbn="9788535928129">
+        <img src="https://covers.openlibrary.org/b/id/12836240-L.jpg" alt="A Hora da Estrela">
+        <h4 class="book-title">A Hora da Estrela</h4>
+        <p class="book-author">Clarice Lispector</p>
+        <div class="book-price">R$ 42,50</div>
+        <div style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+          <button class="btn-buy" style="background: var(--palette-navy); flex: 1;">🔍 Ver Detalhes</button>
+          <a href="/carrinho.html" class="btn-buy btn-buy-direct" style="background: var(--palette-teal-dark); padding: 8px 12px; text-decoration: none;">🛒</a>
+        </div>
+      </article>
+
+      <!-- 5. A República -->
+      <article class="book-card" data-title="A República" data-author="Platão" data-isbn="9788572323412">
+        <img src="https://covers.openlibrary.org/b/id/8231856-L.jpg" alt="A República">
+        <h4 class="book-title">A República</h4>
+        <p class="book-author">Platão</p>
+        <div class="book-price">R$ 64,00</div>
+        <div style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+          <button class="btn-buy" style="background: var(--palette-navy); flex: 1;">🔍 Ver Detalhes</button>
+          <a href="/carrinho.html" class="btn-buy btn-buy-direct" style="background: var(--palette-teal-dark); padding: 8px 12px; text-decoration: none;">🛒</a>
+        </div>
+      </article>
+
+      <!-- 6. O Príncipe -->
+      <article class="book-card" data-title="O Príncipe" data-author="Nicolau Maquiavel" data-isbn="9788542207323">
+        <img src="https://covers.openlibrary.org/b/id/8225261-L.jpg" alt="O Príncipe">
+        <h4 class="book-title">O Príncipe</h4>
+        <p class="book-author">Nicolau Maquiavel</p>
+        <div class="book-price">R$ 35,00</div>
+        <div style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+          <button class="btn-buy" style="background: var(--palette-navy); flex: 1;">🔍 Ver Detalhes</button>
+          <a href="/carrinho.html" class="btn-buy btn-buy-direct" style="background: var(--palette-teal-dark); padding: 8px 12px; text-decoration: none;">🛒</a>
+        </div>
+      </article>
+
+      <!-- 7. Refactoring -->
+      <article class="book-card" data-title="Refactoring" data-author="Martin Fowler" data-isbn="9780201485677">
+        <img src="https://covers.openlibrary.org/b/id/8228691-L.jpg" alt="Refactoring">
+        <h4 class="book-title">Refactoring</h4>
+        <p class="book-author">Martin Fowler</p>
+        <div class="book-price">R$ 95,00</div>
+        <div style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+          <button class="btn-buy" style="background: var(--palette-navy); flex: 1;">🔍 Ver Detalhes</button>
+          <a href="/carrinho.html" class="btn-buy btn-buy-direct" style="background: var(--palette-teal-dark); padding: 8px 12px; text-decoration: none;">🛒</a>
+        </div>
+      </article>
+
+      <!-- 8. Grande Sertão: Veredas -->
+      <article class="book-card" data-title="Grande Sertão: Veredas" data-author="Guimarães Rosa" data-isbn="9788520931202">
+        <img src="https://covers.openlibrary.org/b/id/8315124-L.jpg" alt="Grande Sertão: Veredas">
+        <h4 class="book-title">Grande Sertão: Veredas</h4>
+        <p class="book-author">Guimarães Rosa</p>
+        <div class="book-price">R$ 58,00</div>
+        <div style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+          <button class="btn-buy" style="background: var(--palette-navy); flex: 1;">🔍 Ver Detalhes</button>
+          <a href="/carrinho.html" class="btn-buy btn-buy-direct" style="background: var(--palette-teal-dark); padding: 8px 12px; text-decoration: none;">🛒</a>
+        </div>
+      </article>
+
+      <!-- 9. Memórias Póstumas de Brás Cubas -->
+      <article class="book-card" data-title="Memórias Póstumas de Brás Cubas" data-author="Machado de Assis" data-isbn="9788535910858">
+        <img src="https://covers.openlibrary.org/b/id/9254320-L.jpg" alt="Memórias Póstumas de Brás Cubas">
+        <h4 class="book-title">Memórias Póstumas</h4>
+        <p class="book-author">Machado de Assis</p>
+        <div class="book-price">R$ 41,90</div>
+        <div style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+          <button class="btn-buy" style="background: var(--palette-navy); flex: 1;">🔍 Ver Detalhes</button>
+          <a href="/carrinho.html" class="btn-buy btn-buy-direct" style="background: var(--palette-teal-dark); padding: 8px 12px; text-decoration: none;">🛒</a>
+        </div>
+      </article>
+
+      <!-- 10. Design Patterns -->
+      <article class="book-card" data-title="Design Patterns" data-author="Erich Gamma et al." data-isbn="9780201633610">
+        <img src="https://covers.openlibrary.org/b/id/8232145-L.jpg" alt="Design Patterns">
+        <h4 class="book-title">Design Patterns</h4>
+        <p class="book-author">Erich Gamma et al.</p>
+        <div class="book-price">R$ 110,00</div>
+        <div style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+          <button class="btn-buy" style="background: var(--palette-navy); flex: 1;">🔍 Ver Detalhes</button>
+          <a href="/carrinho.html" class="btn-buy btn-buy-direct" style="background: var(--palette-teal-dark); padding: 8px 12px; text-decoration: none;">🛒</a>
+        </div>
+      </article>
+
+      <!-- 11. Ensaio Sobre a Cegueira -->
+      <article class="book-card" data-title="Ensaio Sobre a Cegueira" data-author="José Saramago" data-isbn="9788535900717">
+        <img src="https://covers.openlibrary.org/b/id/10523411-L.jpg" alt="Ensaio Sobre a Cegueira">
+        <h4 class="book-title">Ensaio Sobre a Cegueira</h4>
+        <p class="book-author">José Saramago</p>
+        <div class="book-price">R$ 52,00</div>
+        <div style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+          <button class="btn-buy" style="background: var(--palette-navy); flex: 1;">🔍 Ver Detalhes</button>
+          <a href="/carrinho.html" class="btn-buy btn-buy-direct" style="background: var(--palette-teal-dark); padding: 8px 12px; text-decoration: none;">🛒</a>
+        </div>
+      </article>
+
+      <!-- 12. 1984 -->
+      <article class="book-card" data-title="1984" data-author="George Orwell" data-isbn="9788535902773">
+        <img src="https://covers.openlibrary.org/b/id/11132412-L.jpg" alt="1984">
+        <h4 class="book-title">1984</h4>
+        <p class="book-author">George Orwell</p>
+        <div class="book-price">R$ 39,90</div>
+        <div style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+          <button class="btn-buy" style="background: var(--palette-navy); flex: 1;">🔍 Ver Detalhes</button>
+          <a href="/carrinho.html" class="btn-buy btn-buy-direct" style="background: var(--palette-teal-dark); padding: 8px 12px; text-decoration: none;">🛒</a>
+        </div>
+      </article>
+
+      <!-- 13. A Arte da Guerra -->
+      <article class="book-card" data-title="A Arte da Guerra" data-author="Sun Tzu" data-isbn="9788572323429">
+        <img src="https://covers.openlibrary.org/b/id/8226500-L.jpg" alt="A Arte da Guerra">
+        <h4 class="book-title">A Arte da Guerra</h4>
+        <p class="book-author">Sun Tzu</p>
+        <div class="book-price">R$ 29,90</div>
+        <div style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+          <button class="btn-buy" style="background: var(--palette-navy); flex: 1;">🔍 Ver Detalhes</button>
+          <a href="/carrinho.html" class="btn-buy btn-buy-direct" style="background: var(--palette-teal-dark); padding: 8px 12px; text-decoration: none;">🛒</a>
+        </div>
+      </article>
+
+      <!-- 14. O Feiticeiro de Terramar -->
+      <article class="book-card" data-title="O Feiticeiro de Terramar" data-author="Ursula K. Le Guin" data-isbn="9788535928136">
+        <img src="https://covers.openlibrary.org/b/id/12845100-L.jpg" alt="O Feiticeiro de Terramar">
+        <h4 class="book-title">O Feiticeiro de Terramar</h4>
+        <p class="book-author">Ursula K. Le Guin</p>
+        <div class="book-price">R$ 47,00</div>
+        <div style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+          <button class="btn-buy" style="background: var(--palette-navy); flex: 1;">🔍 Ver Detalhes</button>
+          <a href="/carrinho.html" class="btn-buy btn-buy-direct" style="background: var(--palette-teal-dark); padding: 8px 12px; text-decoration: none;">🛒</a>
+        </div>
+      </article>
+
+      <!-- 15. Quien Pierde Paga (Stephen King - Obras Raras) -->
+      <article class="book-card" data-title="Quien Pierde Paga" data-author="Stephen King" data-isbn="9788497593793">
+        <img src="https://covers.openlibrary.org/b/id/8313436-L.jpg" alt="Quien Pierde Paga">
+        <h4 class="book-title">Quien Pierde Paga</h4>
+        <p class="book-author">Stephen King</p>
+        <div class="book-price">R$ 38,00</div>
+        <div style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+          <button class="btn-buy" style="background: var(--palette-navy); flex: 1;">🔍 Ver Detalhes</button>
+          <a href="/carrinho.html" class="btn-buy btn-buy-direct" style="background: var(--palette-teal-dark); padding: 8px 12px; text-decoration: none;">🛒</a>
+        </div>
+      </article>
+
+    </section>
+  </main>
+
+  <!-- Modal de Detalhes e Sinopse do Livro -->
+  <div id="modal-detalhes-livro" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000;">
+    <div style="background: white; width: 90%; max-width: 750px; border-radius: 8px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+        <span id="detalhe-categoria" style="background: var(--palette-sand); color: var(--palette-navy-dark); font-size: 0.75rem; font-weight: bold; padding: 4px 10px; border-radius: 12px; text-transform: uppercase;"></span>
+        <button type="button" onclick="fecharModalDetalhes()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">✕</button>
+      </div>
+      <div style="display: grid; grid-template-columns: 200px 1fr; gap: 25px;">
+        <div style="text-align: center;">
+          <img id="detalhe-capa" src="" alt="Capa" style="width: 100%; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); margin-bottom: 15px;">
+          <a href="/carrinho.html" class="btn-buy" style="display: block; text-decoration: none; text-align: center; background: var(--palette-teal-dark);">Adicionar ao Carrinho</a>
+        </div>
+        <div>
+          <h3 id="detalhe-titulo" style="font-family: var(--font-heading); color: var(--palette-navy-dark); font-size: 1.5rem; margin-top: 0; margin-bottom: 4px;"></h3>
+          <p id="detalhe-autor" style="color: var(--text-muted); font-size: 0.95rem; font-weight: 600; margin-bottom: 15px;"></p>
+          <div style="display: flex; gap: 15px; background: #f8fafc; padding: 10px 15px; border-radius: 6px; font-size: 0.8rem; border: 1px solid #e2e8f0; margin-bottom: 15px;">
+            <div><strong>ISBN:</strong> <span id="detalhe-isbn"></span></div>
+            <div><strong>Páginas:</strong> <span id="detalhe-paginas"></span></div>
+            <div><strong>Editora:</strong> <span id="detalhe-editora"></span></div>
+          </div>
+          <h5 style="font-family: var(--font-heading); color: var(--palette-navy-dark); margin-bottom: 8px; font-size: 1rem;">Sinopse da Obra</h5>
+          <p id="detalhe-sinopse" style="font-size: 0.9rem; line-height: 1.6; color: #334155; margin-bottom: 20px; text-align: justify;"></p>
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 15px;">
+            <div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Preço de Capa:</span>
+              <div id="detalhe-preco" style="font-size: 1.6rem; font-weight: bold; color: var(--palette-navy-dark);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rodapé Institucional -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h5>Livraria Alexandria</h5>
+        <p>Especialistas em acervos clássicos, obras raras e edições históricas para colecionadores.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Navegação</h5>
+        <ul>
+          <li><a href="/index.html">Acervo Principal</a></li>
+          <li><a href="/cliente-pedidos.html">Meus Pedidos</a></li>
+          <li><a href="/cliente-cadastro.html">Minha Conta</a></li>
+          <li><a href="/carrinho.html">Carrinho de Compras</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Atendimento</h5>
+        <ul>
+          <li>Central de Ajuda</li>
+          <li>Política de Troca & Devolução</li>
+          <li>Atendimento via Chatbot</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 Livraria Alexandria. Todos os direitos reservados.
+    </div>
+  </footer>
+
+  <script src="/js/busca-acervo.js"></script>
+  <script src="/js/chatbot-modal.js"></script>
+  <script src="/js/detalhes-livro-modal.js"></script>
+</body>
+</html>

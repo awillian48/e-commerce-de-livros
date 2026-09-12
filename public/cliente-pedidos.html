@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livraria Alexandria - Guia Meus Pedidos & Trocas</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Header Unificado da Loja Pública -->
+  <header>
+    <a href="index.html" class="logo">📚 Livraria Alexandria</a>
+    <form class="header-search" onsubmit="return false;">
+      <select>
+        <option>Título ou Autor</option>
+        <option>ISBN</option>
+      </select>
+      <input type="text" placeholder="Buscar no acervo...">
+      <button type="submit">🔍</button>
+    </form>
+    <nav class="user-nav" style="display: flex; gap: 12px; align-items: center;">
+      <a href="index.html">📖 Voltar ao Acervo</a>
+      <a href="cliente-pedidos.html" style="background: var(--palette-sand); color: var(--palette-navy-dark); padding: 6px 12px; border-radius: 4px; font-weight: bold; text-decoration: none;">📦 Meus Pedidos</a>
+      <a href="cliente-cadastro.html">👤 Minha Conta</a>
+      <a href="carrinho.html">🛒 Carrinho</a>
+    </nav>
+  </header>
+
+  <main class="container" style="max-width: 950px; margin-top: 25px;">
+    <!-- Barra Superior de Navegação por Abas (Tab Pattern) -->
+    <div style="display: flex; gap: 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 25px;">
+      <a href="cliente-pedidos.html" style="background: var(--palette-navy-dark); color: white; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; gap: 6px;">
+        📦 Histórico de Pedidos & Trocas
+      </a>
+      <a href="cliente-cadastro.html" style="background: #e2e8f0; color: var(--text-body); padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 6px;">
+        👤 Meus Dados Cadastrais
+      </a>
+    </div>
+
+    <h3 class="section-title" style="margin-bottom: 15px;">Acompanhamento de Pedidos & Solicitação de Troca</h3>
+
+    <!-- Contêiner Hidratado Dinamicamente via cliente-pedidos.js -->
+    <section id="container-historico-pedidos" style="background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+      <!-- Tabela renderizada dinamicamente -->
+    </section>
+
+    <!-- Modal de Solicitação de Troca de Item (Pós-Venda) -->
+    <div id="modal-solicitar-troca" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000;">
+      <div style="background: white; width: 90%; max-width: 550px; border-radius: 8px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">
+          <h4 style="font-family: var(--font-heading); color: var(--palette-navy-dark); margin: 0;">Solicitar Troca de Item</h4>
+          <button type="button" onclick="fecharModalTroca()" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">✕</button>
+        </div>
+
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
+          Obra: <strong id="troca-nome-livro" style="color: var(--palette-navy-dark);"></strong> | Pedido <span id="troca-num-pedido"></span>
+        </p>
+
+        <form id="form-solicitar-troca" style="display: flex; flex-direction: column; gap: 12px; font-size: 0.85rem;">
+          <div>
+            <label style="font-weight: bold; display: block; margin-bottom: 4px;">Motivo da Troca:</label>
+            <select id="select-motivo-troca" required style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px;">
+              <option value="">Selecione o motivo...</option>
+              <option value="AVARIA_TRANSPORTE">Avaria no Transporte (Amassado/Rasgado)</option>
+              <option value="DEFEITO_FABRICACAO">Defeito de Encadernação/Impressão</option>
+              <option value="DESACORDO_PEDIDO">Item Enviado Diferente do Comprado</option>
+              <option value="ARREPENDIMENTO">Arrependimento de Compra (Código de Defesa do Consumidor)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-weight: bold; display: block; margin-bottom: 4px;">Descrição Detalhada do Problema:</label>
+            <textarea id="textarea-descricao-troca" rows="3" required placeholder="Descreva o estado do produto para análise da equipe..." style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px;"></textarea>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
+            <button type="button" onclick="fecharModalTroca()" style="background: #94a3b8; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Cancelar</button>
+            <button type="submit" class="btn-buy" style="background: var(--palette-terracotta);">Enviar Solicitação de Troca</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/cliente-pedidos.js"></script>
+</body>
+</html>

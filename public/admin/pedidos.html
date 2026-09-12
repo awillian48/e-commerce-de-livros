@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livraria Alexandria - Painel Admin Pedidos</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+  <a href="/admin/index.html" class="logo">📚 Livraria Alexandria — Control Center</a>
+  <nav class="user-nav" style="display: flex; gap: 15px; align-items: center; font-size: 0.85rem;">
+    <a href="/admin/index.html">🏠 Hub Admin</a>
+    <a href="/admin/pedidos.html">📦 Pedidos</a>
+    <a href="/admin/clientes.html">👥 Clientes</a>
+    <a href="/admin/trocas.html">🔄 Trocas</a>
+    <a href="/admin/analise.html">📊 BI / Analítico</a>
+    <a href="/index.html" style="margin-left: 10px; color: var(--palette-sand); font-weight: bold;">🛍️ Ver Loja</a>
+  </nav>
+</header>
+
+  <main class="container">
+    <h3 class="section-title">Painel de Controle de Pedidos</h3>
+
+    <!-- Filtro de Busca Parametrizada de Pedidos -->
+    <section style="background: white; border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+      <form style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;" onsubmit="return false;">
+        <input type="text" placeholder="Código do Pedido (#)" style="padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px;">
+        <input type="text" placeholder="CPF do Cliente" style="padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px;">
+        <select style="padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px;">
+          <option value="">Todos os Status</option>
+          <option>EM ABERTO</option>
+          <option>EM PROCESSAMENTO</option>
+          <option>PAGAMENTO REALIZADO</option>
+          <option>EM TRÂNSITO</option>
+          <option>ENTREGUE</option>
+        </select>
+        <button type="submit" class="btn-buy" style="padding: 8px;">Filtrar Pedidos</button>
+      </form>
+    </section>
+
+    <!-- Tabela de Gestão de Ciclo de Vida do Pedido -->
+    <section style="background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-title);">
+            <th style="padding: 10px;">Pedido</th>
+            <th style="padding: 10px;">Cliente</th>
+            <th style="padding: 10px;">Data</th>
+            <th style="padding: 10px;">Total</th>
+            <th style="padding: 10px;">Status Atual</th>
+            <th style="padding: 10px; text-align: center;">Ação de Transição de Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Transição 1: EM ABERTO -> EM PROCESSAMENTO -->
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 12px 10px; font-weight: bold;">#7892</td>
+            <td style="padding: 12px 10px;">Clarice Lispector</td>
+            <td style="padding: 12px 10px;">17/08/2026</td>
+            <td style="padding: 12px 10px; font-weight: bold; color: var(--accent-price);">R$ 42,50</td>
+            <td style="padding: 12px 10px;"><span style="background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 4px; font-weight: bold;">EM ABERTO</span></td>
+            <td style="padding: 12px 10px; text-align: center;">
+              <button style="background: var(--palette-navy); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Avançar para EM PROCESSAMENTO →</button>
+            </td>
+          </tr>
+
+          <!-- Transição 2: EM PROCESSAMENTO -> PAGAMENTO REALIZADO -->
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 12px 10px; font-weight: bold;">#7891</td>
+            <td style="padding: 12px 10px;">Machado de Assis</td>
+            <td style="padding: 12px 10px;">16/08/2026</td>
+            <td style="padding: 12px 10px; font-weight: bold; color: var(--accent-price);">R$ 89,90</td>
+            <td style="padding: 12px 10px;"><span style="background: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 4px; font-weight: bold;">EM PROCESSAMENTO</span></td>
+            <td style="padding: 12px 10px; text-align: center;">
+              <button style="background: var(--palette-teal-dark); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Aprovar PAGAMENTO REALIZADO →</button>
+            </td>
+          </tr>
+
+          <!-- Transição 3: PAGAMENTO REALIZADO -> EM TRÂNSITO -->
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 12px 10px; font-weight: bold;">#7890</td>
+            <td style="padding: 12px 10px;">Aluísio Azevedo</td>
+            <td style="padding: 12px 10px;">15/08/2026</td>
+            <td style="padding: 12px 10px; font-weight: bold; color: var(--accent-price);">R$ 38,00</td>
+            <td style="padding: 12px 10px;"><span style="background: #dcfce7; color: #15803d; padding: 4px 8px; border-radius: 4px; font-weight: bold;">PAGAMENTO REALIZADO</span></td>
+            <td style="padding: 12px 10px; text-align: center;">
+              <button style="background: var(--palette-orange); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Despachar (EM TRÂNSITO) →</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

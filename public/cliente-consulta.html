@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livraria Alexandria - Consulta de Clientes</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">📚 Livraria Alexandria</a>
+    <nav class="user-nav">
+      <a href="cliente-cadastro.html">+ Novo Cliente</a>
+      <a href="index.html">← Voltar para o Acervo</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h3 class="section-title">Consulta de Clientes</h3>
+
+    <!-- RF0024: Filtro combinado ou isolado por campos de identificação -->
+    <section style="background: white; border: 1px solid var(--border-color); padding: 20px; border-radius: 6px; margin-bottom: 25px; font-family: sans-serif; font-size: 0.9rem;">
+      <form style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;" onsubmit="return false;">
+        <input type="text" placeholder="Nome do Cliente" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        <input type="text" placeholder="CPF" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        <input type="email" placeholder="E-mail" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        <select style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+          <option value="">Todos os Status</option>
+          <option>Ativo</option>
+          <option>Inativo</option>
+        </select>
+        <button type="submit" class="btn-buy" style="padding: 8px;">Pesquisar</button>
+      </form>
+    </section>
+
+    <!-- Tabela de Resultados, Ranking (RN0027) e Inativação (RF0023) -->
+    <section style="background: white; border: 1px solid var(--border-color); padding: 20px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-family: sans-serif; font-size: 0.85rem;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--border-color); color: var(--header-teal-dark);">
+            <th style="padding: 10px;">Código</th>
+            <th style="padding: 10px;">Cliente</th>
+            <th style="padding: 10px;">CPF / E-mail</th>
+            <th style="padding: 10px;">Ranking</th>
+            <th style="padding: 10px;">Status</th>
+            <th style="padding: 10px; text-align: center;">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #f0ebe1;">
+            <td style="padding: 12px 10px; font-weight: bold;">CLI-001</td>
+            <td style="padding: 12px 10px;">
+              <strong>Machado de Assis</strong><br>
+              <span style="font-size: 0.75rem; color: #6e6255;">Cadastrado em 10/01/2026</span>
+            </td>
+            <td style="padding: 12px 10px;">123.456.789-00<br>machado@literatura.com</td>
+            <td style="padding: 12px 10px;"><span style="background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 12px; font-weight: bold;">⭐ 5 estrelas</span></td>
+            <td style="padding: 12px 10px;"><span style="color: #16a34a; font-weight: bold;">Ativo</span></td>
+            <td style="padding: 12px 10px; text-align: center;">
+              <a href="cliente-cadastro.html" style="color: var(--header-teal); text-decoration: none; font-weight: bold; margin-right: 8px;">Editar</a>
+              <a href="cliente-pedidos.html" style="color: #2563eb; text-decoration: none; font-weight: bold; margin-right: 8px;">Transações (RF0025)</a>
+              <button style="background: var(--accent-wine); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Inativar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

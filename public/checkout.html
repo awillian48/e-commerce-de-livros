@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livraria Alexandria - Finalizar Compra</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">📚 Livraria Alexandria</a>
+    <nav class="user-nav">
+      <a href="carrinho.html">← Voltar ao Carrinho</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h3 class="section-title">Checkout / Finalização de Pedido</h3>
+    
+    <form style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; font-family: sans-serif; font-size: 0.9rem;" onsubmit="return false;">
+      
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- Endereço de Entrega e Cálculo de Frete -->
+        <fieldset style="background: white; border: 1px solid var(--border-color); padding: 20px; border-radius: 6px;">
+          <legend style="color: var(--header-teal-dark); font-weight: bold; font-family: Georgia, serif; padding: 0 5px;">1. Endereço de Entrega & Frete</legend>
+          <div style="margin-bottom: 12px;">
+            <label style="display: block; margin-bottom: 6px; font-weight: bold;">Selecione o Endereço de Entrega:</label>
+            <select id="select-endereco-entrega" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+              <option value="">Selecione um endereço para calcular o frete...</option>
+              <option value="Letras">Casa - Rua das Letras, 100 (Sua Casa) - CEP 01000-000</option>
+              <option value="Paulista">Trabalho - Av. Paulista, 1500 (Escritório) - CEP 01310-100</option>
+            </select>
+          </div>
+          <button type="button" style="background: none; border: none; color: var(--header-teal); font-weight: bold; cursor: pointer; text-decoration: underline;">+ Cadastrar Novo Endereço de Entrega</button>
+        </fieldset>
+
+        <!-- Cupons de Desconto e Troca -->
+        <fieldset style="background: white; border: 1px solid var(--border-color); padding: 20px; border-radius: 6px;">
+          <legend style="color: var(--header-teal-dark); font-weight: bold; font-family: Georgia, serif; padding: 0 5px;">2. Cupons de Desconto e Troca</legend>
+          <label style="display: block; font-weight: bold; margin-bottom: 8px; color: var(--palette-navy-dark);">Seus Cupons Disponíveis:</label>
+          <div id="container-cupons-disponiveis" style="margin-bottom: 15px;"></div>
+
+          <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 15px 0;">
+
+          <label style="display: block; font-weight: bold; margin-bottom: 6px;">Possui outro código promocional?</label>
+          <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <input type="text" id="input-codigo-cupom" placeholder="Digite o código (ex: LIVRO10)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+            <button type="button" id="btn-aplicar-cupom" style="background: var(--palette-teal-dark); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">Usar este cupom</button>
+          </div>
+
+          <label style="display: block; font-weight: bold; margin-bottom: 6px; color: #166534;">Cupons Aplicados a esta Compra:</label>
+          <div id="lista-cupons-aplicados"></div>
+        </fieldset>
+
+        <!-- Pagamento Combinado com Múltiplos Cartões e Máscara Monetária -->
+        <fieldset style="background: white; border: 1px solid var(--border-color); padding: 20px; border-radius: 6px;">
+          <legend style="color: var(--header-teal-dark); font-weight: bold; font-family: Georgia, serif; padding: 0 5px;">3. Pagamento Combinado (Múltiplos Cartões)</legend>
+          
+          <div style="border-bottom: 1px solid #eee; padding-bottom: 12px; margin-bottom: 12px;">
+            <label style="display: block; font-weight: bold; margin-bottom: 4px;">Cartão 1 (Preferencial):</label>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+              <select style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <option>Visa final 4321 (Preferencial)</option>
+              </select>
+              <input type="text" id="input-valor-cartao1" value="R$ 0,00" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-weight: bold; text-align: right;">
+            </div>
+          </div>
+
+          <div>
+            <label style="display: block; font-weight: bold; margin-bottom: 4px;">Cartão 2 (Opcional para Dividir Valor):</label>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+              <select style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <option>Selecione outro cartão...</option>
+                <option>Mastercard final 8765</option>
+              </select>
+              <input type="text" id="input-valor-cartao2" value="R$ 0,00" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-weight: bold; text-align: right;">
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- Resumo Financeiro Reativo -->
+      <aside style="background: white; border: 1px solid var(--border-color); padding: 20px; border-radius: 6px; height: fit-content;">
+        <h4 style="font-family: Georgia, serif; border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-bottom: 15px; color: var(--header-teal-dark);">Resumo do Pedido</h4>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span>Subtotal:</span>
+          <span>R$ 45,90</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span>Frete:</span>
+          <span id="resumo-frete">R$ 0,00</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; color: #166534;">
+          <span>Desconto Cupons:</span>
+          <span id="resumo-desconto-cupons">- R$ 0,00</span>
+        </div>
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 12px 0;">
+        <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; color: var(--accent-wine); margin-bottom: 20px;">
+          <span>Total a Pagar:</span>
+          <span id="resumo-total-pagar">R$ 45,90</span>
+        </div>
+        <a href="cliente-pedidos.html" class="btn-buy" style="text-align: center; text-decoration: none;">Confirmar e Finalizar Pedido</a>
+      </aside>
+
+    </form>
+  </main>
+
+  <script src="/js/checkout.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livraria Alexandria - Control Center</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Header Unificado do Control Center -->
+  <header>
+    <a href="/admin/index.html" class="logo">🛡️ Livraria Alexandria — Control Center</a>
+    <nav class="user-nav" style="display: flex; gap: 15px; align-items: center; font-size: 0.85rem;">
+      <a href="/admin/index.html">🏠 Hub Admin</a>
+      <a href="/admin/pedidos.html">📦 Pedidos</a>
+      <a href="/admin/clientes.html">👥 Clientes</a>
+      <a href="/admin/estoque.html">📚 Estoque</a>
+      <a href="/admin/trocas.html">🔄 Trocas</a>
+      <a href="/admin/analise.html">📊 BI / Analítico</a>
+      <a href="/index.html" style="margin-left: 10px; color: var(--palette-sand); font-weight: bold; text-decoration: none;">👁️ Ver Loja</a>
+    </nav>
+  </header>
+
+  <main class="container" style="max-width: 1200px;">
+    <section class="hero-banner" style="text-align: left; padding: 30px; margin-bottom: 30px;">
+      <h2>Painel de Gestão e Operações</h2>
+      <p>Acesse os módulos do sistema, monitore vendas e gerencie solicitações de clientes de forma centralizada.</p>
+    </section>
+
+    <h3 class="section-title">Módulos do Sistema</h3>
+
+    <!-- Grid Responsivo com os 5 Módulos Operacionais -->
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 40px;">
+      
+      <!-- Módulo 1: Gestão de Pedidos -->
+      <article style="background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+        <div>
+          <div style="font-size: 2rem; margin-bottom: 10px;">📦</div>
+          <h4 style="font-family: var(--font-heading); color: var(--palette-navy-dark); font-size: 1.1rem; margin-bottom: 8px;">Gestão de Pedidos</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Acompanhe o ciclo de vida das compras e altere os estados de envio.</p>
+        </div>
+        <a href="/admin/pedidos.html" class="btn-buy" style="text-align: center; text-decoration: none; background: var(--palette-navy-dark);">Acessar Pedidos →</a>
+      </article>
+
+      <!-- Módulo 2: Gestão de Clientes -->
+      <article style="background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+        <div>
+          <div style="font-size: 2rem; margin-bottom: 10px;">👥</div>
+          <h4 style="font-family: var(--font-heading); color: var(--palette-navy-dark); font-size: 1.1rem; margin-bottom: 8px;">Gestão de Clientes</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Consulte perfis, edite dados cadastrais, inative ou exclua registros.</p>
+        </div>
+        <a href="/admin/clientes.html" class="btn-buy" style="text-align: center; text-decoration: none; background: var(--palette-burgundy);">Gerenciar Clientes →</a>
+      </article>
+
+      <!-- Módulo 3: Controle de Estoque -->
+      <article style="background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+        <div>
+          <div style="font-size: 2rem; margin-bottom: 10px;">📚</div>
+          <h4 style="font-family: var(--font-heading); color: var(--palette-navy-dark); font-size: 1.1rem; margin-bottom: 8px;">Controle de Estoque</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Monitore o volume físico do acervo, defina estoque mínimo e dê entrada em lotes.</p>
+        </div>
+        <a href="/admin/estoque.html" class="btn-buy" style="text-align: center; text-decoration: none; background: #d97706;">Gerenciar Estoque →</a>
+      </article>
+
+      <!-- Módulo 4: Trocas & Devoluções -->
+      <article style="background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+        <div>
+          <div style="font-size: 2rem; margin-bottom: 10px;">🔄</div>
+          <h4 style="font-family: var(--font-heading); color: var(--palette-navy-dark); font-size: 1.1rem; margin-bottom: 8px;">Trocas & Devoluções</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Analise devoluções avariadas e autorize cupons de troca automatizados.</p>
+        </div>
+        <a href="/admin/trocas.html" class="btn-buy" style="text-align: center; text-decoration: none; background: var(--palette-teal-dark);">Gerenciar Trocas →</a>
+      </article>
+
+      <!-- Módulo 5: Business Intelligence -->
+      <article style="background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+        <div>
+          <div style="font-size: 2rem; margin-bottom: 10px;">📊</div>
+          <h4 style="font-family: var(--font-heading); color: var(--palette-navy-dark); font-size: 1.1rem; margin-bottom: 8px;">Hub Analítico (BI)</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Explore gráficos temporais de vendas, categorias e faturamento anual.</p>
+        </div>
+        <a href="/admin/analise.html" class="btn-buy" style="text-align: center; text-decoration: none; background: var(--palette-terracotta);">Ver Dashboards →</a>
+      </article>
+
+    </section>
+  </main>
+</body>
+</html>

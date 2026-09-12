@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livraria Clássica - Seu Carrinho</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="top-notice">
+    📖 Suas edições selecionadas estão reservadas temporariamente em nosso acervo.
+  </div>
+
+  <header>
+    <a href="index.html" class="logo">📚 Livraria Alexandria</a>
+    <nav class="user-nav">
+      <a href="index.html">← Voltar para o Acervo</a>
+    </nav>
+  </header>
+
+  <main class="container">
+  <h3 class="section-title">Itens Selecionados</h3>
+  <section style="background: white; border: 1px solid var(--border-color); border-radius: 6px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">
+    <table style="width: 100%; border-collapse: collapse; text-align: left; font-family: sans-serif; font-size: 0.9rem;">
+      <thead>
+        <tr style="border-bottom: 2px solid var(--border-color); color: var(--header-teal-dark);">
+          <th style="padding: 12px 0;">Obra</th>
+          <th style="padding: 12px;">Qtd</th>
+          <th style="padding: 12px;">Valor Unitário</th>
+          <th style="padding: 12px;">Subtotal</th>
+          <th style="padding: 12px; text-align: right;">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid #f0ebe1;">
+          <td style="padding: 12px 0; display: flex; align-items: center; gap: 12px;">
+            <img src="https://covers.openlibrary.org/b/id/8313436-L.jpg" alt="Dom Casmurro" class="cart-item-thumb" width="50" height="70" style="width: 50px; height: 70px; object-fit: cover;">
+            <div>
+              <strong style="color: var(--text-title); display: block; font-family: var(--font-heading); font-size: 0.95rem;">Dom Casmurro</strong>
+              <span style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">Machado de Assis</span>
+            </div>
+          </td>
+          <td style="padding: 12px;">
+            <input type="number" id="qtd-item" value="1" min="1" max="5" style="width: 50px; padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px;">
+          </td>
+          <td style="padding: 12px; color: var(--text-body);">R$ 45,90</td>
+          <td style="padding: 12px; font-weight: bold; color: var(--accent-price);" id="subtotal-item">R$ 45,90</td>
+          <td style="padding: 12px; text-align: right;">
+            <button onclick="removerItem(this)" style="background: var(--btn-primary); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">Remover</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top: 20px; padding: 15px; background: #fbf8f3; border: 1px solid var(--border-color); border-radius: 6px; font-family: var(--font-ui); display: flex; align-items: center; gap: 15px;">
+      <label for="cep-input" style="font-size: 0.85rem; font-weight: bold;">Calcular Frete (CEP):</label>
+      <input type="text" id="cep-input" placeholder="00000-000" maxlength="9" style="padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 4px; width: 120px;">
+      <button type="button" id="btn-frete" style="background: var(--palette-teal-dark); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Calcular</button>
+      <span style="font-size: 0.9rem; margin-left: auto;">Frete: <strong id="valor-frete" style="color: var(--palette-navy-dark);">R$ 0,00</strong></span>
+    </div>
+
+    <div style="margin-top: 25px; display: flex; justify-content: space-between; align-items: center; border-top: 2px solid var(--border-color); padding-top: 20px; font-family: sans-serif;">
+      <a href="index.html" style="color: var(--header-teal); text-decoration: none; font-weight: bold;">+ Selecionar Mais Livros</a>
+      <div style="text-align: right;">
+        <div style="font-size: 1.3rem; font-weight: bold; color: var(--text-dark); margin-bottom: 12px;">Total: <span id="total-carrinho" style="color: var(--accent-wine);">R$ 45,90</span></div>
+        <a href="checkout.html" class="btn-buy" style="padding: 12px 24px; text-decoration: none; display: inline-block;">Avançar para Checkout (Pagamento) →</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+  <script src="/js/carrinho.js"></script>
+</body>
+</html>

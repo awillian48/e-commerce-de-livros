@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livraria Alexandria - Minha Conta & Cadastro</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Header Unificado da Loja Pública -->
+  <header style="background: #1b2a47; color: white; padding: 16px 5%; display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+    <a href="/index.html" class="logo" style="font-family: Georgia, serif; font-size: 1.4rem; font-weight: bold; color: #ffffff; text-decoration: none; white-space: nowrap;">📚 Livraria Alexandria</a>
+    
+    <form class="header-search" onsubmit="return false;" style="display: flex; flex: 1; max-width: 400px; background: white; border-radius: 6px; overflow: hidden; border: 2px solid #2a9d8f;">
+      <select style="border: none; padding: 8px; background: #f1f5f9; font-size: 0.8rem;">
+        <option>Título ou Autor</option>
+        <option>ISBN</option>
+      </select>
+      <input type="text" placeholder="Buscar no acervo..." style="flex: 1; border: none; padding: 8px; outline: none; font-size: 0.85rem;">
+      <button type="submit" style="background: #2a9d8f; color: white; border: none; padding: 0 14px; cursor: pointer;">🔍</button>
+    </form>
+
+    <nav class="user-nav" style="display: flex !important; gap: 10px !important; align-items: center !important; flex-shrink: 0 !important;">
+      <a href="/cliente-pedidos.html" style="background: #f4a261 !important; color: #1b2a47 !important; padding: 8px 12px !important; border-radius: 4px !important; font-weight: bold !important; text-decoration: none !important; white-space: nowrap !important; font-size: 0.85rem !important;">📦 Meus Pedidos</a>
+      <a href="/cliente-cadastro.html" style="color: #ffffff !important; text-decoration: none !important; font-weight: 500 !important; white-space: nowrap !important; font-size: 0.85rem !important;">👤 Minha Conta</a>
+      <a href="/carrinho.html" style="color: #ffffff !important; text-decoration: none !important; font-weight: 500 !important; white-space: nowrap !important; font-size: 0.85rem !important;">🛒 Carrinho (1)</a>
+      <a href="/admin/index.html" style="background: #2a9d8f !important; color: #ffffff !important; padding: 8px 12px !important; border-radius: 4px !important; font-weight: bold !important; text-decoration: none !important; white-space: nowrap !important; font-size: 0.85rem !important;">🛡️ Painel Admin</a>
+    </nav>
+  </header>
+
+  <main class="container" style="max-width: 900px; margin-top: 25px;">
+    <!-- Navegação por Abas (Tab Pattern) -->
+    <div style="display: flex; gap: 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 25px;">
+      <a href="/cliente-pedidos.html" style="background: #e2e8f0; color: var(--text-body); padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 0.9rem;">
+        📦 Histórico de Pedidos & Trocas
+      </a>
+      <a href="/cliente-cadastro.html" style="background: var(--palette-navy-dark); color: white; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.9rem;">
+        👤 Meus Dados Cadastrais
+      </a>
+    </div>
+
+    <h3 class="section-title" style="margin-bottom: 15px;">Perfil do Leitor</h3>
+
+    <form id="form-cliente-publico" style="display: flex; flex-direction: column; gap: 20px; font-size: 0.85rem;">
+      
+      <!-- Bloco 1: Dados Pessoais e Acesso -->
+      <fieldset style="border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+        <legend style="font-weight: bold; color: var(--palette-navy-dark); font-family: Georgia, serif; padding: 0 8px; font-size: 1rem;">1. Dados Pessoais & Credenciais</legend>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
+          <div>
+            <label style="font-weight: bold; display: block; margin-bottom: 4px;">Nome Completo *</label>
+            <input type="text" id="cli-nome" required placeholder="Ex: Machado de Assis" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px;">
+          </div>
+          <div>
+            <label style="font-weight: bold; display: block; margin-bottom: 4px;">CPF *</label>
+            <input type="text" id="cli-cpf" required placeholder="000.000.000-00" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px;">
+          </div>
+          <div>
+            <label style="font-weight: bold; display: block; margin-bottom: 4px;">E-mail *</label>
+            <input type="email" id="cli-email" required placeholder="leitor@alexandria.com" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px;">
+          </div>
+          <div>
+            <label style="font-weight: bold; display: block; margin-bottom: 4px;">Senha de Acesso *</label>
+            <input type="password" id="cli-senha" required placeholder="••••••••" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px;">
+          </div>
+          <div>
+            <label style="font-weight: bold; display: block; margin-bottom: 4px;">Telefone *</label>
+            <input type="text" id="cli-telefone" required placeholder="(11) 99999-0000" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px;">
+          </div>
+          <div>
+            <label style="font-weight: bold; display: block; margin-bottom: 4px;">Data de Nascimento</label>
+            <input type="date" id="cli-nascimento" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px;">
+          </div>
+          <div>
+            <label style="font-weight: bold; display: block; margin-bottom: 4px;">Gênero</label>
+            <select id="cli-genero" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px;">
+              <option value="Masculino">Masculino</option>
+              <option value="Feminino">Feminino</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Bloco 2: Múltiplos Endereços Granulados (1:N) -->
+      <fieldset style="border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+        <legend style="font-weight: bold; color: var(--palette-navy-dark); font-family: Georgia, serif; padding: 0 8px; font-size: 1rem;">2. Meus Endereços (Entrega & Cobrança)</legend>
+        <div id="container-enderecos-cliente" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px;">
+          <!-- Renderizado dinamicamente via cliente-cadastro.js -->
+        </div>
+        <button type="button" onclick="adicionarEnderecoPublico()" style="background: var(--palette-teal-dark); color: white; border: none; padding: 8px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.8rem;">
+          + Cadastrar Outro Endereço
+        </button>
+      </fieldset>
+
+      <!-- Bloco 3: Múltiplos Cartões de Crédito (1:N) -->
+      <fieldset style="border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+        <legend style="font-weight: bold; color: var(--palette-navy-dark); font-family: Georgia, serif; padding: 0 8px; font-size: 1rem;">3. Meus Cartões de Crédito</legend>
+        <div id="container-cartoes-cliente" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px;">
+          <!-- Renderizado dinamicamente via cliente-cadastro.js -->
+        </div>
+        <button type="button" onclick="adicionarCartaoPublico()" style="background: var(--palette-navy-dark); color: white; border: none; padding: 8px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.8rem;">
+          + Cadastrar Outro Cartão
+        </button>
+      </fieldset>
+
+      <!-- Ação de Submissão -->
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+        <button type="submit" class="btn-buy" style="background: var(--palette-teal-dark); padding: 12px 28px; font-size: 0.95rem;">
+          💾 Salvar Meu Perfil Completo
+        </button>
+      </div>
+    </form>
+  </main>
+
+  <script src="/js/cliente-cadastro.js"></script>
+</body>
+</html>

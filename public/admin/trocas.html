@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livraria Alexandria - Autorização de Trocas</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+  <a href="/admin/index.html" class="logo">📚 Livraria Alexandria — Control Center</a>
+  <nav class="user-nav" style="display: flex; gap: 15px; align-items: center; font-size: 0.85rem;">
+    <a href="/admin/index.html">🏠 Hub Admin</a>
+    <a href="/admin/pedidos.html">📦 Pedidos</a>
+    <a href="/admin/clientes.html">👥 Clientes</a>
+    <a href="/admin/trocas.html">🔄 Trocas</a>
+    <a href="/admin/analise.html">📊 BI / Analítico</a>
+    <a href="/index.html" style="margin-left: 10px; color: var(--palette-sand); font-weight: bold;">🛍️ Ver Loja</a>
+  </nav>
+</header>
+
+  <main class="container">
+    <h3 class="section-title">Gestão de Trocas & Devoluções</h3>
+
+    <section style="background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-title);">
+            <th style="padding: 10px;">Solicitação</th>
+            <th style="padding: 10px;">Pedido</th>
+            <th style="padding: 10px;">Cliente</th>
+            <th style="padding: 10px;">Motivo Informado</th>
+            <th style="padding: 10px;">Status do Fluxo</th>
+            <th style="padding: 10px; text-align: center;">Decisão / Transição Humana</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Passo 1: Avaliação de Troca pelo Operador -->
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 12px 10px; font-weight: bold;">#TR-001</td>
+            <td style="padding: 12px 10px;">#7890</td>
+            <td style="padding: 12px 10px;">Machado de Assis</td>
+            <td style="padding: 12px 10px; color: var(--text-muted); italic;">Página rasgada no transporte</td>
+            <td style="padding: 12px 10px;"><span style="background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 4px; font-weight: bold;">TROCA SOLICITADA</span></td>
+            <td style="padding: 12px 10px; text-align: center; display: flex; gap: 6px; justify-content: center;">
+              <button style="background: var(--palette-teal-dark); color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold;">Aceitar Troca ✓</button>
+              <button style="background: var(--palette-terracotta); color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold;">Recusar ✕</button>
+            </td>
+          </tr>
+
+          <!-- Passo 2: Recebimento Físico no Estoque e Geração de Cupom -->
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 12px 10px; font-weight: bold;">#TR-002</td>
+            <td style="padding: 12px 10px;">#7888</td>
+            <td style="padding: 12px 10px;">Clarice Lispector</td>
+            <td style="padding: 12px 10px; color: var(--text-muted); italic;">Item enviado de volta pelo cliente</td>
+            <td style="padding: 12px 10px;"><span style="background: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 4px; font-weight: bold;">ITEM ENVIADO</span></td>
+            <td style="padding: 12px 10px; text-align: center;">
+              <button style="background: var(--palette-navy-dark); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Confirmar Recebimento e Gerar Cupom de Troca →</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
