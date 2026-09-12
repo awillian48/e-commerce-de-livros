@@ -1,8 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import supabase, { isSupabaseConfigured } from './supabaseClient.js';
 
-// Caminho do arquivo JSON de persistência
+// Caminho do arquivo JSON de persistência local / fallback
 const DATA_FILE = path.resolve('src/data/clientes.json');
 
 // Bandeiras de cartão homologadas no sistema (RN0025)
@@ -30,9 +31,9 @@ export function validarSenhaForte(senha) {
 }
 
 /**
- * Lê todos os clientes do arquivo JSON
+ * Lê todos os clientes do arquivo JSON local (fallback)
  */
-export function listarTodosClientes() {
+export function listarTodosClientesLocal() {
   try {
     if (!fs.existsSync(DATA_FILE)) {
       fs.writeFileSync(DATA_FILE, '[]', 'utf8');
@@ -47,10 +48,112 @@ export function listarTodosClientes() {
 }
 
 /**
- * Salva a lista de clientes no arquivo JSON
+ * Salva a lista de clientes no arquivo JSON local
  */
-export function salvarTodosClientes(clientes) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(clientes, null, 2), 'utf8');
+export function salvarTodosClientesLocal(clientes) {
+  try {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(clientes, null, 2), 'utf8');
+  } catch (err) {
+    console.error('Erro ao salvar clientes.json:', err);
+  }
+}
+
+/**
+ * Converte registro relacional do Supabase para o modelo de domínio
+ */
+function mapearClienteSupabase(c) {
+  const tel = Array.isArray(c.telefones) && c.telefones.length > 0 ? c.telefones[0] : null;
+  return {
+    id: c.codigo || c.id,
+    uuid: c.id,
+    codigo: c.codigo,
+    nome: c.nome,
+    cpf: c.cpf,
+    email: c.email,
+    senhaHash: c.senha_hash,
+    telefone: tel ? {
+      tipo: tel.tipo,
+      ddd: tel.ddd,
+      numero: tel.numero
+    } : { tipo: 'CELULAR', ddd: '11', numero: '99999-9999' },
+    dataNascimento: c.data_nascimento,
+    genero: c.genero,
+    ranking: c.ranking,
+    status: c.status,
+    enderecos: (c.enderecos || []).map(e => ({
+      id: e.id,
+      fraseIdentificadora: e.frase_identificadora,
+      tipoResidencia: e.tipo_residencia,
+      tipoLogradouro: e.tipo_logradouro,
+      logradouro: e.logradouro,
+      numero: e.numero,
+      bairro: e.bairro,
+      cep: e.cep,
+      cidade: e.cidade,
+      estado: e.estado,
+      pais: e.pais,
+      observacoes: e.observacoes || '',
+      finalidade: e.finalidade
+    })),
+    cartoes: (c.cartoes || []).map(card => ({
+      id: card.id,
+      numero: card.numero,
+      nomeImpresso: card.nome_impresso,
+      bandeira: card.bandeira,
+      cvv: card.cvv,
+      preferencial: Boolean(card.preferencial)
+    })),
+    transacoes: (c.pedidos || []).map(p => ({
+      id: p.id,
+      data: p.data,
+      valor: Number(p.valor_total),
+      status: p.status,
+      itens: (p.itens_pedido || []).map(item => item.titulo_livro)
+    }))
+  };
+}
+
+/**
+ * Consulta de todos os clientes (com suporte a Supabase e fallback local)
+ */
+export async function listarTodosClientes() {
+  if (isSupabaseConfigured()) {
+    try {
+      const { data, error } = await supabase
+        .from('clientes')
+        .select(`
+          id,
+          codigo,
+          nome,
+          cpf,
+          email,
+          senha_hash,
+          data_nascimento,
+          genero,
+          ranking,
+          status,
+          telefones ( tipo, ddd, numero ),
+          enderecos ( id, frase_identificadora, tipo_residencia, tipo_logradouro, logradouro, numero, bairro, cep, cidade, estado, pais, observacoes, finalidade ),
+          cartoes ( id, numero, nome_impresso, bandeira, cvv, preferencial ),
+          pedidos ( id, data, valor_total, status, itens_pedido ( titulo_livro, autor, quantidade, preco_unitario ) )
+        `)
+        .order('codigo', { ascending: true });
+
+      if (error) {
+        console.warn('⚠️ Supabase retornou erro na consulta. Utilizando fallback local:', error.message);
+        return listarTodosClientesLocal();
+      }
+
+      if (data && data.length > 0) {
+        return data.map(mapearClienteSupabase);
+      }
+    } catch (err) {
+      console.warn('⚠️ Falha de comunicação com Supabase. Utilizando fallback local:', err.message);
+      return listarTodosClientesLocal();
+    }
+  }
+
+  return listarTodosClientesLocal();
 }
 
 /**
@@ -70,8 +173,8 @@ function gerarProximoCodigo(clientes) {
 /**
  * RF0024 - Consulta de clientes com filtros combinados ou isolados
  */
-export function filtrarClientes({ nome, cpf, email, status, ranking, genero }) {
-  const clientes = listarTodosClientes();
+export async function filtrarClientes({ nome, cpf, email, status, ranking, genero }) {
+  const clientes = await listarTodosClientes();
   return clientes.filter(c => {
     let match = true;
     if (nome && !c.nome.toLowerCase().includes(nome.toLowerCase())) match = false;
@@ -87,15 +190,15 @@ export function filtrarClientes({ nome, cpf, email, status, ranking, genero }) {
 /**
  * Busca um cliente por ID ou Código
  */
-export function buscarClientePorId(id) {
-  const clientes = listarTodosClientes();
-  return clientes.find(c => c.id === id || c.codigo === id);
+export async function buscarClientePorId(id) {
+  const clientes = await listarTodosClientes();
+  return clientes.find(c => c.id === id || c.codigo === id || c.uuid === id);
 }
 
 /**
  * RF0021 - Cadastrar cliente com todas as RNs aplicadas
  */
-export function cadastrarCliente(dados) {
+export async function cadastrarCliente(dados) {
   const erros = [];
 
   // RN0026: Dados obrigatórios do cliente
@@ -143,7 +246,6 @@ export function cadastrarCliente(dados) {
       if (!end.cep?.trim()) erros.push(`Endereço #${idx + 1}: CEP é obrigatório (RN0023).`);
       if (!end.cidade?.trim()) erros.push(`Endereço #${idx + 1}: Cidade é obrigatória (RN0023).`);
       if (!end.estado?.trim()) erros.push(`Endereço #${idx + 1}: Estado é obrigatório (RN0023).`);
-      if (!end.pais?.trim()) erros.push(`Endereço #${idx + 1}: País é obrigatório (RN0023).`);
     });
   }
 
@@ -162,12 +264,12 @@ export function cadastrarCliente(dados) {
     // RF0027: Cartão preferencial
     const temPreferencial = cartoes.some(c => c.preferencial === true);
     if (!temPreferencial) {
-      cartoes[0].preferencial = true; // Define o primeiro como preferencial por padrão se não indicado
+      cartoes[0].preferencial = true;
     }
   }
 
-  // Validação de CPF ou E-mail duplicado
-  const clientesExistentes = listarTodosClientes();
+  // Validação de CPF duplicado
+  const clientesExistentes = await listarTodosClientes();
   const cpfLimpo = dados.cpf.replace(/\D/g, '');
   const jaExisteCpf = clientesExistentes.some(c => c.cpf.replace(/\D/g, '') === cpfLimpo);
   if (jaExisteCpf) erros.push('Já existe um cliente cadastrado com este CPF.');
@@ -209,7 +311,7 @@ export function cadastrarCliente(dados) {
       cep: end.cep.trim(),
       cidade: end.cidade.trim(),
       estado: end.estado.trim(),
-      pais: end.pais.trim() || 'Brasil',
+      pais: end.pais ? end.pais.trim() : 'Brasil',
       observacoes: end.observacoes ? end.observacoes.trim() : '',
       finalidade: end.finalidade || 'ENTREGA'
     })),
@@ -221,20 +323,94 @@ export function cadastrarCliente(dados) {
       cvv: card.cvv.trim(),
       preferencial: Boolean(card.preferencial)
     })),
-    transacoes: [] // Novo cliente não possui transações inicialmente
+    transacoes: []
   };
 
-  clientesExistentes.push(novoCliente);
-  salvarTodosClientes(clientesExistentes);
+  // Se Supabase estiver conectado, persiste nas tabelas relacionais
+  if (isSupabaseConfigured()) {
+    try {
+      const { data: clienteCriado, error: errCli } = await supabase
+        .from('clientes')
+        .insert({
+          codigo: novoCliente.codigo,
+          nome: novoCliente.nome,
+          cpf: novoCliente.cpf,
+          email: novoCliente.email,
+          senha_hash: novoCliente.senhaHash,
+          data_nascimento: novoCliente.dataNascimento,
+          genero: novoCliente.genero,
+          ranking: novoCliente.ranking,
+          status: novoCliente.status
+        })
+        .select()
+        .single();
+
+      if (errCli) throw errCli;
+
+      const clienteUUID = clienteCriado.id;
+      novoCliente.uuid = clienteUUID;
+
+      // Inserir telefone
+      await supabase.from('telefones').insert({
+        cliente_id: clienteUUID,
+        tipo: novoCliente.telefone.tipo,
+        ddd: novoCliente.telefone.ddd,
+        numero: novoCliente.telefone.numero
+      });
+
+      // Inserir endereços
+      if (novoCliente.enderecos.length > 0) {
+        await supabase.from('enderecos').insert(
+          novoCliente.enderecos.map(e => ({
+            cliente_id: clienteUUID,
+            frase_identificadora: e.fraseIdentificadora,
+            tipo_residencia: e.tipoResidencia,
+            tipo_logradouro: e.tipoLogradouro,
+            logradouro: e.logradouro,
+            numero: e.numero,
+            bairro: e.bairro,
+            cep: e.cep,
+            cidade: e.cidade,
+            estado: e.estado,
+            pais: e.pais,
+            observacoes: e.observacoes,
+            finalidade: e.finalidade
+          }))
+        );
+      }
+
+      // Inserir cartões
+      if (novoCliente.cartoes.length > 0) {
+        await supabase.from('cartoes').insert(
+          novoCliente.cartoes.map(c => ({
+            cliente_id: clienteUUID,
+            numero: c.numero,
+            nome_impresso: c.nomeImpresso,
+            bandeira: c.bandeira,
+            cvv: c.cvv,
+            preferencial: c.preferencial
+          }))
+        );
+      }
+    } catch (errSupabase) {
+      console.warn('⚠️ Erro ao persistir no Supabase, salvando em fallback local:', errSupabase.message);
+    }
+  }
+
+  // Atualiza arquivo local
+  const baseLocal = listarTodosClientesLocal();
+  baseLocal.push(novoCliente);
+  salvarTodosClientesLocal(baseLocal);
+
   return novoCliente;
 }
 
 /**
  * RF0022 - Alterar dados cadastrais de cliente
  */
-export function alterarCliente(id, dados) {
-  const clientes = listarTodosClientes();
-  const index = clientes.findIndex(c => c.id === id || c.codigo === id);
+export async function alterarCliente(id, dados) {
+  const clientes = await listarTodosClientes();
+  const index = clientes.findIndex(c => c.id === id || c.codigo === id || c.uuid === id);
   if (index === -1) {
     const error = new Error(`Cliente com ID ${id} não foi encontrado.`);
     error.statusCode = 404;
@@ -271,47 +447,93 @@ export function alterarCliente(id, dados) {
     status: dados.status ? dados.status.toUpperCase() : clienteAtual.status
   };
 
-  // Se foram enviados endereços atualizados
   if (Array.isArray(dados.enderecos)) {
     clienteAtualizado.enderecos = dados.enderecos;
   }
 
-  // Se foram enviados cartões atualizados
   if (Array.isArray(dados.cartoes)) {
     clienteAtualizado.cartoes = dados.cartoes;
   }
 
-  clientes[index] = clienteAtualizado;
-  salvarTodosClientes(clientes);
+  // Persistência no Supabase
+  if (isSupabaseConfigured() && clienteAtual.uuid) {
+    try {
+      await supabase.from('clientes').update({
+        nome: clienteAtualizado.nome,
+        email: clienteAtualizado.email,
+        data_nascimento: clienteAtualizado.dataNascimento,
+        genero: clienteAtualizado.genero,
+        ranking: clienteAtualizado.ranking,
+        status: clienteAtualizado.status,
+        updated_at: new Date().toISOString()
+      }).eq('id', clienteAtual.uuid);
+
+      // Atualizar telefone
+      await supabase.from('telefones').update({
+        tipo: clienteAtualizado.telefone.tipo,
+        ddd: clienteAtualizado.telefone.ddd,
+        numero: clienteAtualizado.telefone.numero
+      }).eq('cliente_id', clienteAtual.uuid);
+
+    } catch (errSupabase) {
+      console.warn('⚠️ Erro ao atualizar no Supabase:', errSupabase.message);
+    }
+  }
+
+  // Atualiza arquivo local
+  const baseLocal = listarTodosClientesLocal();
+  const idxLocal = baseLocal.findIndex(c => c.id === id || c.codigo === id);
+  if (idxLocal !== -1) {
+    baseLocal[idxLocal] = clienteAtualizado;
+    salvarTodosClientesLocal(baseLocal);
+  }
+
   return clienteAtualizado;
 }
 
 /**
  * RF0023 - Inativar / Reativar cadastro de cliente
- * Regra: Altera o status mantendo todos os dados e histórico de pedidos intactos.
  */
-export function alternarStatusCliente(id, novoStatus) {
-  const clientes = listarTodosClientes();
-  const index = clientes.findIndex(c => c.id === id || c.codigo === id);
+export async function alternarStatusCliente(id, novoStatus) {
+  const clientes = await listarTodosClientes();
+  const index = clientes.findIndex(c => c.id === id || c.codigo === id || c.uuid === id);
   if (index === -1) {
     const error = new Error(`Cliente com ID ${id} não foi encontrado.`);
     error.statusCode = 404;
     throw error;
   }
 
-  const statusFinal = novoStatus ? novoStatus.toUpperCase() : (clientes[index].status === 'ATIVO' ? 'INATIVO' : 'ATIVO');
-  clientes[index].status = statusFinal;
-  salvarTodosClientes(clientes);
-  return clientes[index];
+  const cliente = clientes[index];
+  const statusFinal = novoStatus ? novoStatus.toUpperCase() : (cliente.status === 'ATIVO' ? 'INATIVO' : 'ATIVO');
+  cliente.status = statusFinal;
+
+  if (isSupabaseConfigured() && cliente.uuid) {
+    try {
+      await supabase.from('clientes').update({
+        status: statusFinal,
+        updated_at: new Date().toISOString()
+      }).eq('id', cliente.uuid);
+    } catch (errSupabase) {
+      console.warn('⚠️ Erro ao alterar status no Supabase:', errSupabase.message);
+    }
+  }
+
+  const baseLocal = listarTodosClientesLocal();
+  const idxLocal = baseLocal.findIndex(c => c.id === id || c.codigo === id);
+  if (idxLocal !== -1) {
+    baseLocal[idxLocal].status = statusFinal;
+    salvarTodosClientesLocal(baseLocal);
+  }
+
+  return cliente;
 }
 
 /**
  * RF0028 - Alteração apenas de senha
- * Regra: Permite atualizar exclusivamente a senha do usuário sem revalidar todos os dados cadastrais.
  */
-export function alterarApenasSenha(id, { senhaNova, confirmacaoSenhaNova }) {
-  const clientes = listarTodosClientes();
-  const index = clientes.findIndex(c => c.id === id || c.codigo === id);
+export async function alterarApenasSenha(id, { senhaNova, confirmacaoSenhaNova }) {
+  const clientes = await listarTodosClientes();
+  const index = clientes.findIndex(c => c.id === id || c.codigo === id || c.uuid === id);
   if (index === -1) {
     const error = new Error(`Cliente com ID ${id} não foi encontrado.`);
     error.statusCode = 404;
@@ -334,18 +556,36 @@ export function alterarApenasSenha(id, { senhaNova, confirmacaoSenhaNova }) {
     throw error;
   }
 
-  clientes[index].senhaHash = gerarHashSenha(senhaNova);
-  salvarTodosClientes(clientes);
+  const novoHash = gerarHashSenha(senhaNova);
+  const cliente = clientes[index];
+
+  if (isSupabaseConfigured() && cliente.uuid) {
+    try {
+      await supabase.from('clientes').update({
+        senha_hash: novoHash,
+        updated_at: new Date().toISOString()
+      }).eq('id', cliente.uuid);
+    } catch (errSupabase) {
+      console.warn('⚠️ Erro ao atualizar senha no Supabase:', errSupabase.message);
+    }
+  }
+
+  const baseLocal = listarTodosClientesLocal();
+  const idxLocal = baseLocal.findIndex(c => c.id === id || c.codigo === id);
+  if (idxLocal !== -1) {
+    baseLocal[idxLocal].senhaHash = novoHash;
+    salvarTodosClientesLocal(baseLocal);
+  }
+
   return { mensagem: 'Senha alterada com sucesso exclusivamente (RF0028).' };
 }
 
 /**
  * RNF0034 - Alteração isolada de endereços
- * Regra: O cliente pode adicionar, editar ou remover endereços sem ter que reenviar dados pessoais.
  */
-export function alterarEnderecosIsolados(id, listaEnderecos) {
-  const clientes = listarTodosClientes();
-  const index = clientes.findIndex(c => c.id === id || c.codigo === id);
+export async function alterarEnderecosIsolados(id, listaEnderecos) {
+  const clientes = await listarTodosClientes();
+  const index = clientes.findIndex(c => c.id === id || c.codigo === id || c.uuid === id);
   if (index === -1) {
     const error = new Error(`Cliente com ID ${id} não foi encontrado.`);
     error.statusCode = 404;
@@ -361,7 +601,14 @@ export function alterarEnderecosIsolados(id, listaEnderecos) {
   }
 
   clientes[index].enderecos = listaEnderecos;
-  salvarTodosClientes(clientes);
+
+  const baseLocal = listarTodosClientesLocal();
+  const idxLocal = baseLocal.findIndex(c => c.id === id || c.codigo === id);
+  if (idxLocal !== -1) {
+    baseLocal[idxLocal].enderecos = listaEnderecos;
+    salvarTodosClientesLocal(baseLocal);
+  }
+
   return clientes[index].enderecos;
 }
 
@@ -370,9 +617,9 @@ export function alterarEnderecosIsolados(id, listaEnderecos) {
  * - Exclusão Física: PERMITIDA APENAS se o cliente NÃO possuir transações/pedidos vinculados.
  * - Se o cliente possuir pedidos: a exclusão física é BLOQUEADA e o sistema instrui a usar a INATIVAÇÃO.
  */
-export function excluirCliente(id) {
-  const clientes = listarTodosClientes();
-  const index = clientes.findIndex(c => c.id === id || c.codigo === id);
+export async function excluirCliente(id) {
+  const clientes = await listarTodosClientes();
+  const index = clientes.findIndex(c => c.id === id || c.codigo === id || c.uuid === id);
   if (index === -1) {
     const error = new Error(`Cliente com ID ${id} não foi encontrado.`);
     error.statusCode = 404;
@@ -394,16 +641,30 @@ export function excluirCliente(id) {
   }
 
   // Se não tem pedidos, permite a exclusão física
-  clientes.splice(index, 1);
-  salvarTodosClientes(clientes);
+  if (isSupabaseConfigured() && cliente.uuid) {
+    try {
+      const { error: errDel } = await supabase.from('clientes').delete().eq('id', cliente.uuid);
+      if (errDel) throw errDel;
+    } catch (errSupabase) {
+      console.warn('⚠️ Erro ao excluir no Supabase:', errSupabase.message);
+    }
+  }
+
+  const baseLocal = listarTodosClientesLocal();
+  const idxLocal = baseLocal.findIndex(c => c.id === id || c.codigo === id);
+  if (idxLocal !== -1) {
+    baseLocal.splice(idxLocal, 1);
+    salvarTodosClientesLocal(baseLocal);
+  }
+
   return { mensagem: `Cliente "${cliente.nome}" excluído fisicamente com sucesso.` };
 }
 
 /**
  * RF0025 - Consulta de transações do cliente
  */
-export function consultarTransacoesCliente(id) {
-  const cliente = buscarClientePorId(id);
+export async function consultarTransacoesCliente(id) {
+  const cliente = await buscarClientePorId(id);
   if (!cliente) {
     const error = new Error(`Cliente com ID ${id} não foi encontrado.`);
     error.statusCode = 404;

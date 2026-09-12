@@ -12,6 +12,8 @@
     "test:record": "cypress run --record --key dbb870cb-ae6c-4585-b0b7-006a6027746d"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.109.0",
+    "dotenv": "^17.4.2",
     "express": "^4.22.2"
   },
   "devDependencies": {

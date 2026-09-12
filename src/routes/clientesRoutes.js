@@ -18,14 +18,14 @@ const router = express.Router();
  * RF0024: Consulta de clientes
  * Suporta filtros isolados ou combinados: ?nome=&cpf=&email=&status=&ranking=&genero=
  */
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const { nome, cpf, email, status, ranking, genero } = req.query;
     if (nome || cpf || email || status || ranking || genero) {
-      const filtrados = filtrarClientes({ nome, cpf, email, status, ranking, genero });
+      const filtrados = await filtrarClientes({ nome, cpf, email, status, ranking, genero });
       return res.json(filtrados);
     }
-    const clientes = listarTodosClientes();
+    const clientes = await listarTodosClientes();
     return res.json(clientes);
   } catch (err) {
     return res.status(500).json({ erro: 'Erro interno ao consultar clientes', mensagem: err.message });
@@ -35,9 +35,9 @@ router.get('/', (req, res) => {
 /**
  * Consulta de um cliente específico por ID ou Código
  */
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
-    const cliente = buscarClientePorId(req.params.id);
+    const cliente = await buscarClientePorId(req.params.id);
     if (!cliente) {
       return res.status(404).json({ erro: 'Cliente não encontrado' });
     }
@@ -52,9 +52,9 @@ router.get('/:id', (req, res) => {
  * Valida todos os campos obrigatórios (RN0026), senha forte (RNF0031, RNF0032),
  * endereços (RN0021, RN0022, RN0023, RF0026) e cartões (RN0024, RN0025, RF0027).
  */
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   try {
-    const novoCliente = cadastrarCliente(req.body);
+    const novoCliente = await cadastrarCliente(req.body);
     return res.status(201).json({
       sucesso: true,
       mensagem: 'Cliente cadastrado com sucesso (RF0021)!',
@@ -72,9 +72,9 @@ router.post('/', (req, res) => {
 /**
  * RF0022: Alterar dados cadastrais do cliente
  */
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
-    const clienteAtualizado = alterarCliente(req.params.id, req.body);
+    const clienteAtualizado = await alterarCliente(req.params.id, req.body);
     return res.json({
       sucesso: true,
       mensagem: 'Dados cadastrais atualizados com sucesso (RF0022)!',
@@ -92,10 +92,10 @@ router.put('/:id', (req, res) => {
 /**
  * RF0023: Inativar / Reativar cadastro de cliente
  */
-router.patch('/:id/status', (req, res) => {
+router.patch('/:id/status', async (req, res) => {
   try {
     const { status } = req.body;
-    const cliente = alternarStatusCliente(req.params.id, status);
+    const cliente = await alternarStatusCliente(req.params.id, status);
     return res.json({
       sucesso: true,
       mensagem: `Status do cliente alterado para ${cliente.status} com sucesso (RF0023)!`,
@@ -112,9 +112,9 @@ router.patch('/:id/status', (req, res) => {
 /**
  * RF0028: Alteração exclusiva de senha
  */
-router.patch('/:id/senha', (req, res) => {
+router.patch('/:id/senha', async (req, res) => {
   try {
-    const resultado = alterarApenasSenha(req.params.id, req.body);
+    const resultado = await alterarApenasSenha(req.params.id, req.body);
     return res.json({
       sucesso: true,
       ...resultado
@@ -131,9 +131,9 @@ router.patch('/:id/senha', (req, res) => {
 /**
  * RNF0034: Alteração isolada de endereços
  */
-router.put('/:id/enderecos', (req, res) => {
+router.put('/:id/enderecos', async (req, res) => {
   try {
-    const enderecos = alterarEnderecosIsolados(req.params.id, req.body);
+    const enderecos = await alterarEnderecosIsolados(req.params.id, req.body);
     return res.json({
       sucesso: true,
       mensagem: 'Endereços atualizados de forma isolada com sucesso (RNF0034)!',
@@ -151,9 +151,9 @@ router.put('/:id/enderecos', (req, res) => {
  * DISTINÇÃO ENTRE INATIVAÇÃO E EXCLUSÃO:
  * Bloqueia exclusão física se houver histórico de transações vinculadas.
  */
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
-    const resultado = excluirCliente(req.params.id);
+    const resultado = await excluirCliente(req.params.id);
     return res.json({
       sucesso: true,
       ...resultado
@@ -170,9 +170,9 @@ router.delete('/:id', (req, res) => {
 /**
  * RF0025: Consulta de histórico de transações do cliente
  */
-router.get('/:id/transacoes', (req, res) => {
+router.get('/:id/transacoes', async (req, res) => {
   try {
-    const transacoes = consultarTransacoesCliente(req.params.id);
+    const transacoes = await consultarTransacoesCliente(req.params.id);
     return res.json({
       sucesso: true,
       transacoes
