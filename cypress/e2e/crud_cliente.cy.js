@@ -32,8 +32,26 @@ const PAUSA_ACAO_MS = 500;
 
 describe('Suíte de Testes Automatizados — CRUD Completo de Cliente (LES 2026)', () => {
   beforeEach(() => {
-    // Garante confirmação automática para caixas nativas de window.confirm
-    cy.on('window:confirm', () => true);
+    // 1. Automatiza e aceita automaticamente qualquer popup de permissão/confirmação (confirm)
+    cy.on('window:confirm', (mensagem) => {
+      Cypress.log({
+        name: 'POPUP PERMISSÃO',
+        displayName: 'CONFIRMAÇÃO',
+        message: `Aceito automaticamente: "${mensagem}"`
+      });
+      return true; // Retorna true (equivalente a clicar em OK/Confirmar)
+    });
+
+    // 2. Automatiza e fecha qualquer popup de alerta nativo (alert)
+    cy.on('window:alert', (mensagem) => {
+      Cypress.log({
+        name: 'POPUP ALERTA',
+        displayName: 'ALERTA',
+        message: `Fechado automaticamente: "${mensagem}"`
+      });
+      return true;
+    });
+
     cy.visit('/admin/clientes.html');
     cy.wait(1200); // Pausa para visualização da tela inicial carregada
   });
