@@ -13,9 +13,21 @@
  * ============================================================================
  */
 
-// Desacelera a digitação (60ms entre cada tecla) para visualização humana em tempo real
+// 1. Desacelera a digitação (100ms entre cada caractere) para visualização humana
 Cypress.Keyboard.defaults({
-  keystrokeDelay: 60
+  keystrokeDelay: 100
+});
+
+// 2. Adiciona uma pausa suave automática (500ms) após cliques e seleções na tela
+const PAUSA_ACAO_MS = 500;
+['click', 'select', 'check'].forEach((command) => {
+  Cypress.Commands.overwrite(command, (originalFn, element, ...args) => {
+    return originalFn(element, ...args).then((subject) => {
+      return new Cypress.Promise((resolve) => {
+        setTimeout(() => resolve(subject), PAUSA_ACAO_MS);
+      });
+    });
+  });
 });
 
 describe('Suíte de Testes Automatizados — CRUD Completo de Cliente (LES 2026)', () => {
@@ -23,7 +35,7 @@ describe('Suíte de Testes Automatizados — CRUD Completo de Cliente (LES 2026)
     // Garante confirmação automática para caixas nativas de window.confirm
     cy.on('window:confirm', () => true);
     cy.visit('/admin/clientes.html');
-    cy.wait(800); // Pausa para visualização da tela inicial
+    cy.wait(1200); // Pausa para visualização da tela inicial carregada
   });
 
   // --------------------------------------------------------------------------
@@ -141,10 +153,10 @@ describe('Suíte de Testes Automatizados — CRUD Completo de Cliente (LES 2026)
 
     cy.get('#btn-salvar-cliente').click();
     cy.get('#modal-erros-validacao').scrollIntoView().should('be.visible').and('contain', 'RNF0031');
-    cy.wait(1500); // Pausa para leitura do erro de validação
+    cy.wait(2500); // Pausa ampliada para o professor ler a regra de senha fraca
     cy.get('#modal-cliente').should('be.visible');
     cy.contains('button', 'Cancelar').click();
-    cy.wait(600);
+    cy.wait(1000);
   });
 
   // --------------------------------------------------------------------------
@@ -168,9 +180,9 @@ describe('Suíte de Testes Automatizados — CRUD Completo de Cliente (LES 2026)
 
     cy.get('#btn-salvar-cliente').click();
     cy.get('#modal-erros-validacao').scrollIntoView().should('be.visible').and('contain', 'RNF0032');
-    cy.wait(1500); // Pausa para leitura do erro de confirmação
+    cy.wait(2500); // Pausa ampliada para o professor ler a regra de confirmação divergente
     cy.contains('button', 'Cancelar').click();
-    cy.wait(600);
+    cy.wait(1000);
   });
 
   // --------------------------------------------------------------------------
@@ -240,26 +252,26 @@ describe('Suíte de Testes Automatizados — CRUD Completo de Cliente (LES 2026)
   // TESTE 8: CONSULTA DE TRANSAÇÕES DO CLIENTE (RF0025)
   // --------------------------------------------------------------------------
   it('[RF0025] Deve exibir o histórico de transações/pedidos vinculados ao cliente', () => {
-    cy.wait(600);
+    cy.wait(800);
     cy.get('[data-cy="linha-cliente-CLI-001"]').within(() => {
       cy.contains('button', 'Transações').click();
     });
 
     cy.get('#modal-transacoes').should('be.visible');
-    cy.wait(1500); // Pausa visual para o professor ver os pedidos na tela
+    cy.wait(2500); // Pausa visual para o professor ver os pedidos detalhados na tela
     cy.get('#container-tabela-transacoes').should('contain', 'PED-2026-001');
     cy.get('#container-tabela-transacoes').should('contain', 'Dom Casmurro');
     cy.get('#container-tabela-transacoes').should('contain', 'R$ 89,90');
     cy.get('#modal-transacoes').contains('button', 'Fechar').click();
     cy.get('#modal-transacoes').should('not.be.visible');
-    cy.wait(800);
+    cy.wait(1000);
   });
 
   // --------------------------------------------------------------------------
   // TESTE 9: DISTINÇÃO INATIVAÇÃO VS EXCLUSÃO — BLOQUEIO POR HISTÓRICO
   // --------------------------------------------------------------------------
   it('[DISTINÇÃO] Deve BLOQUEAR a exclusão física de cliente que possui transações e instruir uso da inativação', () => {
-    cy.wait(600);
+    cy.wait(800);
     // Machado de Assis tem pedidos registrados
     cy.get('[data-cy="linha-cliente-CLI-001"]').within(() => {
       cy.contains('button', 'Excluir').click();
@@ -267,21 +279,21 @@ describe('Suíte de Testes Automatizados — CRUD Completo de Cliente (LES 2026)
 
     // Deve abrir o modal explicativo de BLOQUEIO da regra de negócio
     cy.get('#modal-bloqueio-exclusao').should('be.visible');
-    cy.wait(2000); // Pausa importante para ler a explicação da regra de negócio
+    cy.wait(3000); // Pausa ampliada para ler a explicação da regra fiscal e contábil
     cy.get('#texto-bloqueio-exclusao').should('contain', 'transação(ões)');
     cy.get('#modal-bloqueio-exclusao').contains('button', 'Entendido').click();
     cy.get('#modal-bloqueio-exclusao').should('not.be.visible');
 
     // Garante que Machado de Assis NÃO foi excluído
     cy.get('#tabela-clientes-body').should('contain', 'Machado de Assis');
-    cy.wait(1000);
+    cy.wait(1200);
   });
 
   // --------------------------------------------------------------------------
   // TESTE 10: EXCLUSÃO PERMITIDA PARA CLIENTE SEM PEDIDOS
   // --------------------------------------------------------------------------
   it('[EXCLUSÃO PERMITIDA] Deve permitir a exclusão física de cliente que NÃO possui histórico de pedidos', () => {
-    cy.wait(600);
+    cy.wait(800);
     // José de Alencar (CLI-003) não possui compras registradas
     cy.get('[data-cy="linha-cliente-CLI-003"]').within(() => {
       cy.contains('button', 'Excluir').click();
@@ -289,6 +301,6 @@ describe('Suíte de Testes Automatizados — CRUD Completo de Cliente (LES 2026)
 
     cy.get('#mensagem-alerta').should('contain', 'excluído fisicamente com sucesso');
     cy.get('#tabela-clientes-body').should('not.contain', 'CLI-003');
-    cy.wait(1200);
+    cy.wait(2000); // Pausa final para visualização da remoção
   });
 });
