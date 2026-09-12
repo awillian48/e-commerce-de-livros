@@ -14,4 +14,9 @@ app.use('/clientes', clientesRoutes); // Alias para flexibilidade
 const publicPath = path.resolve('public');
 app.use(express.static(publicPath));
 
+// Redirecionamento da raiz para a área administrativa de clientes
+app.get('/', (req, res) => {
+  res.redirect('/admin/clientes.html');
+});
+
 export default app;
