@@ -36,13 +36,16 @@ O servidor iniciará em `http://localhost:3000`.
 
 O sistema conta com testes automatizados desenvolvidos em **Cypress** com cobertura de 100% dos requisitos do DRS:
 
-### 🌟 1. Direto pelo App do Cypress (Sem CMD — Recomendado)
-Abra a pasta do projeto no Windows Explorer e dê um **duplo clique no arquivo `Abrir_Cypress.bat`**. O Cypress Desktop App abrirá diretamente na tela:
-1. Escolha **E2E Testing**
-2. Selecione o navegador desejado
-3. Clique em **`crud_cliente.cy.js`**
+### 🌟 1. Direto pelo App do Cypress (Recomendado)
+Com o Cypress App já aberto:
+1. No Cypress, selecione ou adicione a pasta deste projeto:
+   `C:\Users\anderson.barros\.gemini\antigravity-ide\scratch\e-commerce-de-livros`
+2. Clique em **E2E Testing**
+3. Escolha o navegador (Chrome ou Electron)
+4. Clique na spec **`crud_cliente.cy.js`**
+5. Todos os 10 testes serão executados visualmente e passo a passo!
 
-*Ou via comando:*
+*Para abrir o app do Cypress via npm (se necessário):*
 ```bash
 npm run cypress:open
 ```

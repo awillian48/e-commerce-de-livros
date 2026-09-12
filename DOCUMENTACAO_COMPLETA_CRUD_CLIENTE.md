@@ -57,16 +57,14 @@ Uma das principais regras de negócio de governança contábil e fiscal do siste
 
 ## 4. Como Executar e Demonstrar os Testes
 
-O projeto conta com **execução de testes no Cypress Desktop App** de forma profissional e isolada, sem poluir a interface do usuário:
+O projeto conta com **execução de testes no Cypress Desktop App** de forma profissional e isolada, sem scripts em lote (.bat) e sem poluir a interface do usuário:
 
-### Opção 1: Cypress Desktop App Direto (Sem CMD — Recomendado para a Apresentação)
-Para abrir o aplicativo interativo do Cypress com 1 clique, sem precisar digitar comandos no terminal:
-1. Abra a pasta do projeto no Windows Explorer:
+### Opção 1: Cypress Desktop App Direto (Recomendado para a Apresentação)
+Com o aplicativo do Cypress já aberto:
+1. No Cypress, selecione ou adicione o projeto apontando para:
    `C:\Users\anderson.barros\.gemini\antigravity-ide\scratch\e-commerce-de-livros`
-2. Dê um **duplo clique no arquivo `Abrir_Cypress.bat`**.
-3. A janela oficial do Cypress Desktop abrirá na tela.
-4. Clique em **E2E Testing** -> Escolha o navegador (Chrome ou Electron) -> Clique em **`crud_cliente.cy.js`**.
-5. O Cypress executará todos os 10 testes com visualização passo a passo e ritmo pausado para o professor acompanhar.
+2. Clique em **E2E Testing** $\rightarrow$ escolha o navegador (Chrome ou Electron) $\rightarrow$ clique em **`crud_cliente.cy.js`**.
+3. O Cypress executará todos os 10 testes com visualização passo a passo e ritmo pausado para o professor acompanhar.
 
 ---
 
@@ -95,7 +93,7 @@ npm run test:e2e
    - Destacar o design editorial limpo, a paleta retrô original (Navy, Teal, Sand, Terracotta e Cream), os cards de KPIs no topo e o **modal ampliado (1140px)** com layout espaçoso sem quebra de linhas.
 
 2. **Demonstração em Tempo Real no Cypress Desktop App (3 a 4 minutos):**
-   - Executar os testes pelo aplicativo do Cypress (via `Abrir_Cypress.bat` ou `npm run cypress:open`).
+   - Executar a spec `crud_cliente.cy.js` diretamente no aplicativo do Cypress.
    - Conforme cada teste é executado, comentar a conformidade com os requisitos e regras de negócio:
      - *"Aqui vemos o RF0024 com filtro dinâmico por nome e status..."*
      - *"Aqui o RNF0031 e RNF0032 barrando senhas fracas e confirmações divergentes..."*
