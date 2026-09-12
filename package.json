@@ -5,6 +5,8 @@
   "main": "server.js",
   "scripts": {
     "dev": "node --watch server.js",
+    "test:browser": "node run-tests-browser.js",
+    "test:headed": "cypress run --headed --no-runner-ui",
     "test:e2e": "cypress run",
     "test:e2e:open": "cypress open"
   },
