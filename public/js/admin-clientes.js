@@ -1,298 +1,809 @@
-const STORAGE_KEY = '@alexandria:clientes';
+/**
+ * ============================================================================
+ * Livraria Alexandria — Controle Administrativo de Clientes (CRUD)
+ * Disciplina: Laboratório de Engenharia de Software (LES 2026)
+ * Alunos: Anderson Barros & João Pedro Scandiuzzi
+ * 
+ * Requisitos Implementados:
+ * - RF0021: Cadastrar cliente
+ * - RF0022: Alterar cliente
+ * - RF0023: Inativar cadastro de cliente
+ * - RF0024: Consulta de clientes (filtros combinados e isolados)
+ * - RF0025: Consulta de transações
+ * - RF0026: Cadastro de endereços com frase curta identificadora
+ * - RF0027: Cadastro de cartões de crédito com cartão preferencial
+ * - RF0028: Alteração exclusiva de senha
+ * - RN0021: Endereço de cobrança obrigatório
+ * - RN0022: Endereço de entrega obrigatório
+ * - RN0023: Composição detalhada do registro de endereços
+ * - RN0024: Composição do registro de cartões de crédito
+ * - RN0025: Validação de bandeiras homologadas
+ * - RN0026: Dados obrigatórios do cliente (incluindo telefone detalhado)
+ * - RN0027: Ranking numérico do cliente
+ * - RNF0031: Senha forte (mínimo 8 caracteres, maiúscula, minúscula, especial)
+ * - RNF0032: Confirmação dupla de senha
+ * - RNF0035: Código único de cliente (CLI-XXX)
+ * ============================================================================
+ */
 
-// Base de dados mockada com estrutura de relacionamento 1:N
-const clientesIniciaisMock = [
-  {
-    id: '1',
-    cpf: '123.456.789-00',
-    nome: 'Machado de Assis',
-    email: 'machado@alexandria.com.br',
-    dataNascimento: '1839-06-21',
-    genero: 'Masculino',
-    telefone: '(21) 98888-7777',
-    status: 'ATIVO',
-    enderecos: [
-      { logradouro: 'Rua Cosme Velho', numero: '100', bairro: 'Botafogo', cep: '22241-090', cidade: 'Rio de Janeiro', estado: 'RJ', tipo: 'ENTREGA' },
-      { logradouro: 'Av. Rio Branco', numero: '156', bairro: 'Centro', cep: '20040-003', cidade: 'Rio de Janeiro', estado: 'RJ', tipo: 'COBRANCA' }
-    ],
-    cartoes: [
-      { numero: '•••• •••• •••• 4321', nomeImpresso: 'N MACHADO ASSIS', bandeira: 'VISA' },
-      { numero: '•••• •••• •••• 8765', nomeImpresso: 'JOAQUIM M ASSIS', bandeira: 'MASTERCARD' }
-    ]
-  },
-  {
-    id: '2',
-    cpf: '987.654.321-11',
-    nome: 'Clarice Lispector',
-    email: 'clarice@alexandria.com.br',
-    dataNascimento: '1920-12-10',
-    genero: 'Feminino',
-    telefone: '(21) 97777-6666',
-    status: 'INATIVO',
-    enderecos: [
-      { logradouro: 'Av. Atlântica', numero: '1500', bairro: 'Copacabana', cep: '22021-001', cidade: 'Rio de Janeiro', estado: 'RJ', tipo: 'AMBOS' }
-    ],
-    cartoes: [
-      { numero: '•••• •••• •••• 1122', nomeImpresso: 'CLARICE LISPECTOR', bandeira: 'ELO' }
-    ]
-  }
-];
+const API_BASE = '/api/clientes';
 
-// Estado temporário em memória para manipular os blocos do modal antes de salvar
-let enderecosTemporarios = [];
-let cartoesTemporarios = [];
+// Armazena em memória os clientes carregados atualmente
+let clientesCache = [];
 
+// Buffers temporários para edição das coleções 1:N de endereços e cartões
+let enderecosBuffer = [];
+let cartoesBuffer = [];
+
+// Inicialização ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {
-  inicializarStorage();
-  renderizarTabela();
-
-  const form = document.getElementById('form-cliente-admin');
-  if (form) form.addEventListener('submit', salvarCliente);
+  carregarClientes();
 });
 
-function inicializarStorage() {
-  if (!localStorage.getItem(STORAGE_KEY)) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(clientesIniciaisMock));
+/**
+ * Exibe mensagens de feedback com cores adequadas
+ */
+function exibirMensagem(texto, tipo = 'sucesso') {
+  const box = document.getElementById('mensagem-alerta');
+  if (!box) return;
+  box.textContent = texto;
+  box.style.display = 'block';
+  if (tipo === 'sucesso') {
+    box.style.background = '#dcfce7';
+    box.style.color = '#15803d';
+    box.style.border = '1px solid #86efac';
+  } else {
+    box.style.background = '#fee2e2';
+    box.style.color = '#991b1b';
+    box.style.border = '1px solid #fca5a5';
+  }
+  setTimeout(() => {
+    box.style.display = 'none';
+  }, 5000);
+}
+
+/**
+ * RF0024: Carrega e consulta clientes via API REST
+ */
+async function carregarClientes(queryParams = '') {
+  try {
+    const url = queryParams ? `${API_BASE}?${queryParams}` : API_BASE;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Falha ao obter lista de clientes');
+    clientesCache = await response.json();
+    renderizarTabelaClientes(clientesCache);
+  } catch (err) {
+    console.error(err);
+    exibirMensagem('Erro ao carregar dados de clientes da API.', 'erro');
   }
 }
 
-function obterClientes() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+/**
+ * RF0024: Aplica filtros isolados ou combinados
+ */
+function aplicarFiltros(e) {
+  e.preventDefault();
+  const nome = document.getElementById('filtro-nome').value.trim();
+  const cpf = document.getElementById('filtro-cpf').value.trim();
+  const email = document.getElementById('filtro-email').value.trim();
+  const status = document.getElementById('filtro-status').value;
+  const ranking = document.getElementById('filtro-ranking').value;
+
+  const params = new URLSearchParams();
+  if (nome) params.append('nome', nome);
+  if (cpf) params.append('cpf', cpf);
+  if (email) params.append('email', email);
+  if (status) params.append('status', status);
+  if (ranking) params.append('ranking', ranking);
+
+  carregarClientes(params.toString());
 }
 
-function salvarClientesStorage(lista) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
+/**
+ * Limpa os filtros e recarrega a base completa
+ */
+function limparFiltros() {
+  document.getElementById('form-filtro-clientes').reset();
+  carregarClientes();
 }
 
-function renderizarTabela() {
+/**
+ * Renderiza as linhas da tabela de clientes
+ */
+function renderizarTabelaClientes(clientes) {
   const tbody = document.getElementById('tabela-clientes-body');
+  const badgeTotal = document.getElementById('total-clientes-badge');
+  if (badgeTotal) badgeTotal.textContent = clientes.length;
   if (!tbody) return;
 
-  const clientes = obterClientes();
   tbody.innerHTML = '';
+
+  if (clientes.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align: center; padding: 25px; color: var(--text-muted);">
+          Nenhum cliente encontrado com os critérios pesquisados (RF0024).
+        </td>
+      </tr>
+    `;
+    return;
+  }
 
   clientes.forEach(cliente => {
     const isAtivo = cliente.status === 'ATIVO';
     const totalEnderecos = cliente.enderecos ? cliente.enderecos.length : 0;
     const totalCartoes = cliente.cartoes ? cliente.cartoes.length : 0;
+    const totalTransacoes = cliente.transacoes ? cliente.transacoes.length : 0;
+
+    // Formatação do ranking por estrelas (RN0027)
+    const estrelas = '⭐'.repeat(cliente.ranking || 1);
+
+    // Formatação do telefone composto (RN0026)
+    const telFormatado = cliente.telefone
+      ? `(${cliente.telefone.ddd}) ${cliente.telefone.numero} [${cliente.telefone.tipo}]`
+      : 'Não informado';
 
     const tr = document.createElement('tr');
-    tr.style.borderBottom = '1px solid #f1f5f9';
+    tr.setAttribute('data-cy', `linha-cliente-${cliente.codigo}`);
     tr.innerHTML = `
-      <td style="padding: 12px 10px;">
-        <strong>#${cliente.id}</strong><br>
-        <small style="color: var(--text-muted);">${cliente.cpf}</small>
+      <td style="font-weight: bold; color: var(--palette-navy-dark);">
+        ${cliente.codigo || cliente.id}
       </td>
-      <td style="padding: 12px 10px;">
-        <strong style="color: var(--text-title);">${cliente.nome}</strong><br>
-        <small style="color: var(--text-muted);">${cliente.telefone || 'Sem telefone'} | 📍 ${totalEnderecos} end. | 💳 ${totalCartoes} cartão(ões)</small>
+      <td>
+        <strong style="color: var(--text-title); font-size: 0.95rem;">${cliente.nome}</strong><br>
+        <small style="color: var(--text-muted);">CPF: ${cliente.cpf}</small>
       </td>
-      <td style="padding: 12px 10px;">${cliente.email}</td>
-      <td style="padding: 12px 10px;">
-        <span style="background: ${isAtivo ? '#dcfce7' : '#fee2e2'}; color: ${isAtivo ? '#15803d' : '#b91c1c'}; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem;">
+      <td>
+        <span>${cliente.email}</span><br>
+        <small style="color: var(--text-muted);">${telFormatado}</small><br>
+        <small style="color: var(--palette-teal-dark);">📍 ${totalEnderecos} end. | 💳 ${totalCartoes} cartão(ões)</small>
+      </td>
+      <td>
+        <span style="font-size: 0.85rem;" title="Ranking: ${cliente.ranking} estrela(s)">${estrelas}</span>
+      </td>
+      <td>
+        <span class="badge-${isAtivo ? 'success' : 'danger'}" data-cy="badge-status-${cliente.codigo}">
           ${cliente.status}
         </span>
       </td>
-      <td style="padding: 12px 10px; text-align: center;">
-        <button onclick="abrirModalEdicao('${cliente.id}')" style="background: var(--palette-navy-dark); color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Editar</button>
-        <button onclick="alternarStatusCliente('${cliente.id}')" style="background: ${isAtivo ? 'var(--palette-terracotta)' : 'var(--palette-teal-dark)'}; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-left: 4px;">
-          ${isAtivo ? 'Inativar' : 'Reativar'}
-        </button>
-        <button onclick="excluirCliente('${cliente.id}')" style="background: #991b1b; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-left: 4px;">Excluir</button>
+      <td style="text-align: center;">
+        <div style="display: flex; gap: 4px; justify-content: center; flex-wrap: wrap;">
+          <button type="button" class="btn-sm" style="background: #0284c7; color: white;" onclick="abrirModalTransacoes('${cliente.id}')" title="Ver Compras (RF0025)" data-cy="btn-transacoes-${cliente.codigo}">
+            📦 Transações (${totalTransacoes})
+          </button>
+          <button type="button" class="btn-sm" style="background: var(--palette-navy-dark); color: white;" onclick="abrirModalEdicao('${cliente.id}')" title="Editar Dados (RF0022)" data-cy="btn-editar-${cliente.codigo}">
+            ✏️ Editar
+          </button>
+          <button type="button" class="btn-sm" style="background: #475569; color: white;" onclick="abrirModalSenha('${cliente.id}')" title="Alterar Senha (RF0028)" data-cy="btn-senha-${cliente.codigo}">
+            🔑 Senha
+          </button>
+          <button type="button" class="btn-sm" style="background: ${isAtivo ? 'var(--palette-terracotta)' : 'var(--palette-teal-dark)'}; color: white;" onclick="alternarStatus('${cliente.id}')" title="Inativar/Reativar (RF0023)" data-cy="btn-inativar-${cliente.codigo}">
+            ${isAtivo ? 'Inativar' : 'Reativar'}
+          </button>
+          <button type="button" class="btn-sm" style="background: #b91c1c; color: white;" onclick="tentarExcluirCliente('${cliente.id}')" title="Excluir" data-cy="btn-excluir-${cliente.codigo}">
+            🗑️ Excluir
+          </button>
+        </div>
       </td>
     `;
     tbody.appendChild(tr);
   });
 }
 
+// ============================================================================
+// MODAL DE CADASTRO E EDIÇÃO (RF0021 & RF0022)
+// ============================================================================
+
 function abrirModalNovo() {
-  document.getElementById('modal-titulo').textContent = 'Novo Cliente';
+  document.getElementById('modal-titulo').textContent = 'Cadastrar Novo Cliente (RF0021)';
   document.getElementById('form-cliente-admin').reset();
   document.getElementById('cliente-id').value = '';
   document.getElementById('field-cpf').removeAttribute('readonly');
+  document.getElementById('bloco-senha-cadastro').style.display = 'block';
+  document.getElementById('modal-erros-validacao').style.display = 'none';
 
-  // Inicializa arrays com 1 registro padrão
-  enderecosTemporarios = [{ logradouro: '', numero: '', bairro: '', cep: '', cidade: '', estado: 'SP', tipo: 'ENTREGA' }];
-  cartoesTemporarios = [{ numero: '', nomeImpresso: '', bandeira: 'VISA' }];
+  // Inicializa 1 endereço com finalidade "AMBOS" (satisfaz RN0021 e RN0022)
+  enderecosBuffer = [{
+    id: `end-${Date.now()}-0`,
+    fraseIdentificadora: 'Minha Residência',
+    tipoResidencia: 'Casa',
+    tipoLogradouro: 'Rua',
+    logradouro: '',
+    numero: '',
+    bairro: '',
+    cep: '',
+    cidade: '',
+    estado: 'SP',
+    pais: 'Brasil',
+    observacoes: '',
+    finalidade: 'AMBOS'
+  }];
+
+  // Inicializa 1 cartão com rádio preferencial ativo (RF0027)
+  cartoesBuffer = [{
+    id: `card-${Date.now()}-0`,
+    numero: '',
+    nomeImpresso: '',
+    bandeira: 'VISA',
+    cvv: '',
+    preferencial: true
+  }];
 
   renderizarBlocosEnderecos();
   renderizarBlocosCartoes();
-  document.getElementById('modal-cliente').style.display = 'flex';
+  const m = document.getElementById('modal-cliente');
+  m.style.display = 'flex';
+  m.classList.add('active');
 }
 
 function abrirModalEdicao(id) {
-  const clientes = obterClientes();
-  const cliente = clientes.find(c => c.id === String(id));
+  const cliente = clientesCache.find(c => c.id === id || c.codigo === id);
   if (!cliente) return;
 
-  document.getElementById('modal-titulo').textContent = `Editar Cliente #${cliente.id}`;
+  document.getElementById('modal-titulo').textContent = `Editar Cliente ${cliente.codigo || cliente.id} (RF0022)`;
   document.getElementById('cliente-id').value = cliente.id;
-  document.getElementById('field-nome').value = cliente.nome;
-  document.getElementById('field-cpf').value = cliente.cpf;
-  document.getElementById('field-cpf').setAttribute('readonly', 'true');
-  document.getElementById('field-email').value = cliente.email;
-  document.getElementById('field-telefone').value = cliente.telefone || '';
+  document.getElementById('field-nome').value = cliente.nome || '';
+  document.getElementById('field-cpf').value = cliente.cpf || '';
+  document.getElementById('field-cpf').setAttribute('readonly', 'true'); // CPF imutável
+  document.getElementById('field-email').value = cliente.email || '';
   document.getElementById('field-nascimento').value = cliente.dataNascimento || '';
   document.getElementById('field-genero').value = cliente.genero || 'Masculino';
-  document.getElementById('field-status').value = cliente.status;
+  document.getElementById('field-ranking').value = String(cliente.ranking || 1);
 
-  // Carrega subcoleções existentes ou garante array padrão
-  enderecosTemporarios = cliente.enderecos && cliente.enderecos.length > 0
+  // Preenchimento do telefone composto (RN0026)
+  if (cliente.telefone) {
+    document.getElementById('field-tel-tipo').value = cliente.telefone.tipo || 'CELULAR';
+    document.getElementById('field-tel-ddd').value = cliente.telefone.ddd || '';
+    document.getElementById('field-tel-numero').value = cliente.telefone.numero || '';
+  }
+
+  // Na edição, a senha não é re-exigida (RF0028 cuida de senhas isoladamente)
+  document.getElementById('bloco-senha-cadastro').style.display = 'none';
+  document.getElementById('modal-erros-validacao').style.display = 'none';
+
+  enderecosBuffer = cliente.enderecos && cliente.enderecos.length > 0
     ? JSON.parse(JSON.stringify(cliente.enderecos))
-    : [{ logradouro: '', numero: '', bairro: '', cep: '', cidade: '', estado: 'SP', tipo: 'ENTREGA' }];
+    : [];
 
-  cartoesTemporarios = cliente.cartoes && cliente.cartoes.length > 0
+  cartoesBuffer = cliente.cartoes && cliente.cartoes.length > 0
     ? JSON.parse(JSON.stringify(cliente.cartoes))
-    : [{ numero: '', nomeImpresso: '', bandeira: 'VISA' }];
+    : [];
 
   renderizarBlocosEnderecos();
   renderizarBlocosCartoes();
-  document.getElementById('modal-cliente').style.display = 'flex';
+  const m = document.getElementById('modal-cliente');
+  m.style.display = 'flex';
+  m.classList.add('active');
 }
 
 function fecharModal() {
-  document.getElementById('modal-cliente').style.display = 'none';
+  const m = document.getElementById('modal-cliente');
+  m.style.display = 'none';
+  m.classList.remove('active');
 }
 
-// Manipulação Dinâmica da Subcoleção de Endereços
-function adicionarBlocoEndereco() {
-  enderecosTemporarios.push({ logradouro: '', numero: '', bairro: '', cep: '', cidade: '', estado: 'SP', tipo: 'ENTREGA' });
+// ----------------------------------------------------------------------------
+// Manipulação Dinâmica de Endereços (1:N — RN0021, RN0022, RN0023, RF0026)
+// ----------------------------------------------------------------------------
+function adicionarBlocoEnderecoForm() {
+  enderecosBuffer.push({
+    id: `end-${Date.now()}-${enderecosBuffer.length}`,
+    fraseIdentificadora: '',
+    tipoResidencia: 'Casa',
+    tipoLogradouro: 'Rua',
+    logradouro: '',
+    numero: '',
+    bairro: '',
+    cep: '',
+    cidade: '',
+    estado: 'SP',
+    pais: 'Brasil',
+    observacoes: '',
+    finalidade: 'ENTREGA'
+  });
   renderizarBlocosEnderecos();
 }
 
-function removerBlocoEndereco(index) {
-  if (enderecosTemporarios.length === 1) {
-    alert('O cliente precisa ter ao menos 1 endereço cadastrado.');
+function removerBlocoEnderecoForm(index) {
+  if (enderecosBuffer.length <= 1) {
+    alert('Aviso: O cliente deve manter pelo menos um endereço cadastrado.');
     return;
   }
-  enderecosTemporarios.splice(index, 1);
+  enderecosBuffer.splice(index, 1);
   renderizarBlocosEnderecos();
 }
 
 function renderizarBlocosEnderecos() {
-  const container = document.getElementById('container-lista-enderecos');
+  const container = document.getElementById('container-enderecos-form');
   if (!container) return;
   container.innerHTML = '';
 
-  enderecosTemporarios.forEach((end, idx) => {
+  enderecosBuffer.forEach((end, idx) => {
     const div = document.createElement('div');
-    div.style.cssText = 'background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px;';
+    div.style.cssText = 'background: #f8fafc; border: 1px solid #cbd5e1; padding: 12px; border-radius: 6px;';
     div.innerHTML = `
-      <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-        <strong>Endereço #${idx + 1}</strong>
-        <button type="button" onclick="removerBlocoEndereco(${idx})" style="color: #b91c1c; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 0.75rem;">✕ Remover</button>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 4px;">
+        <strong style="color: var(--palette-navy-dark); font-size: 0.85rem;">
+          📍 Endereço #${idx + 1}
+        </strong>
+        <button type="button" onclick="removerBlocoEnderecoForm(${idx})" style="color: #b91c1c; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 0.8rem;">
+          ✕ Remover
+        </button>
       </div>
-      <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-        <input type="text" placeholder="Logradouro" value="${end.logradouro}" onchange="enderecosTemporarios[${idx}].logradouro = this.value" required style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
-        <input type="text" placeholder="Número" value="${end.numero}" onchange="enderecosTemporarios[${idx}].numero = this.value" required style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
-        <input type="text" placeholder="Bairro" value="${end.bairro}" onchange="enderecosTemporarios[${idx}].bairro = this.value" required style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+
+      <!-- Linha 1: Identificador / Frase Curta (RF0026) e Finalidade (RN0021/RN0022) -->
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 8px;">
+        <div>
+          <label class="form-label">Frase Identificadora do Endereço * (RF0026)</label>
+          <input type="text" placeholder="Ex: Minha Casa, Escritório Centro" value="${end.fraseIdentificadora || ''}" oninput="enderecosBuffer[${idx}].fraseIdentificadora = this.value" required class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Finalidade do Endereço *</label>
+          <select onchange="enderecosBuffer[${idx}].finalidade = this.value" class="form-input">
+            <option value="ENTREGA" ${end.finalidade === 'ENTREGA' ? 'selected' : ''}>Apenas Entrega</option>
+            <option value="COBRANCA" ${end.finalidade === 'COBRANCA' ? 'selected' : ''}>Apenas Cobrança</option>
+            <option value="AMBOS" ${end.finalidade === 'AMBOS' ? 'selected' : ''}>Ambos (Entrega & Cobrança)</option>
+          </select>
+        </div>
       </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px;">
-        <input type="text" placeholder="CEP" value="${end.cep}" onchange="enderecosTemporarios[${idx}].cep = this.value" required style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
-        <input type="text" placeholder="Cidade" value="${end.cidade}" onchange="enderecosTemporarios[${idx}].cidade = this.value" required style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
-        <input type="text" placeholder="Estado (UF)" value="${end.estado}" onchange="enderecosTemporarios[${idx}].estado = this.value" required style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
-        <select onchange="enderecosTemporarios[${idx}].tipo = this.value" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
-          <option value="ENTREGA" ${end.tipo === 'ENTREGA' ? 'selected' : ''}>Entrega</option>
-          <option value="COBRANCA" ${end.tipo === 'COBRANCA' ? 'selected' : ''}>Cobrança</option>
-          <option value="AMBOS" ${end.tipo === 'AMBOS' ? 'selected' : ''}>Ambos</option>
-        </select>
+
+      <!-- Linha 2: Tipo de Residência, Tipo Logradouro, Logradouro e Número (RN0023) -->
+      <div style="display: grid; grid-template-columns: 140px 140px 2fr 100px; gap: 8px; margin-bottom: 8px;">
+        <div>
+          <label class="form-label">Tipo Residência *</label>
+          <select onchange="enderecosBuffer[${idx}].tipoResidencia = this.value" class="form-input">
+            <option value="Casa" ${end.tipoResidencia === 'Casa' ? 'selected' : ''}>Casa</option>
+            <option value="Apartamento" ${end.tipoResidencia === 'Apartamento' ? 'selected' : ''}>Apartamento</option>
+            <option value="Sobrado" ${end.tipoResidencia === 'Sobrado' ? 'selected' : ''}>Sobrado</option>
+            <option value="Comercial" ${end.tipoResidencia === 'Comercial' ? 'selected' : ''}>Comercial</option>
+            <option value="Outro" ${end.tipoResidencia === 'Outro' ? 'selected' : ''}>Outro</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Tipo Logradouro *</label>
+          <select onchange="enderecosBuffer[${idx}].tipoLogradouro = this.value" class="form-input">
+            <option value="Rua" ${end.tipoLogradouro === 'Rua' ? 'selected' : ''}>Rua</option>
+            <option value="Avenida" ${end.tipoLogradouro === 'Avenida' ? 'selected' : ''}>Avenida</option>
+            <option value="Alameda" ${end.tipoLogradouro === 'Alameda' ? 'selected' : ''}>Alameda</option>
+            <option value="Travessa" ${end.tipoLogradouro === 'Travessa' ? 'selected' : ''}>Travessa</option>
+            <option value="Praça" ${end.tipoLogradouro === 'Praça' ? 'selected' : ''}>Praça</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Logradouro *</label>
+          <input type="text" placeholder="Nome da rua/av" value="${end.logradouro || ''}" oninput="enderecosBuffer[${idx}].logradouro = this.value" required class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Número *</label>
+          <input type="text" placeholder="Nº" value="${end.numero || ''}" oninput="enderecosBuffer[${idx}].numero = this.value" required class="form-input">
+        </div>
+      </div>
+
+      <!-- Linha 3: Bairro, CEP, Cidade, Estado, País (RN0023) -->
+      <div style="display: grid; grid-template-columns: 1.5fr 120px 1.5fr 80px 120px; gap: 8px; margin-bottom: 8px;">
+        <div>
+          <label class="form-label">Bairro *</label>
+          <input type="text" placeholder="Bairro" value="${end.bairro || ''}" oninput="enderecosBuffer[${idx}].bairro = this.value" required class="form-input">
+        </div>
+        <div>
+          <label class="form-label">CEP *</label>
+          <input type="text" placeholder="00000-000" value="${end.cep || ''}" oninput="enderecosBuffer[${idx}].cep = this.value" required class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Cidade *</label>
+          <input type="text" placeholder="Cidade" value="${end.cidade || ''}" oninput="enderecosBuffer[${idx}].cidade = this.value" required class="form-input">
+        </div>
+        <div>
+          <label class="form-label">UF *</label>
+          <input type="text" placeholder="SP" maxlength="2" value="${end.estado || ''}" oninput="enderecosBuffer[${idx}].estado = this.value" required class="form-input">
+        </div>
+        <div>
+          <label class="form-label">País *</label>
+          <input type="text" placeholder="Brasil" value="${end.pais || 'Brasil'}" oninput="enderecosBuffer[${idx}].pais = this.value" required class="form-input">
+        </div>
+      </div>
+
+      <!-- Linha 4: Observações Opcionais (RN0023) -->
+      <div>
+        <label class="form-label">Observações (Opcional)</label>
+        <input type="text" placeholder="Ponto de referência, bloco, etc." value="${end.observacoes || ''}" oninput="enderecosBuffer[${idx}].observacoes = this.value" class="form-input">
       </div>
     `;
     container.appendChild(div);
   });
 }
 
-// Manipulação Dinâmica da Subcoleção de Cartões
-function adicionarBlocoCartao() {
-  cartoesTemporarios.push({ numero: '', nomeImpresso: '', bandeira: 'VISA' });
+// ----------------------------------------------------------------------------
+// Manipulação Dinâmica de Cartões (1:N — RN0024, RN0025, RF0027)
+// ----------------------------------------------------------------------------
+function adicionarBlocoCartaoForm() {
+  cartoesBuffer.push({
+    id: `card-${Date.now()}-${cartoesBuffer.length}`,
+    numero: '',
+    nomeImpresso: '',
+    bandeira: 'VISA',
+    cvv: '',
+    preferencial: cartoesBuffer.length === 0
+  });
   renderizarBlocosCartoes();
 }
 
-function removerBlocoCartao(index) {
-  if (cartoesTemporarios.length === 1) {
-    alert('O cliente precisa ter ao menos 1 cartão cadastrado.');
+function removerBlocoCartaoForm(index) {
+  if (cartoesBuffer.length <= 1) {
+    alert('Aviso: Mantenha pelo menos um cartão associado.');
     return;
   }
-  cartoesTemporarios.splice(index, 1);
+  const removendoPreferencial = cartoesBuffer[index].preferencial;
+  cartoesBuffer.splice(index, 1);
+  if (removendoPreferencial && cartoesBuffer.length > 0) {
+    cartoesBuffer[0].preferencial = true;
+  }
+  renderizarBlocosCartoes();
+}
+
+function definirCartaoPreferencial(index) {
+  cartoesBuffer.forEach((c, i) => {
+    c.preferencial = i === index;
+  });
   renderizarBlocosCartoes();
 }
 
 function renderizarBlocosCartoes() {
-  const container = document.getElementById('container-lista-cartoes');
+  const container = document.getElementById('container-cartoes-form');
   if (!container) return;
   container.innerHTML = '';
 
-  cartoesTemporarios.forEach((card, idx) => {
+  cartoesBuffer.forEach((card, idx) => {
     const div = document.createElement('div');
-    div.style.cssText = 'background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px;';
+    div.style.cssText = 'background: #f8fafc; border: 1px solid #cbd5e1; padding: 12px; border-radius: 6px;';
     div.innerHTML = `
-      <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-        <strong>Cartão #${idx + 1}</strong>
-        <button type="button" onclick="removerBlocoCartao(${idx})" style="color: #b91c1c; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 0.75rem;">✕ Remover</button>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 4px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <strong style="color: var(--palette-navy-dark); font-size: 0.85rem;">💳 Cartão #${idx + 1}</strong>
+          ${card.preferencial ? '<span style="background: #fef08a; color: #854d0e; font-size: 0.75rem; font-weight: bold; padding: 2px 6px; border-radius: 4px;">⭐ PREFERENCIAL (RF0027)</span>' : ''}
+        </div>
+        <button type="button" onclick="removerBlocoCartaoForm(${idx})" style="color: #b91c1c; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 0.8rem;">
+          ✕ Remover
+        </button>
       </div>
-      <div style="display: grid; grid-template-columns: 2fr 2fr 1fr; gap: 8px;">
-        <input type="text" placeholder="Número do Cartão" value="${card.numero}" onchange="cartoesTemporarios[${idx}].numero = this.value" required style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
-        <input type="text" placeholder="Nome Impresso" value="${card.nomeImpresso}" onchange="cartoesTemporarios[${idx}].nomeImpresso = this.value" required style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
-        <select onchange="cartoesTemporarios[${idx}].bandeira = this.value" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
-          <option value="VISA" ${card.bandeira === 'VISA' ? 'selected' : ''}>Visa</option>
-          <option value="MASTERCARD" ${card.bandeira === 'MASTERCARD' ? 'selected' : ''}>Mastercard</option>
-          <option value="ELO" ${card.bandeira === 'ELO' ? 'selected' : ''}>Elo</option>
-        </select>
+
+      <div style="display: grid; grid-template-columns: 2fr 2fr 1.5fr 100px; gap: 8px; margin-bottom: 8px;">
+        <div>
+          <label class="form-label">Número do Cartão * (RN0024)</label>
+          <input type="text" placeholder="0000 0000 0000 0000" value="${card.numero || ''}" oninput="cartoesBuffer[${idx}].numero = this.value" required class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Nome Impresso no Cartão * (RN0024)</label>
+          <input type="text" placeholder="Nome como no plástico" value="${card.nomeImpresso || ''}" oninput="cartoesBuffer[${idx}].nomeImpresso = this.value" required class="form-input">
+        </div>
+        <div>
+          <label class="form-label">Bandeira * (RN0025)</label>
+          <select onchange="cartoesBuffer[${idx}].bandeira = this.value" class="form-input">
+            <option value="VISA" ${card.bandeira === 'VISA' ? 'selected' : ''}>Visa</option>
+            <option value="MASTERCARD" ${card.bandeira === 'MASTERCARD' ? 'selected' : ''}>Mastercard</option>
+            <option value="ELO" ${card.bandeira === 'ELO' ? 'selected' : ''}>Elo</option>
+            <option value="AMERICAN EXPRESS" ${card.bandeira === 'AMERICAN EXPRESS' ? 'selected' : ''}>American Express</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">CVV * (RN0024)</label>
+          <input type="text" placeholder="123" maxlength="4" value="${card.cvv || ''}" oninput="cartoesBuffer[${idx}].cvv = this.value" required class="form-input">
+        </div>
       </div>
+
+      <!-- Configuração de Cartão Preferencial (RF0027) -->
+      <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer; margin-top: 4px;">
+        <input type="radio" name="radio-cartao-preferencial" ${card.preferencial ? 'checked' : ''} onchange="definirCartaoPreferencial(${idx})">
+        <span>Definir este cartão como preferencial para compras (RF0027)</span>
+      </label>
     `;
     container.appendChild(div);
   });
 }
 
-// Persistência Completa do Payload Aninhado (1:N)
-function salvarCliente(e) {
+/**
+ * Validação visual de senha forte em tempo real (RNF0031)
+ */
+function validarIndicadorSenha(senha) {
+  const box = document.getElementById('indicador-forca-senha');
+  if (!box) return;
+  if (!senha) {
+    box.textContent = '';
+    return;
+  }
+  const temTam = senha.length >= 8;
+  const temMai = /[A-Z]/.test(senha);
+  const temMin = /[a-z]/.test(senha);
+  const temEsp = /[^A-Za-z0-9]/.test(senha);
+
+  if (temTam && temMai && temMin && temEsp) {
+    box.textContent = '✅ Senha Forte (atende a RNF0031)';
+    box.style.color = '#15803d';
+  } else {
+    box.textContent = '❌ Senha Fraca: precisa de 8+ caracteres, letra MAIÚSCULA, minúscula e caractere especial (@#$...).';
+    box.style.color = '#b91c1c';
+  }
+}
+
+/**
+ * Submissão do Formulário de Salvar Cliente (POST ou PUT)
+ */
+async function salvarCliente(e) {
   e.preventDefault();
   const id = document.getElementById('cliente-id').value;
-  const clientes = obterClientes();
+  const boxErro = document.getElementById('modal-erros-validacao');
+  boxErro.style.display = 'none';
 
-  const clientePayload = {
-    id: id || String(Date.now()),
+  const payload = {
     nome: document.getElementById('field-nome').value.trim(),
     cpf: document.getElementById('field-cpf').value.trim(),
     email: document.getElementById('field-email').value.trim(),
-    telefone: document.getElementById('field-telefone').value.trim(),
     dataNascimento: document.getElementById('field-nascimento').value,
     genero: document.getElementById('field-genero').value,
-    status: document.getElementById('field-status').value,
-    enderecos: JSON.parse(JSON.stringify(enderecosTemporarios)),
-    cartoes: JSON.parse(JSON.stringify(cartoesTemporarios))
+    ranking: Number(document.getElementById('field-ranking').value) || 1,
+    telefone: {
+      tipo: document.getElementById('field-tel-tipo').value,
+      ddd: document.getElementById('field-tel-ddd').value.trim(),
+      numero: document.getElementById('field-tel-numero').value.trim()
+    },
+    enderecos: enderecosBuffer,
+    cartoes: cartoesBuffer
   };
 
-  if (id) {
-    const index = clientes.findIndex(c => c.id === id);
-    if (index !== -1) clientes[index] = clientePayload;
-  } else {
-    clientes.push(clientePayload);
+  // Se for novo cadastro, inclui senha e confirmação (RN0026, RNF0031, RNF0032)
+  if (!id) {
+    payload.senha = document.getElementById('field-senha').value;
+    payload.confirmacaoSenha = document.getElementById('field-senha-confirma').value;
+
+    // Validação local de senha forte e confirmação para feedback imediato
+    const errosLocais = [];
+    if (!payload.senha) {
+      errosLocais.push('Senha é obrigatória (RN0026).');
+    } else {
+      const temTam = payload.senha.length >= 8;
+      const temMai = /[A-Z]/.test(payload.senha);
+      const temMin = /[a-z]/.test(payload.senha);
+      const temEsp = /[^A-Za-z0-9]/.test(payload.senha);
+      if (!temTam || !temMai || !temMin || !temEsp) {
+        errosLocais.push('A senha deve ter no mínimo 8 caracteres, contendo letras maiúsculas, minúsculas e caractere especial (RNF0031).');
+      }
+      if (payload.senha !== payload.confirmacaoSenha) {
+        errosLocais.push('A confirmação de senha deve ser idêntica à senha digitada (RNF0032).');
+      }
+    }
+
+    if (errosLocais.length > 0) {
+      boxErro.innerHTML = `<strong>Falha de Validação:</strong><br>${errosLocais.map(d => `• ${d}`).join('<br>')}`;
+      boxErro.style.display = 'block';
+      boxErro.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
+    }
   }
 
-  salvarClientesStorage(clientes);
-  fecharModal();
-  renderizarTabela();
-}
+  try {
+    const url = id ? `${API_BASE}/${id}` : API_BASE;
+    const method = id ? 'PUT' : 'POST';
 
-function alternarStatusCliente(id) {
-  const clientes = obterClientes();
-  const cliente = clientes.find(c => c.id === String(id));
-  if (cliente) {
-    cliente.status = cliente.status === 'ATIVO' ? 'INATIVO' : 'ATIVO';
-    salvarClientesStorage(clientes);
-    renderizarTabela();
+    const response = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      boxErro.innerHTML = `<strong>Falha de Validação:</strong><br>${(result.detalhes || [result.erro]).map(d => `• ${d}`).join('<br>')}`;
+      boxErro.style.display = 'block';
+      return;
+    }
+
+    fecharModal();
+    exibirMensagem(result.mensagem || 'Cliente salvo com sucesso!', 'sucesso');
+    carregarClientes();
+  } catch (err) {
+    console.error(err);
+    boxErro.textContent = 'Erro de comunicação ao salvar cliente.';
+    boxErro.style.display = 'block';
   }
 }
 
-function excluirCliente(id) {
-  const clientes = obterClientes();
-  const cliente = clientes.find(c => c.id === String(id));
+// ============================================================================
+// RF0023: INATIVAR / REATIVAR CLIENTE
+// ============================================================================
+async function alternarStatus(id) {
+  const cliente = clientesCache.find(c => c.id === id || c.codigo === id);
   if (!cliente) return;
 
-  if (confirm(`Deseja EXCLUIR DEFINITIVAMENTE o cliente "${cliente.nome}"?`)) {
-    const novaLista = clientes.filter(c => c.id !== String(id));
-    salvarClientesStorage(novaLista);
-    renderizarTabela();
+  const acao = cliente.status === 'ATIVO' ? 'INATIVAR' : 'REATIVAR';
+  if (!confirm(`Deseja realmente ${acao} o cadastro do cliente "${cliente.nome}" (RF0023)?`)) return;
+
+  try {
+    const response = await fetch(`${API_BASE}/${id}/status`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: cliente.status === 'ATIVO' ? 'INATIVO' : 'ATIVO' })
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.erro || 'Erro ao alterar status');
+    exibirMensagem(result.mensagem, 'sucesso');
+    carregarClientes();
+  } catch (err) {
+    alert(err.message);
   }
+}
+
+// ============================================================================
+// REGRA CRUCIAL: DISTINÇÃO ENTRE INATIVAÇÃO E EXCLUSÃO
+// ============================================================================
+let clienteBloqueadoParaInativarId = null;
+
+async function tentarExcluirCliente(id) {
+  const cliente = clientesCache.find(c => c.id === id || c.codigo === id);
+  if (!cliente) return;
+
+  if (!confirm(`Tem certeza que deseja solicitar a EXCLUSÃO do cliente "${cliente.nome}"?`)) return;
+
+  try {
+    const response = await fetch(`${API_BASE}/${id}`, {
+      method: 'DELETE'
+    });
+    const result = await response.json();
+
+    if (!response.ok) {
+      if (result.bloqueado) {
+        // Exibe o modal didático explicando o bloqueio da exclusão física
+        clienteBloqueadoParaInativarId = id;
+        document.getElementById('texto-bloqueio-exclusao').textContent = result.erro;
+        const mb = document.getElementById('modal-bloqueio-exclusao');
+        mb.style.display = 'flex';
+        mb.classList.add('active');
+        document.getElementById('btn-inativar-direto-bloqueio').onclick = () => {
+          fecharModalBloqueio();
+          alternarStatus(clienteBloqueadoParaInativarId);
+        };
+      } else {
+        alert(result.erro || 'Erro ao excluir');
+      }
+      return;
+    }
+
+    exibirMensagem(result.mensagem, 'sucesso');
+    carregarClientes();
+  } catch (err) {
+    console.error(err);
+    alert('Erro de comunicação ao tentar excluir cliente.');
+  }
+}
+
+function fecharModalBloqueio() {
+  const mb = document.getElementById('modal-bloqueio-exclusao');
+  mb.style.display = 'none';
+  mb.classList.remove('active');
+  clienteBloqueadoParaInativarId = null;
+}
+
+// ============================================================================
+// RF0028: ALTERAÇÃO EXCLUSIVA DE SENHA
+// ============================================================================
+function abrirModalSenha(id) {
+  const cliente = clientesCache.find(c => c.id === id || c.codigo === id);
+  if (!cliente) return;
+
+  document.getElementById('modal-senha-cliente-id').value = cliente.id;
+  document.getElementById('modal-senha-cliente-nome').textContent = cliente.nome;
+  document.getElementById('modal-senha-cliente-codigo').textContent = cliente.codigo || cliente.id;
+  document.getElementById('campo-nova-senha').value = '';
+  document.getElementById('campo-confirma-nova-senha').value = '';
+  document.getElementById('modal-senha-erros').style.display = 'none';
+  const ms = document.getElementById('modal-senha');
+  ms.style.display = 'flex';
+  ms.classList.add('active');
+}
+
+function fecharModalSenha() {
+  const ms = document.getElementById('modal-senha');
+  ms.style.display = 'none';
+  ms.classList.remove('active');
+}
+
+async function salvarApenasSenha(e) {
+  e.preventDefault();
+  const id = document.getElementById('modal-senha-cliente-id').value;
+  const senhaNova = document.getElementById('campo-nova-senha').value;
+  const confirmacaoSenhaNova = document.getElementById('campo-confirma-nova-senha').value;
+  const boxErro = document.getElementById('modal-senha-erros');
+  boxErro.style.display = 'none';
+
+  try {
+    const response = await fetch(`${API_BASE}/${id}/senha`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ senhaNova, confirmacaoSenhaNova })
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      boxErro.innerHTML = (result.detalhes || [result.erro]).map(d => `• ${d}`).join('<br>');
+      boxErro.style.display = 'block';
+      return;
+    }
+
+    fecharModalSenha();
+    exibirMensagem(result.mensagem, 'sucesso');
+  } catch (err) {
+    console.error(err);
+    boxErro.textContent = 'Erro ao atualizar senha.';
+    boxErro.style.display = 'block';
+  }
+}
+
+// ============================================================================
+// RF0025: HISTÓRICO DE TRANSAÇÕES
+// ============================================================================
+async function abrirModalTransacoes(id) {
+  const cliente = clientesCache.find(c => c.id === id || c.codigo === id);
+  if (!cliente) return;
+
+  document.getElementById('transacoes-cliente-nome').textContent = cliente.nome;
+  document.getElementById('transacoes-cliente-codigo').textContent = cliente.codigo || cliente.id;
+
+  const container = document.getElementById('container-tabela-transacoes');
+  container.innerHTML = '<p style="color: var(--text-muted);">Carregando transações...</p>';
+  const mt = document.getElementById('modal-transacoes');
+  mt.style.display = 'flex';
+  mt.classList.add('active');
+
+  try {
+    const response = await fetch(`${API_BASE}/${id}/transacoes`);
+    const result = await response.json();
+    const transacoes = result.transacoes || [];
+
+    if (transacoes.length === 0) {
+      container.innerHTML = `
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 6px; text-align: center; color: var(--text-muted);">
+          Nenhuma transação/pedido encontrado para este cliente (RF0025).
+        </div>
+      `;
+      return;
+    }
+
+    let html = `
+      <table class="table-default" style="width: 100%;">
+        <thead>
+          <tr>
+            <th>ID Pedido</th>
+            <th>Data</th>
+            <th>Itens Comprados</th>
+            <th>Valor Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    transacoes.forEach(t => {
+      html += `
+        <tr>
+          <td style="font-weight: bold; color: var(--palette-navy-dark);">${t.id}</td>
+          <td>${t.data}</td>
+          <td>${t.itens.join(', ')}</td>
+          <td style="font-weight: bold; color: var(--palette-teal-dark);">R$ ${t.valor.toFixed(2).replace('.', ',')}</td>
+          <td>
+            <span class="badge-info">${t.status}</span>
+          </td>
+        </tr>
+      `;
+    });
+
+    html += `</tbody></table>`;
+    container.innerHTML = html;
+  } catch (err) {
+    container.innerHTML = '<p style="color: #b91c1c;">Erro ao carregar transações.</p>';
+  }
+}
+
+function fecharModalTransacoes() {
+  const mt = document.getElementById('modal-transacoes');
+  mt.style.display = 'none';
+  mt.classList.remove('active');
 }

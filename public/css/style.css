@@ -573,9 +573,12 @@ footer {
   transition: opacity 0.25s ease;
 }
 
-.modal-overlay.active {
-  display: flex;
-  opacity: 1;
+.modal-overlay.active,
+.modal-overlay[style*="display: flex"],
+.modal-overlay[style*="display:flex"] {
+  display: flex !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
 .modal-box {

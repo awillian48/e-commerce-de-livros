@@ -1,0 +1,113 @@
+[
+  {
+    "id": "CLI-001",
+    "codigo": "CLI-001",
+    "nome": "Machado de Assis",
+    "cpf": "123.456.789-00",
+    "email": "machado@alexandria.com.br",
+    "senhaHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "telefone": {
+      "tipo": "CELULAR",
+      "ddd": "21",
+      "numero": "98888-7777"
+    },
+    "dataNascimento": "1839-06-21",
+    "genero": "Masculino",
+    "ranking": 5,
+    "status": "ATIVO",
+    "enderecos": [
+      {
+        "id": "end-1",
+        "fraseIdentificadora": "Residência Oficial Cosme Velho",
+        "tipoResidencia": "Casa",
+        "tipoLogradouro": "Rua",
+        "logradouro": "Cosme Velho",
+        "numero": "100",
+        "bairro": "Cosme Velho",
+        "cep": "22241-090",
+        "cidade": "Rio de Janeiro",
+        "estado": "RJ",
+        "pais": "Brasil",
+        "observacoes": "Próximo à linha do bonde",
+        "finalidade": "ENTREGA"
+      }
+    ],
+    "cartoes": [
+      {
+        "id": "card-1",
+        "numero": "4532 1111 2222 4321",
+        "nomeImpresso": "N MACHADO ASSIS",
+        "bandeira": "VISA",
+        "cvv": "123",
+        "preferencial": true
+      }
+    ],
+    "transacoes": [
+      {
+        "id": "PED-2026-001",
+        "data": "10/02/2026",
+        "valor": 89.9,
+        "status": "ENTREGUE",
+        "itens": [
+          "Dom Casmurro (Edição Luxo)",
+          "O Alienista"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "CLI-002",
+    "codigo": "CLI-002",
+    "nome": "Clarice Lispector",
+    "cpf": "987.654.321-11",
+    "email": "clarice@alexandria.com.br",
+    "senhaHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "telefone": {
+      "tipo": "CELULAR",
+      "ddd": "21",
+      "numero": "97777-6666"
+    },
+    "dataNascimento": "1920-12-10",
+    "genero": "Feminino",
+    "ranking": 4,
+    "status": "INATIVO",
+    "enderecos": [
+      {
+        "id": "end-3",
+        "fraseIdentificadora": "Apartamento Leme",
+        "tipoResidencia": "Apartamento",
+        "tipoLogradouro": "Rua",
+        "logradouro": "Gustavo Sampaio",
+        "numero": "300",
+        "bairro": "Leme",
+        "cep": "22010-010",
+        "cidade": "Rio de Janeiro",
+        "estado": "RJ",
+        "pais": "Brasil",
+        "observacoes": "Apto 402",
+        "finalidade": "AMBOS"
+      }
+    ],
+    "cartoes": [
+      {
+        "id": "card-3",
+        "numero": "5067 9999 8888 1122",
+        "nomeImpresso": "CLARICE LISPECTOR",
+        "bandeira": "ELO",
+        "cvv": "789",
+        "preferencial": true
+      }
+    ],
+    "transacoes": [
+      {
+        "id": "PED-2026-003",
+        "data": "15/02/2026",
+        "valor": 65.5,
+        "status": "APROVADA",
+        "itens": [
+          "A Hora da Estrela"
+        ]
+      }
+    ]
+  }
+]

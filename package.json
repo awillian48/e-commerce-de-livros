@@ -4,9 +4,14 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "test:e2e": "cypress run",
+    "test:e2e:open": "cypress open"
   },
   "dependencies": {
     "express": "^4.22.2"
+  },
+  "devDependencies": {
+    "cypress": "^15.21.1"
   }
 }
