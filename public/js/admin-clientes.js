@@ -245,7 +245,8 @@ function abrirModalNovo() {
   document.getElementById('form-cliente-admin').reset();
   document.getElementById('cliente-id').value = '';
   document.getElementById('field-cpf').removeAttribute('readonly');
-  document.getElementById('bloco-senha-cadastro').style.display = 'block';
+  const blocoSenha = document.getElementById('secao-seguranca') || document.getElementById('bloco-senha-cadastro');
+  if (blocoSenha) blocoSenha.style.display = 'block';
   document.getElementById('modal-erros-validacao').style.display = 'none';
 
   // Inicializa 1 endereço com finalidade "AMBOS" (satisfaz RN0021 e RN0022)
@@ -304,7 +305,8 @@ function abrirModalEdicao(id) {
   }
 
   // Na edição, a senha não é re-exigida (RF0028 cuida de senhas isoladamente)
-  document.getElementById('bloco-senha-cadastro').style.display = 'none';
+  const blocoSenha = document.getElementById('secao-seguranca') || document.getElementById('bloco-senha-cadastro');
+  if (blocoSenha) blocoSenha.style.display = 'none';
   document.getElementById('modal-erros-validacao').style.display = 'none';
 
   enderecosBuffer = cliente.enderecos && cliente.enderecos.length > 0
