@@ -1,19 +1,5 @@
-/**
- * ============================================================================
- * SUÍTE DE TESTES AUTOMATIZADOS DE INTERFACE (E2E) — CYPRESS
- * Disciplina: Laboratório de Engenharia de Software (LES 2026)
- * Alunos: Anderson Barros & João Pedro Scandiuzzi
- * 
- * Demonstração e comprovação automatizada do CRUD de Cliente
- * Rastreabilidade completa de Requisitos Funcionais (RF), Regras de Negócio (RN)
- * e Requisitos Não Funcionais (RNF) conforme o documento DRS_LES_2_2026.
- * 
- * NOTA: O ritmo de execução está desacelerado (keystrokeDelay + pausas visuais)
- * para permitir acompanhamento e leitura clara pelo professor durante a apresentação.
- * ============================================================================
- */
 
-// 1. Desacelera a digitação (100ms entre cada caractere) para visualização humana
+// 1. Desacelera a digitação (100ms entre cada caractere)
 Cypress.Keyboard.defaults({
   keystrokeDelay: 100
 });

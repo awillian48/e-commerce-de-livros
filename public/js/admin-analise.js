@@ -5,7 +5,9 @@
  */
 
 // Base analítica transacional consolidada (abrangendo 2026)
-const vendasMock = [
+let vendasBase = [
+  // Backup local inicial
+
   // Agosto / Setembro 2026
   { id: 'PED-2026-101', data: '2026-09-01', clienteId: 'CLI-001', livro: 'Dom Casmurro (Edição Luxo)', autor: 'Machado de Assis', categoria: 'Literatura Brasileira', valor: 89.90, qtd: 1, pagamento: 'VISA', status: 'ENTREGUE' },
   { id: 'PED-2026-102', data: '2026-09-02', clienteId: 'CLI-002', livro: 'A Hora da Estrela (Capa Dura)', autor: 'Clarice Lispector', categoria: 'Literatura Brasileira', valor: 65.50, qtd: 1, pagamento: 'ELO', status: 'ENTREGUE' },
@@ -42,11 +44,59 @@ let chartFaturamento = null;
 let chartCategorias = null;
 let chartPagamentos = null;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   inicializarDatasPadrao();
   configurarEventosFiltro();
   aplicarFiltroEAtualizarDashboard();
+  await carregarVendasDoBanco();
 });
+
+async function carregarVendasDoBanco() {
+  try {
+    const res = await fetch('/api/pedidos');
+    if (res.ok) {
+      const pedidos = await res.json();
+      if (Array.isArray(pedidos) && pedidos.length > 0) {
+        const listaMapeada = [];
+        pedidos.forEach(p => {
+          const clienteId = p.clientes?.codigo || 'CLI-001';
+          const data = p.data;
+          const status = (p.status || 'ENTREGUE').toUpperCase();
+          const pag = p.pagamentos_pedido?.[0]?.forma_pagamento?.replace('_CREDITO', '') || 'VISA';
+
+          if (p.itens_pedido && p.itens_pedido.length > 0) {
+            p.itens_pedido.forEach(it => {
+              let cat = 'Literatura Brasileira';
+              const tit = (it.titulo_livro || '').toLowerCase();
+              if (tit.includes('clean') || tit.includes('refactoring')) cat = 'Engenharia de Software';
+              else if (tit.includes('crítica') || tit.includes('moral')) cat = 'Filosofia';
+              else if (tit.includes('lusíadas') || tit.includes('grande sertão')) cat = 'Obras Raras';
+
+              listaMapeada.push({
+                id: p.id,
+                data: data,
+                clienteId: clienteId,
+                livro: it.titulo_livro,
+                autor: it.autor || 'Autor',
+                categoria: cat,
+                valor: Number(it.preco_unitario) * Number(it.quantidade),
+                qtd: Number(it.quantidade),
+                pagamento: pag,
+                status: status
+              });
+            });
+          }
+        });
+        if (listaMapeada.length > 0) {
+          vendasBase = listaMapeada;
+          aplicarFiltroEAtualizarDashboard();
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('API analítica offline, operando com dados em cache:', err);
+  }
+}
 
 // Inicialização com intervalo padrão (Mês Atual ou Período Recente)
 function inicializarDatasPadrao() {
@@ -114,7 +164,7 @@ function obterVendasFiltradas() {
   const strFim = document.getElementById('filtro-data-fim').value;
   const catSelecionada = document.getElementById('filtro-categoria').value;
 
-  return vendasMock.filter(v => {
+  return vendasBase.filter(v => {
     const atendeData = v.data >= strInicio && v.data <= strFim;
     const atendeCat = catSelecionada === 'TODAS' || v.categoria === catSelecionada;
     return atendeData && atendeCat;

@@ -1,15 +1,7 @@
-const STOCK_STORAGE_KEY = '@alexandria:estoque';
-
-const estoqueInicial = [
-  { id: '1', isbn: '9788535910841', titulo: 'Dom Casmurro', autor: 'Machado de Assis', preco: 45.90, quantidade: 28, estoqueMinimo: 10, status: 'DISPONÍVEL' },
-  { id: '2', isbn: '9788508040377', titulo: 'O Cortiço', autor: 'Aluísio Azevedo', preco: 38.00, quantidade: 4, estoqueMinimo: 5, status: 'BAIXO_ESTOQUE' },
-  { id: '3', isbn: '9780132350884', titulo: 'Clean Code', autor: 'Robert C. Martin', preco: 89.90, quantidade: 15, estoqueMinimo: 8, status: 'DISPONÍVEL' },
-  { id: '4', isbn: '9788535928129', titulo: 'A Hora da Estrela', autor: 'Clarice Lispector', preco: 42.50, quantidade: 0, estoqueMinimo: 5, status: 'ESGOTADO' }
-];
+﻿const STOCK_STORAGE_KEY = '@alexandria:estoque';
 
 document.addEventListener('DOMContentLoaded', () => {
   inicializarEstoque();
-  renderizarTabelaEstoque();
 
   const formModal = document.getElementById('form-novo-livro');
   if (formModal) {
@@ -17,10 +9,31 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-function inicializarEstoque() {
-  if (!localStorage.getItem(STOCK_STORAGE_KEY)) {
-    localStorage.setItem(STOCK_STORAGE_KEY, JSON.stringify(estoqueInicial));
+async function inicializarEstoque() {
+  try {
+    const res = await fetch('/api/livros/estoque/todos');
+    if (res.ok) {
+      const dados = await res.json();
+      if (Array.isArray(dados) && dados.length > 0) {
+        const mapeados = dados.map(item => ({
+          id: item.livro_id || item.id,
+          isbn: item.livros?.isbn || 'N/A',
+          titulo: item.livros?.titulo || 'Livro',
+          autor: item.livros?.autor || 'Autor Desconhecido',
+          preco: item.livros?.preco_venda || 0,
+          quantidade: item.quantidade ?? 0,
+          estoqueMinimo: item.estoque_minimo ?? 5,
+          status: item.status || (item.quantidade === 0 ? 'ESGOTADO' : item.quantidade <= 5 ? 'BAIXO_ESTOQUE' : 'DISPONÍVEL')
+        }));
+        salvarEstoqueStorage(mapeados);
+        renderizarTabelaEstoque();
+        return;
+      }
+    }
+  } catch (err) {
+    console.warn('API de estoque indisponível, usando armazenamento local:', err);
   }
+  renderizarTabelaEstoque();
 }
 
 function obterEstoque() {
@@ -35,100 +48,137 @@ function renderizarTabelaEstoque() {
   const tbody = document.getElementById('tabela-estoque-body');
   if (!tbody) return;
 
-  const itens = obterEstoque();
+  const estoque = obterEstoque();
   tbody.innerHTML = '';
 
-  itens.forEach(item => {
-    if (item.quantidade <= 0) item.status = 'ESGOTADO';
-    else if (item.quantidade <= item.estoqueMinimo) item.status = 'BAIXO_ESTOQUE';
-    else item.status = 'DISPONÍVEL';
+  if (estoque.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #64748b; padding: 24px;">Nenhum item em estoque cadastrado.</td></tr>';
+    atualizarCardsKPI(estoque);
+    return;
+  }
 
+  estoque.forEach(item => {
     const tr = document.createElement('tr');
-    tr.style.borderBottom = '1px solid #f1f5f9';
+    tr.id = linha-livro-;
 
-    const statusBadge = {
-      'DISPONÍVEL': '<span class="pill-status ativo">● DISPONÍVEL</span>',
-      'BAIXO_ESTOQUE': '<span class="pill-status" style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">● BAIXO ESTOQUE</span>',
-      'ESGOTADO': '<span class="pill-status inativo">● ESGOTADO</span>'
-    }[item.status];
+    let statusClass = 'status-disponivel';
+    let statusLabel = 'DISPONÍVEL';
+    let statusBg = '#ecfdf5';
+    let statusColor = '#047857';
 
-    tr.innerHTML = `
-      <td style="padding: 12px 14px;">
-        <strong style="color: var(--palette-navy-dark); font-size: 0.95rem;">${item.titulo}</strong><br>
-        <small style="color: #64748b;">${item.autor}</small>
+    if (item.quantidade === 0) {
+      statusClass = 'status-esgotado';
+      statusLabel = 'ESGOTADO';
+      statusBg = '#fef2f2';
+      statusColor = '#b91c1c';
+    } else if (item.quantidade <= item.estoqueMinimo) {
+      statusClass = 'status-baixo';
+      statusLabel = 'BAIXO ESTOQUE';
+      statusBg = '#fffbeb';
+      statusColor = '#b45309';
+    }
+
+    tr.innerHTML = 
+      <td style="font-family: monospace; color: #475569; font-size: 0.85rem;"></td>
+      <td style="font-weight: 600; color: var(--palette-navy-dark);"></td>
+      <td style="color: #475569;"></td>
+      <td style="color: var(--palette-navy-dark); font-weight: 600;">R$ </td>
+      <td style="font-weight: 700; color: #1e293b;"> un</td>
+      <td>
+        <span class="pill-status " style="background: ; color: ; border: 1px solid rgba(0,0,0,0.05); padding: 3px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">
+          ● 
+        </span>
       </td>
-      <td style="padding: 12px 14px; font-family: monospace; font-size: 0.85rem; color: #334155;">${item.isbn}</td>
-      <td style="padding: 12px 14px; font-weight: bold; color: var(--palette-navy-dark);">R$ ${Number(item.preco).toFixed(2).replace('.', ',')}</td>
-      <td style="padding: 12px 14px; text-align: center; font-size: 1.05rem; font-weight: bold; color: var(--palette-navy-dark);">${item.quantidade} un.</td>
-      <td style="padding: 12px 14px; text-align: center; color: #64748b;">${item.estoqueMinimo} un.</td>
-      <td style="padding: 12px 14px;">${statusBadge}</td>
-      <td style="padding: 12px 18px; text-align: right;">
-        <div class="action-toolbar">
-          <button type="button" class="btn-tbl btn-tbl-outline" onclick="ajustarEstoque('${item.id}', 1)" title="Adicionar 1 unidade">+1</button>
-          <button type="button" class="btn-tbl btn-tbl-outline" onclick="ajustarEstoque('${item.id}', -1)" title="Remover 1 unidade">-1</button>
-          <button type="button" class="btn-tbl btn-tbl-primary" onclick="darEntradaLote('${item.id}')" title="Dar entrada em lote de estoque">+ Lote</button>
-        </div>
+      <td style="text-align: right;">
+        <button type="button" class="btn-tbl btn-tbl-primary" onclick="ajustarQuantidadeEstoque('', 5)" style="background: #0284c7; padding: 4px 8px; font-size: 0.75rem; border: none; border-radius: 4px; color: white; cursor: pointer;">
+          +5 Entrada
+        </button>
+        <button type="button" class="btn-tbl btn-tbl-danger" onclick="ajustarQuantidadeEstoque('', -1)" style="background: #e11d48; padding: 4px 8px; font-size: 0.75rem; border: none; border-radius: 4px; color: white; cursor: pointer; margin-left: 4px;">
+          -1 Baixa
+        </button>
       </td>
-    `;
+    ;
     tbody.appendChild(tr);
   });
+
+  atualizarCardsKPI(estoque);
 }
 
-function abrirModalNovoLivro() {
-  document.getElementById('form-novo-livro').reset();
-  document.getElementById('modal-novo-livro').style.display = 'flex';
+function atualizarCardsKPI(estoque) {
+  const elTotalItens = document.getElementById('kpi-total-itens');
+  const elBaixoEstoque = document.getElementById('kpi-baixo-estoque');
+  const elEsgotados = document.getElementById('kpi-esgotados');
+
+  if (elTotalItens) {
+    const total = estoque.reduce((acc, curr) => acc + Number(curr.quantidade), 0);
+    elTotalItens.textContent = ${total} un;
+  }
+
+  if (elBaixoEstoque) {
+    const countBaixo = estoque.filter(item => item.quantidade > 0 && item.quantidade <= item.estoqueMinimo).length;
+    elBaixoEstoque.textContent = ${countBaixo} títulos;
+  }
+
+  if (elEsgotados) {
+    const countEsgotados = estoque.filter(item => item.quantidade === 0).length;
+    elEsgotados.textContent = ${countEsgotados} títulos;
+  }
 }
 
-function fecharModalLivro() {
-  document.getElementById('modal-novo-livro').style.display = 'none';
+async function ajustarQuantidadeEstoque(id, delta) {
+  const estoque = obterEstoque();
+  const item = estoque.find(i => String(i.id) === String(id));
+  if (!item) return;
+
+  const novaQtd = Math.max(0, item.quantidade + delta);
+  item.quantidade = novaQtd;
+  salvarEstoqueStorage(estoque);
+  renderizarTabelaEstoque();
+
+  // Tenta persistir no Supabase via API
+  try {
+    await fetch(/api/livros/estoque/, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ quantidade: novaQtd })
+    });
+  } catch (err) {
+    console.warn('Erro ao sincronizar estoque no backend:', err);
+  }
 }
 
 function salvarNovoLivro(e) {
   e.preventDefault();
+  const titulo = document.getElementById('modal-titulo')?.value;
+  const autor = document.getElementById('modal-autor')?.value;
+  const isbn = document.getElementById('modal-isbn')?.value;
+  const preco = parseFloat(document.getElementById('modal-preco')?.value || '0');
+  const quantidade = parseInt(document.getElementById('modal-qtd')?.value || '0', 10);
+  const estoqueMinimo = parseInt(document.getElementById('modal-min')?.value || '5', 10);
 
-  const titulo = document.getElementById('book-titulo').value.trim();
-  const autor = document.getElementById('book-autor').value.trim();
-  const isbn = document.getElementById('book-isbn').value.trim();
-  const preco = parseFloat(document.getElementById('book-preco').value);
-  const quantidade = parseInt(document.getElementById('book-quantidade').value, 10);
-  const estoqueMinimo = parseInt(document.getElementById('book-estoque-minimo').value, 10);
+  if (!titulo || !isbn) {
+    alert('Preencha os campos obrigatórios!');
+    return;
+  }
 
-  const itens = obterEstoque();
-
-  const novoLivro = {
-    id: String(Date.now()),
+  const estoque = obterEstoque();
+  const novoItem = {
+    id: 'livro_' + Date.now(),
     isbn,
     titulo,
     autor,
     preco,
     quantidade,
     estoqueMinimo,
-    status: quantidade <= estoqueMinimo ? 'BAIXO_ESTOQUE' : 'DISPONÍVEL'
+    status: quantidade === 0 ? 'ESGOTADO' : quantidade <= estoqueMinimo ? 'BAIXO_ESTOQUE' : 'DISPONÍVEL'
   };
 
-  itens.push(novoLivro);
-  salvarEstoqueStorage(itens);
-  fecharModalLivro();
+  estoque.unshift(novoItem);
+  salvarEstoqueStorage(estoque);
   renderizarTabelaEstoque();
+
+  document.getElementById('modal-novo-livro')?.classList.remove('modal-aberto');
+  document.getElementById('form-novo-livro')?.reset();
 }
 
-// Nota: a função obterEstoque() já está definida na linha 26, não precisa duplicar
-
-function ajustarEstoque(id, delta) {
-  const itens = obterEstoque();
-  const item = itens.find(i => i.id === String(id));
-  if (!item) return;
-
-  item.quantidade = Math.max(0, item.quantidade + delta);
-  salvarEstoqueStorage(itens);
-  renderizarTabelaEstoque();
-}
-
-function darEntradaLote(id) {
-  const qtdStr = prompt('Informe a quantidade de exemplares do novo lote:');
-  const qtd = parseInt(qtdStr, 10);
-
-  if (!isNaN(qtd) && qtd > 0) {
-    ajustarEstoque(id, qtd);
-  }
-}
+window.ajustarQuantidadeEstoque = ajustarQuantidadeEstoque;

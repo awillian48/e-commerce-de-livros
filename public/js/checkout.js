@@ -1,5 +1,5 @@
 // Estado global da sessão de checkout
-const CUPONS_DISPONIVEIS_CLIENTE = [
+let CUPONS_DISPONIVEIS_CLIENTE = [
   { codigo: 'PROMO10', tipo: 'PROMOCIONAL', valor: 10.00, descricao: '10% OFF - Boas-Vindas' },
   { codigo: 'TR-2026-88', tipo: 'TROCA', valor: 20.00, descricao: 'Crédito de Troca #TR-2026-88' },
   { codigo: 'TR-2026-99', tipo: 'TROCA', valor: 15.50, descricao: 'Crédito de Troca #TR-2026-99' }
@@ -28,7 +28,28 @@ document.addEventListener('DOMContentLoaded', () => {
   configurarEventosCheckout();
   configurarMascaraNovoCartao();
   atualizarResumoFinanceiro();
+  carregarCuponsDoBanco();
 });
+
+async function carregarCuponsDoBanco() {
+  try {
+    const res = await fetch('/api/cupons');
+    if (res.ok) {
+      const cuponsDb = await res.json();
+      if (Array.isArray(cuponsDb) && cuponsDb.length > 0) {
+        CUPONS_DISPONIVEIS_CLIENTE = cuponsDb.map(c => ({
+          codigo: c.codigo,
+          tipo: c.tipo,
+          valor: Number(c.valor),
+          descricao: c.tipo === 'PROMOCIONAL' ? ${c.codigo} (R$ ) : Crédito Troca # (R$ )
+        }));
+        renderizarCuponsDisponiveis();
+      }
+    }
+  } catch (err) {
+    console.warn('API de cupons em fallback local:', err);
+  }
+}
 
 // ============================================================================
 // GERENCIAMENTO E CADASTRO DE CARTÕES NO CHECKOUT

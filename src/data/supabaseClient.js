@@ -1,5 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
+﻿import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
+import WebSocket from 'ws';
 
 dotenv.config();
 
@@ -13,6 +14,9 @@ if (supabaseUrl && supabaseKey && supabaseUrl.startsWith('http')) {
     supabaseInstance = createClient(supabaseUrl, supabaseKey, {
       auth: {
         persistSession: false
+      },
+      realtime: {
+        transport: WebSocket
       }
     });
     console.log('✅ Conexão com Supabase inicializada com sucesso!');
@@ -20,7 +24,7 @@ if (supabaseUrl && supabaseKey && supabaseUrl.startsWith('http')) {
     console.error('❌ Falha ao inicializar cliente Supabase:', err.message);
   }
 } else {
-  console.log('ℹ️  Supabase URL/Key não configurados no .env. Operando em modo de persistência local (JSON fallback).');
+  console.log('⚠️  Supabase URL/Key não configurados no .env. Operando em modo de persistência local (JSON fallback).');
 }
 
 export function isSupabaseConfigured() {

@@ -1,5 +1,5 @@
 // Simulação da base de pedidos do cliente em sessão (espelhará o banco de dados)
-const pedidosClienteMock = [
+let pedidosCliente = [
   {
     id: '7890',
     data: '10/08/2026',
@@ -20,8 +20,9 @@ const pedidosClienteMock = [
 
 let itemEmTrocaContexto = null;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   renderizarHistoricoPedidos();
+  await carregarPedidosDoBanco();
 
   const formTroca = document.getElementById('form-solicitar-troca');
   if (formTroca) {
@@ -29,13 +30,41 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+async function carregarPedidosDoBanco() {
+  try {
+    const res = await fetch('/api/pedidos');
+    if (res.ok) {
+      const pedidosDb = await res.json();
+      if (Array.isArray(pedidosDb) && pedidosDb.length > 0) {
+        pedidosCliente = pedidosDb.map(p => ({
+          id: p.id,
+          data: p.data ? p.data.split('-').reverse().join('/') : '10/08/2026',
+          status: p.status || 'ENTREGUE',
+          itens: (p.itens_pedido && p.itens_pedido.length > 0) ? p.itens_pedido.map((it, idx) => ({
+            idItem: it.id || String(idx + 1),
+            titulo: it.titulo_livro,
+            qtd: it.quantidade || 1,
+            valor: Number(it.preco_unitario || 0),
+            statusItem: p.status === 'ENTREGUE' ? 'ENTREGUE' : p.status
+          })) : [
+            { idItem: '1', titulo: 'Livros do Pedido', qtd: 1, valor: Number(p.valor_total), statusItem: p.status }
+          ]
+        }));
+        renderizarHistoricoPedidos();
+      }
+    }
+  } catch (err) {
+    console.warn('API de pedidos em fallback local:', err);
+  }
+}
+
 function renderizarHistoricoPedidos() {
   const container = document.getElementById('container-historico-pedidos');
   if (!container) return;
 
   container.innerHTML = '';
 
-  pedidosClienteMock.forEach(pedido => {
+  pedidosCliente.forEach(pedido => {
     const isEntregue = pedido.status === 'ENTREGUE';
     const cardPedido = document.createElement('div');
     cardPedido.style.cssText = 'border-bottom: 2px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px;';
