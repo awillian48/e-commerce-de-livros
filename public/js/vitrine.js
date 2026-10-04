@@ -31,11 +31,18 @@ function renderizarGridLivros(container, livros) {
   container.innerHTML = '';
 
   livros.forEach(livro => {
-    const estoque = Math.max(0, parseInt(livro.estoque, 10) || 0);
-    const preco = Number(livro.precoVenda || livro.preco || 0);
-    const precoFormatado = preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    let qtdEstoque = 10;
+    if (typeof livro.estoque === "object" && livro.estoque !== null) {
+      qtdEstoque = Number(livro.estoque.quantidade ?? 0);
+    } else if (livro.estoque !== undefined && livro.estoque !== null) {
+      qtdEstoque = parseInt(livro.estoque, 10) || 0;
+    }
+    const estoque = Math.max(0, qtdEstoque);
+
+    const preco = Number(livro.preco_venda ?? livro.precoVenda ?? livro.preco ?? 45.9);
+    const precoFormatado = preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
     const esgotado = estoque <= 0;
-    const capa = livro.imagemCapa || livro.capa || 'https://covers.openlibrary.org/b/id/8313436-L.jpg';
+    const capa = livro.capa_url || livro.imagemCapa || livro.capa || "https://covers.openlibrary.org/b/id/8313436-L.jpg";
 
     const card = document.createElement('article');
     card.className = 'book-card';
@@ -97,16 +104,30 @@ function conectarBotoesAdicionar(container) {
     const livroId = card.dataset.livroId || card.dataset.isbn;
     const livroCache = livrosVitrineCache.find(l => (l.id === livroId || l.codigo === livroId || l.isbn === card.dataset.isbn));
 
-    const dadosLivro = livroCache || {
+    const dadosLivro = livroCache ? {
+      id: livroCache.id || livroId,
+      livroId: livroCache.id || livroId,
+      codigo: livroCache.codigo || livroId,
+      titulo: livroCache.titulo || card.dataset.title || card.querySelector(".book-title")?.textContent?.trim(),
+      autor: livroCache.autor || card.dataset.author || card.querySelector(".book-author")?.textContent?.trim(),
+      isbn: livroCache.isbn || card.dataset.isbn,
+      preco: Number(livroCache.preco_venda ?? livroCache.precoVenda ?? livroCache.preco ?? 45.9),
+      precoCentavos: Math.round(Number(livroCache.preco_venda ?? livroCache.precoVenda ?? livroCache.preco ?? 45.9) * 100),
+      pesoKg: Number(livroCache.peso_kg ?? livroCache.pesoKg ?? 0.45),
+      estoque: typeof livroCache.estoque === "object" && livroCache.estoque !== null
+        ? Number(livroCache.estoque.quantidade ?? 0)
+        : (parseInt(livroCache.estoque, 10) || 0),
+      capa: livroCache.capa_url || livroCache.imagemCapa || livroCache.capa || card.querySelector(".book-cover")?.src
+    } : {
       id: livroId,
       livroId: livroId,
       codigo: livroId,
-      titulo: card.dataset.title || card.querySelector('.book-title')?.textContent?.trim(),
-      autor: card.dataset.author || card.querySelector('.book-author')?.textContent?.trim(),
+      titulo: card.dataset.title || card.querySelector(".book-title")?.textContent?.trim(),
+      autor: card.dataset.author || card.querySelector(".book-author")?.textContent?.trim(),
       isbn: card.dataset.isbn,
-      preco: extrairPreco(card.querySelector('.book-price')?.textContent),
-      estoque: extrairEstoque(card.querySelector('.book-estoque')?.textContent),
-      capa: card.querySelector('.book-cover')?.src
+      preco: extrairPreco(card.querySelector(".book-price")?.textContent),
+      estoque: extrairEstoque(card.querySelector(".book-estoque")?.textContent),
+      capa: card.querySelector(".book-cover")?.src
     };
 
     if (window.Carrinho) {
