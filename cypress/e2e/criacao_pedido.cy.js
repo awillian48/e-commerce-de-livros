@@ -12,6 +12,51 @@
  * 8. Validação de regras de cupons: apenas 1 promocional (RN0033).
  */
 
+// ============================================================================
+// CONTROLE DE VELOCIDADE PARA APRESENTAÇÃO (DEMO / SLOW MOTION)
+// ============================================================================
+// Ajuste este valor (em ms) para controlar a velocidade do teste:
+// 1000 = 1 segundo de pausa após cada ação (ideal para apresentar ao professor)
+// 800  = ritmo confortável para apresentação
+// 500  = ritmo moderado
+// 0    = velocidade máxima sem pausas
+const PAUSA_DEMO = 800;
+
+// Digitação humanizada e visível (letra por letra nos campos de formulário)
+Cypress.Keyboard.defaults({
+  keystrokeDelay: 35
+});
+
+if (PAUSA_DEMO > 0) {
+  // Pausa após carregar uma página (visit)
+  Cypress.Commands.overwrite('visit', (originalFn, ...args) => {
+    return originalFn(...args).then((val) => {
+      return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
+    });
+  });
+
+  // Pausa após cliques em botões, links e cards (click)
+  Cypress.Commands.overwrite('click', (originalFn, subject, ...args) => {
+    return originalFn(subject, ...args).then((val) => {
+      return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
+    });
+  });
+
+  // Pausa após seleção de opções em dropdowns (select)
+  Cypress.Commands.overwrite('select', (originalFn, subject, ...args) => {
+    return originalFn(subject, ...args).then((val) => {
+      return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
+    });
+  });
+
+  // Pausa após marcar checkboxes ou radios (check)
+  Cypress.Commands.overwrite('check', (originalFn, subject, ...args) => {
+    return originalFn(subject, ...args).then((val) => {
+      return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
+    });
+  });
+}
+
 describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026)', () => {
   beforeEach(() => {
     cy.clearLocalStorage();
