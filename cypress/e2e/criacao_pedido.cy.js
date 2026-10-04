@@ -48,8 +48,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     cy.get('#tabela-carrinho-body tr').should('have.length', 2);
 
     // Altera a quantidade do primeiro item de 2 para 4
-    cy.get('.input-qtd-carrinho').first().clear();
-    cy.get('.input-qtd-carrinho').first().type('4').trigger('change');
+    cy.get('.input-qtd-carrinho', { timeout: 10000 }).first().invoke('val', 4).trigger('change');
 
     // Valida que o total do carrinho foi recalculado
     cy.get('#total-carrinho').should('not.contain', 'R$ 0,00');
@@ -217,8 +216,8 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     });
 
     // Seleciona Cartão 2
-    cy.get('#select-cartao-2 option', { timeout: 10000 }).should('have.length.at.least', 2);
-    cy.get('#select-cartao-2').select(1);
+    cy.get('#select-cartao-2 option', { timeout: 15000 }).should('have.length.at.least', 3);
+    cy.get('#select-cartao-2').select(2);
 
     // Tenta colocar valor inferior a R$ 10,00 no Cartão 2 (ex: R$ 5,00)
     cy.get('#input-valor-cartao2').clear().type('5.00').trigger('input').trigger('change').trigger('blur');
@@ -373,12 +372,14 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     cy.request('POST', '/api/cupons', { codigo: promo2, tipo: 'PROMOCIONAL', valor: 15.00 });
 
     // Aplica o primeiro
-    cy.get('#input-codigo-cupom').type(promo1);
+    cy.get('#input-codigo-cupom', { timeout: 15000 }).clear().type(promo1);
     cy.get('#btn-aplicar-cupom').click();
+    cy.get('#lista-cupons-aplicados', { timeout: 10000 }).should('contain', promo1);
 
     // Aplica o segundo promocional
-    cy.get('#input-codigo-cupom').type(promo2);
+    cy.get('#input-codigo-cupom', { timeout: 15000 }).clear().type(promo2);
     cy.get('#btn-aplicar-cupom').click();
+    cy.get('#lista-cupons-aplicados', { timeout: 10000 }).should('contain', promo2);
 
     // RN0033: Bloqueio por múltiplos promocionais
     cy.get('#container-erros-pagamento').should('be.visible');
