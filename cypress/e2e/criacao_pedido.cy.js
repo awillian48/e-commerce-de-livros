@@ -277,10 +277,13 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
       }
     });
 
-    // Aplica o cupom de troca de R$ 50,00
-    cy.get('#input-codigo-cupom').type(codigoCupomUnico);
+    // 1. Aguarda cálculo automático do frete
+    cy.get('#valor-frete', { timeout: 15000 }).should('not.contain', 'R$ 0,00');
+
+    // 2. Aplica o cupom de troca de R$ 50,00
+    cy.get('#input-codigo-cupom', { timeout: 15000 }).clear().type(codigoCupomUnico);
     cy.get('#btn-aplicar-cupom').click();
-    cy.get('#lista-cupons-aplicados').should('contain', codigoCupomUnico);
+    cy.get('#lista-cupons-aplicados', { timeout: 15000 }).should('contain', codigoCupomUnico);
 
     // O valor no cartão restante é de ~R$ 7,25 (< 10,00)
     // De acordo com a RN0035, esta é a ÚNICA situação permitida para cartão < R$ 10,00
