@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Livraria Alexandria - Seu Carrinho</title>
+  <title>Livraria Alexandria - Seu Carrinho de Compras</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <!-- Barra Superior de Benefícios -->
+  <!-- Barra Superior -->
   <div style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 6px 5%; font-size: 0.76rem; color: #475569; display: flex; justify-content: space-between; align-items: center;">
     <div style="display: flex; gap: 20px; font-weight: 500;">
       <span>Formas de entrega expressa</span>
@@ -20,107 +20,89 @@
     </div>
   </div>
 
-  <!-- Header Principal da Loja -->
+  <!-- Header -->
   <header style="background: var(--palette-navy-dark); color: white; padding: 14px 5%; display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.12);">
     <a href="/index.html" class="logo" style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 700; color: #ffffff; text-decoration: none; white-space: nowrap; letter-spacing: -0.02em;">
       Livraria Alexandria
     </a>
-    
-    <form class="header-search" onsubmit="return false;" style="display: flex; flex: 1; max-width: 440px; background: white; border-radius: 6px; overflow: hidden; border: 1px solid #cbd5e1;">
-      <select style="border: none; padding: 8px 12px; background: #f8fafc; font-size: 0.8rem; color: #334155; outline: none; border-right: 1px solid #e2e8f0;">
-        <option>Título ou Autor</option>
-        <option>ISBN</option>
-      </select>
-      <input type="text" placeholder="Buscar no acervo..." style="flex: 1; border: none; padding: 8px 12px; outline: none; font-size: 0.85rem; color: #1e293b;">
-      <button type="submit" style="background: var(--palette-navy-dark); color: white; border: none; padding: 0 16px; font-size: 0.82rem; font-weight: 600; cursor: pointer;">Buscar</button>
-    </form>
 
     <nav class="user-nav" style="display: flex; gap: 12px; align-items: center;">
+      <a href="/index.html" class="btn-tbl btn-tbl-outline" style="border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: #ffffff; text-decoration: none;">Acervo Principal</a>
       <a href="/cliente-pedidos.html" class="btn-tbl btn-tbl-outline" style="border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: #ffffff; text-decoration: none;">Meus Pedidos</a>
-      <a href="/cliente-cadastro.html" class="btn-tbl btn-tbl-outline" style="border-color: rgba(255,255,255,0.3); background: transparent; color: #cbd5e1; text-decoration: none;">Minha Conta</a>
-      <a href="/carrinho.html" class="btn-tbl btn-tbl-primary" style="background: var(--palette-sand); color: var(--palette-navy-dark); font-weight: 700; text-decoration: none;">Carrinho</a>
-      <a href="/admin/index.html" class="btn-tbl btn-tbl-outline" style="border-color: var(--palette-teal-dark); background: var(--palette-teal-dark); color: #ffffff; font-weight: 700; text-decoration: none;">Painel Admin</a>
+      <a href="/carrinho.html" class="btn-tbl btn-tbl-primary" style="background: var(--palette-sand); color: var(--palette-navy-dark); font-weight: 700; text-decoration: none;">Carrinho (0)</a>
+      <a href="/admin/clientes.html" class="btn-tbl btn-tbl-outline" style="border-color: var(--palette-teal-dark); background: var(--palette-teal-dark); color: #ffffff; font-weight: 700; text-decoration: none;">Painel Admin</a>
     </nav>
   </header>
 
-  <main class="container">
-    <h3 class="section-title">Itens Selecionados</h3>
+  <main class="container" style="max-width: 1100px; margin: 30px auto; padding: 0 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h2 class="section-title" style="margin: 0;">Carrinho de Compras (RF0031 / RF0032)</h2>
+      <a href="/index.html" style="color: var(--palette-teal-dark); text-decoration: none; font-weight: 600;">+ Adicionar mais livros</a>
+    </div>
 
-    <!-- Tabela com os itens do carrinho -->
-    <section class="section-card">
-      <table class="table-default">
-        <thead>
-          <tr>
-            <th>Obra</th>
-            <th>Qtd</th>
-            <th>Valor Unitário</th>
-            <th>Subtotal</th>
-            <th style="text-align: right;">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Linha do produto (dados estáticos por enquanto) -->
-          <tr>
-            <td style="display: flex; align-items: center; gap: 12px;">
-              <img src="https://covers.openlibrary.org/b/id/8313436-L.jpg" alt="Dom Casmurro" class="cart-item-thumb">
-              <div>
-                <strong style="color: var(--text-title); display: block; font-family: var(--font-heading); font-size: 0.95rem;">Dom Casmurro</strong>
-                <span style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">Machado de Assis</span>
-              </div>
-            </td>
-            <td>
-              <input type="number" id="qtd-item" value="1" min="1" max="5" class="form-input" style="width: 55px;">
-            </td>
-            <td>R$ 45,90</td>
-            <td style="font-weight: bold; color: var(--accent-price);" id="subtotal-item">R$ 45,90</td>
-            <td style="text-align: right;">
-              <button onclick="removerItem(this)" class="btn-sm" style="background: var(--btn-primary);">Remover</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Alerta de Estoque / Regras de Negócio (RN0031) -->
+    <div id="alerta-carrinho" style="display: none; padding: 12px 16px; border-radius: 6px; margin-bottom: 18px; font-size: 0.9rem;"></div>
 
-      <!-- Cálculo de frete por CEP -->
-      <div style="margin-top: 20px; padding: 15px; background: #fbf8f3; border: 1px solid var(--border-color); border-radius: 6px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
-        <label for="cep-input" class="form-label" style="margin-bottom: 0;">Calcular Frete (CEP):</label>
-        <input type="text" id="cep-input" placeholder="00000-000" maxlength="9" class="form-input" style="width: 120px;">
-        <button type="button" id="btn-frete" class="btn-sm" style="background: var(--palette-teal-dark);">Calcular</button>
-        <span style="font-size: 0.9rem; margin-left: auto;">Frete: <strong id="valor-frete" style="color: var(--palette-navy-dark);">R$ 0,00</strong></span>
+    <section class="section-card" style="background: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 24px;">
+      <div id="carrinho-vazio" style="display: none; text-align: center; padding: 40px 20px;">
+        <p style="font-size: 1.1rem; color: #64748b; margin-bottom: 20px;">Seu carrinho está vazio no momento.</p>
+        <a href="/index.html" class="btn-buy" style="text-decoration: none; display: inline-block; padding: 12px 28px;">Explorar o Acervo</a>
       </div>
 
-      <!-- Resumo e botão de avançar -->
-      <div style="margin-top: 25px; display: flex; justify-content: space-between; align-items: center; border-top: 2px solid var(--border-color); padding-top: 20px; flex-wrap: wrap; gap: 15px;">
-        <a href="/index.html" style="color: var(--header-teal); text-decoration: none; font-weight: bold;">+ Selecionar Mais Livros</a>
-        <div style="text-align: right;">
-          <div style="font-size: 1.3rem; font-weight: bold; color: var(--text-dark); margin-bottom: 12px;">Total: <span id="total-carrinho" style="color: var(--accent-wine);">R$ 45,90</span></div>
-          <a href="/checkout.html" class="btn-buy" style="padding: 12px 24px; text-decoration: none; display: inline-block;">Avançar para Checkout (Pagamento) →</a>
+      <div id="carrinho-conteudo">
+        <table class="table-default" style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr style="border-bottom: 2px solid #e2e8f0; text-align: left;">
+              <th style="padding: 12px;">Obra</th>
+              <th style="padding: 12px; width: 120px; text-align: center;">Quantidade</th>
+              <th style="padding: 12px; text-align: right;">Preço Unitário</th>
+              <th style="padding: 12px; text-align: right;">Subtotal</th>
+              <th style="padding: 12px; text-align: center; width: 100px;">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-carrinho-body">
+            <!-- Linhas dinâmicas -->
+          </tbody>
+        </table>
+
+        <!-- Resumo e Ação de Iniciar Compra (RF0033) -->
+        <div style="margin-top: 25px; display: flex; justify-content: space-between; align-items: center; border-top: 2px solid #e2e8f0; padding-top: 20px; flex-wrap: wrap; gap: 15px;">
+          <div>
+            <button type="button" id="btn-limpar-carrinho" class="btn-sm" style="background: #94a3b8; color: #fff;">Limpar Carrinho</button>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 12px;">
+              Subtotal dos Itens: <span id="total-carrinho" style="color: #991b1b;">R$ 0,00</span>
+            </div>
+            <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;">
+              * Frete e condições de pagamento calculados na etapa seguinte (RF0034 / RF0036).
+            </p>
+            <a href="/checkout.html" id="btn-ir-checkout" class="btn-buy" style="padding: 14px 28px; text-decoration: none; display: inline-block; font-size: 1rem; font-weight: 700;">
+              Iniciar Compra (RF0033) ➔
+            </a>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Rodapé Institucional -->
-  <footer>
+  <footer style="margin-top: 60px;">
     <div class="footer-grid">
       <div class="footer-col">
         <h5>Livraria Alexandria</h5>
-        <p>Especialistas em acervos clássicos, obras raras e edições históricas para colecionadores.</p>
+        <p>Especialistas em acervos clássicos, obras raras e edições históricas.</p>
       </div>
       <div class="footer-col">
         <h5>Navegação</h5>
         <ul>
           <li><a href="/index.html">Acervo Principal</a></li>
           <li><a href="/cliente-pedidos.html">Meus Pedidos</a></li>
-          <li><a href="/cliente-cadastro.html">Minha Conta</a></li>
           <li><a href="/carrinho.html">Carrinho de Compras</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h5>Atendimento</h5>
-        <ul>
-          <li>Central de Ajuda</li>
-          <li>Política de Troca & Devolução</li>
-        </ul>
+        <h5>Escopo da Atividade</h5>
+        <p style="font-size: 0.8rem; color: #94a3b8;">Implementação de Criação de Pedido - DRS LES 2026</p>
       </div>
     </div>
     <div class="footer-bottom">
@@ -128,6 +110,7 @@
     </div>
   </footer>
 
+  <script src="/js/carrinho-store.js"></script>
   <script src="/js/carrinho.js"></script>
 </body>
 </html>

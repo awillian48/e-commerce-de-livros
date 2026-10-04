@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const card = e.target.closest('.book-card');
     if (!card) return;
 
-    if (e.target.classList.contains('btn-buy-direct')) return;
+    if (e.target.closest('.btn-buy-direct, .card-acoes-compra, .btn-add-carrinho, input')) return;
 
     e.preventDefault();
     const isbn = card.dataset.isbn;

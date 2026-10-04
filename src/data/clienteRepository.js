@@ -80,7 +80,7 @@ function mapearClienteSupabase(c) {
     genero: c.genero,
     ranking: c.ranking,
     status: c.status,
-    enderecos: (c.enderecos || []).map(e => ({
+    enderecos: (c.enderecos || []).filter(e => e.no_perfil !== false).map(e => ({
       id: e.id,
       fraseIdentificadora: e.frase_identificadora,
       tipoResidencia: e.tipo_residencia,
@@ -95,7 +95,7 @@ function mapearClienteSupabase(c) {
       observacoes: e.observacoes || '',
       finalidade: e.finalidade
     })),
-    cartoes: (c.cartoes || []).map(card => ({
+    cartoes: (c.cartoes || []).filter(card => card.no_perfil !== false).map(card => ({
       id: card.id,
       numero: card.numero,
       nomeImpresso: card.nome_impresso,

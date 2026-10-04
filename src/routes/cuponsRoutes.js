@@ -1,5 +1,7 @@
-﻿import express from 'express';
+import express from 'express';
 import { listarCupons, validarCupom } from '../data/vendaRepository.js';
+import { cadastrarCupom } from '../data/pedidoRepository.js';
+import { responderErro } from './checkoutRoutes.js';
 
 const router = express.Router();
 
@@ -10,6 +12,19 @@ router.get('/', async (req, res) => {
     res.json(cupons);
   } catch (err) {
     res.status(500).json({ erro: 'Erro ao listar cupons', mensagem: err.message });
+  }
+});
+
+/**
+ * Carga prévia de cupons para a demonstração (a geração de cupons de troca
+ * está fora do escopo desta fase — DRS permite carregá-los previamente na base).
+ */
+router.post('/', async (req, res) => {
+  try {
+    const cupom = await cadastrarCupom(req.body || {});
+    res.status(201).json(cupom);
+  } catch (err) {
+    responderErro(res, err);
   }
 });
 

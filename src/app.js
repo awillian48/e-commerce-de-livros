@@ -1,4 +1,4 @@
-﻿import express from 'express';
+import express from 'express';
 import path from 'path';
 import clientesRoutes from './routes/clientesRoutes.js';
 import livrosRoutes from './routes/livrosRoutes.js';
@@ -6,6 +6,8 @@ import pedidosRoutes from './routes/pedidosRoutes.js';
 import cuponsRoutes from './routes/cuponsRoutes.js';
 import trocasRoutes from './routes/trocasRoutes.js';
 import analiseRoutes from './routes/analiseRoutes.js';
+import checkoutRoutes from './routes/checkoutRoutes.js';
+import logsRoutes from './routes/logsRoutes.js';
 
 const app = express();
 
@@ -19,6 +21,8 @@ app.use('/api/pedidos', pedidosRoutes);
 app.use('/api/cupons', cuponsRoutes);
 app.use('/api/trocas', trocasRoutes);
 app.use('/api/analise', analiseRoutes);
+app.use('/api/checkout', checkoutRoutes);
+app.use('/api/logs', logsRoutes);
 
 // Mapeamento absoluto do diretório estático público
 const publicPath = path.resolve('public');

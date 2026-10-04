@@ -9,8 +9,12 @@
     "test:e2e:open": "cypress open",
     "cypress:open": "cypress open",
     "test:headed": "cypress run --headed --no-runner-ui",
+    "test:pedido": "cypress run --spec cypress/e2e/criacao_pedido.cy.js",
+    "test:local": "cypress run --config baseUrl=http://localhost:3000",
     "test:e2e": "cypress run",
-    "test:record": "cypress run --record --key dbb870cb-ae6c-4585-b0b7-006a6027746d"
+    "test:record": "cypress run --record --key dbb870cb-ae6c-4585-b0b7-006a6027746d",
+    "test:pedido:render": "cypress run --spec cypress/e2e/criacao_pedido.cy.js --config baseUrl=https://e-commerce-de-livros.onrender.com",
+    "test:pedido:local": "cypress run --spec cypress/e2e/criacao_pedido.cy.js --config baseUrl=http://localhost:3000"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.109.0",
