@@ -227,8 +227,9 @@
       });
       const data = await res.json();
       if (res.ok) {
-        valorFreteCentavos = data.valorCentavos;
-        definirTextoFrete(data.valorCentavos, data.criterio);
+        const centavosFrete = (data.valorCentavos != null) ? data.valorCentavos : Math.round(Number(data.valor || 0) * 100);
+        valorFreteCentavos = centavosFrete;
+        definirTextoFrete(centavosFrete, data.criterio);
       }
     } catch (err) {
       console.warn('Cálculo de frete em fallback:', err);

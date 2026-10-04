@@ -34,7 +34,7 @@ router.post(
   '/frete',
   rota(async (req) => {
     const f = await repo.calcularFreteItens(req.body || {});
-    return { valor: f.valor, criterio: f.criterio, regiao: f.regiao, uf: f.uf, pesoTotalKg: f.pesoTotalKg };
+    return { valor: f.valor, valorCentavos: Math.round(Number(f.valor) * 100), criterio: f.criterio, regiao: f.regiao, uf: f.uf, pesoTotalKg: f.pesoTotalKg };
   })
 );
 
