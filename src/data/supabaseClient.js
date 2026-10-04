@@ -4,8 +4,11 @@ import WebSocket from 'ws';
 
 dotenv.config();
 
-const supabaseUrl = process.env.SUPABASE_URL?.trim();
-const supabaseKey = process.env.SUPABASE_KEY?.trim();
+const DEFAULT_SUPABASE_URL = "https://fjorfwbighsbdvunijtd.supabase.co";
+const DEFAULT_SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqb3Jmd2JpZ2hzYmR2dW5panRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1NDU3OTYsImV4cCI6MjEwNjEyMTc5Nn0.peMjDrhBogK8GiFDVrJpKXIKh5G5rn9cKJq90w2Ftik";
+
+const supabaseUrl = (process.env.SUPABASE_URL?.trim()) || DEFAULT_SUPABASE_URL;
+const supabaseKey = (process.env.SUPABASE_KEY?.trim()) || DEFAULT_SUPABASE_KEY;
 
 let supabaseInstance = null;
 
