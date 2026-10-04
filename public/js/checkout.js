@@ -251,6 +251,17 @@
   // ==========================================================================
   // 3. CUPONS DE DESCONTO E TROCA (RN0033, RN0035, RN0036)
   // ==========================================================================
+  function mostrarFeedbackCupom(msg, tipo = 'erro') {
+    const el = document.getElementById('feedback-cupom');
+    if (el) {
+      el.style.display = 'block';
+      el.style.color = tipo === 'erro' ? '#dc2626' : '#059669';
+      el.textContent = msg;
+    } else if (typeof window.mostrarModalAviso === 'function') {
+      window.mostrarModalAviso(msg, 'Cupons');
+    }
+  }
+
   function renderizarCupons() {
     const container = document.getElementById('container-cupons-disponiveis');
     if (!container) return;
@@ -335,9 +346,9 @@
               return;
             }
           }
-          alert(`Cupom "${codigo}" não encontrado ou inativo.`);
+          mostrarFeedbackCupom(`Cupom "${codigo}" não encontrado ou inativo.`, 'erro');
         } catch (e) {
-          alert('Erro ao consultar cupom.');
+          mostrarFeedbackCupom('Erro ao consultar cupom.', 'erro');
         }
       });
     }
@@ -857,7 +868,7 @@
     }
 
     return {
-      clienteId: clienteAtual.uuid,
+      clienteId: clienteAtual.id || clienteAtual.uuid,
       clienteCodigo: clienteAtual.codigo,
       usuario: clienteAtual.nome,
       itens: itens.map(it => ({

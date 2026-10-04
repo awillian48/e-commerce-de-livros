@@ -52,6 +52,7 @@
     .badge-promo { background: #dbeafe; color: #1e40af; }
     .badge-troca { background: #dcfce7; color: #166534; }
   </style>
+  <script src="/js/modal-sistema.js"></script>
 </head>
 <body>
   <!-- Barra Superior -->
@@ -218,6 +219,7 @@
             <input type="text" id="input-codigo-cupom" class="form-input" placeholder="Digitar código de cupom extra..." style="max-width: 280px; text-transform: uppercase;">
             <button type="button" id="btn-aplicar-cupom" class="btn-sm" style="background: var(--palette-teal-dark); color: white; padding: 0 14px;">Aplicar Cupom</button>
           </div>
+          <div id="feedback-cupom" style="display: none; font-size: 0.82rem; margin-top: 6px;"></div>
           <div id="lista-cupons-aplicados" style="margin-top: 10px; font-size: 0.85rem;"></div>
         </section>
 

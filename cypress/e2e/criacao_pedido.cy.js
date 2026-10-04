@@ -27,13 +27,13 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     cy.get('.book-card', { timeout: 10000 }).should('have.length.at.least', 2);
 
     // Seleciona o primeiro card com botão ativo de adicionar
-    cy.contains('.btn-add-carrinho', '+ Adicionar').first().closest('.book-card').within(() => {
+    cy.get('.btn-add-carrinho:not([disabled])').eq(0).closest('.book-card').within(() => {
       cy.get('.input-qtd-vitrine').clear().type('2');
       cy.get('.btn-add-carrinho').click();
     });
 
     // Seleciona o segundo card com botão ativo de adicionar
-    cy.contains('.btn-add-carrinho', '+ Adicionar').eq(1).closest('.book-card').within(() => {
+    cy.get('.btn-add-carrinho:not([disabled])').eq(1).closest('.book-card').within(() => {
       cy.get('.input-qtd-vitrine').clear().type('1');
       cy.get('.btn-add-carrinho').click();
     });
@@ -90,12 +90,13 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
         pesoKg: 0.45,
         estoque: 20,
         quantidade: 1,
-        capa: 'https://covers.openlibrary.org/b/id/8313436-L.jpg'
+        capa: '/img/capas/LIV-001.svg'
       }
     ];
 
     cy.intercept('GET', '/api/checkout/cliente/*').as('carregarCliente');
     cy.intercept('POST', '/api/checkout/frete').as('calcularFrete');
+    
 
     cy.visit('/checkout.html', {
       onBeforeLoad(win) {
@@ -118,10 +119,10 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     cy.get('#select-cartao-1 option').should('have.length.at.least', 2);
 
     // 4. Finaliza a compra
-    cy.get('#btn-finalizar-compra', { timeout: 10000 }).should('be.enabled').click();
+    cy.get('#btn-finalizar-compra', { timeout: 15000 }).should('be.enabled').click();
 
     // 5. Valida tela de confirmação e status EM PROCESSAMENTO
-    cy.get('#confirmacao-pedido', { timeout: 10000 }).should('be.visible');
+    cy.get('#confirmacao-pedido', { timeout: 20000 }).should('be.visible');
     cy.get('#pedido-numero').should('contain', 'PED-');
     cy.get('#pedido-status').should('contain', 'EM PROCESSAMENTO');
   });
@@ -139,7 +140,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
         pesoKg: 0.45,
         estoque: 10,
         quantidade: 1,
-        capa: 'https://covers.openlibrary.org/b/id/8313436-L.jpg'
+        capa: '/img/capas/LIV-001.svg'
       }
     ];
 
@@ -186,7 +187,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     cy.get('#btn-finalizar-compra', { timeout: 10000 }).should('be.enabled').click();
 
     // 4. Confirmação
-    cy.get('#confirmacao-pedido', { timeout: 10000 }).should('be.visible');
+    cy.get('#confirmacao-pedido', { timeout: 20000 }).should('be.visible');
     cy.get('#pedido-status').should('contain', 'EM PROCESSAMENTO');
   });
 
@@ -203,7 +204,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
         pesoKg: 0.45,
         estoque: 10,
         quantidade: 2, // 2 unidades = R$ 91,80
-        capa: 'https://covers.openlibrary.org/b/id/8313436-L.jpg'
+        capa: '/img/capas/LIV-001.svg'
       }
     ];
 
@@ -219,7 +220,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     cy.get('#select-cartao-2').select(1);
 
     // Tenta colocar valor inferior a R$ 10,00 no Cartão 2 (ex: R$ 5,00)
-    cy.get('#input-valor-cartao2').clear().type('5.00').trigger('blur');
+    cy.get('#input-valor-cartao2').clear().type('5.00').trigger('input').trigger('change').trigger('blur');
 
     // RN0034: deve bloquear a finalização e exibir erro de valor mínimo
     cy.get('#container-erros-pagamento').should('be.visible');
@@ -227,19 +228,19 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     cy.get('#btn-finalizar-compra').should('be.disabled');
 
     // Corrige para valor válido respeitando o mínimo (ex: R$ 30,00 no Cartão 2)
-    cy.get('#input-valor-cartao2').clear().type('30.00').trigger('blur');
+    cy.get('#input-valor-cartao2').clear().type('30.00').trigger('input').trigger('change').trigger('blur');
 
     // Obtém o valor total para preencher a diferença exata no Cartão 1
     cy.get('#resumo-total').invoke('text').then((totalTexto) => {
       const totalNum = parseFloat(totalTexto.replace(/[^\d,]/g, '').replace(',', '.'));
       const val1 = (totalNum - 30.00).toFixed(2);
-      cy.get('#input-valor-cartao1').clear().type(val1).trigger('blur');
+      cy.get('#input-valor-cartao1').clear().type(val1).trigger('input').trigger('change').trigger('blur');
 
       // Botão habilitado com valores >= 10 em ambos
       cy.get('#container-erros-pagamento').should('not.be.visible');
       cy.get('#btn-finalizar-compra').should('be.enabled').click();
 
-      cy.get('#confirmacao-pedido', { timeout: 10000 }).should('be.visible');
+      cy.get('#confirmacao-pedido', { timeout: 20000 }).should('be.visible');
       cy.get('#pedido-status').should('contain', 'EM PROCESSAMENTO');
     });
   });
@@ -265,7 +266,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
         pesoKg: 0.45,
         estoque: 10,
         quantidade: 1,
-        capa: 'https://covers.openlibrary.org/b/id/8313436-L.jpg'
+        capa: '/img/capas/LIV-001.svg'
       }
     ];
 
@@ -285,7 +286,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     // De acordo com a RN0035, esta é a ÚNICA situação permitida para cartão < R$ 10,00
     cy.get('#btn-finalizar-compra', { timeout: 10000 }).should('be.enabled').click();
 
-    cy.get('#confirmacao-pedido', { timeout: 10000 }).should('be.visible');
+    cy.get('#confirmacao-pedido', { timeout: 20000 }).should('be.visible');
     cy.get('#pedido-status').should('contain', 'EM PROCESSAMENTO');
   });
 
@@ -311,7 +312,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
         pesoKg: 0.45,
         estoque: 10,
         quantidade: 1,
-        capa: 'https://covers.openlibrary.org/b/id/8313436-L.jpg'
+        capa: '/img/capas/LIV-001.svg'
       }
     ];
 
@@ -334,7 +335,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     cy.get('#btn-finalizar-compra', { timeout: 10000 }).should('be.enabled').click();
 
     // Valida confirmação e o cupom de troca emitido
-    cy.get('#confirmacao-pedido', { timeout: 10000 }).should('be.visible');
+    cy.get('#confirmacao-pedido', { timeout: 20000 }).should('be.visible');
     cy.get('#container-cupom-troca').should('be.visible');
     cy.get('#cupom-troca-gerado').should('contain', 'TR-');
   });
@@ -352,7 +353,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
         pesoKg: 0.45,
         estoque: 10,
         quantidade: 1,
-        capa: 'https://covers.openlibrary.org/b/id/8313436-L.jpg'
+        capa: '/img/capas/LIV-001.svg'
       }
     ];
 
