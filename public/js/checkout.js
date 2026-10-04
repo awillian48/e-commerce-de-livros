@@ -405,7 +405,8 @@
     } else {
       cartoesCliente.forEach(c => {
         const bandeira = c.bandeira || 'CARTÃO';
-        const numMascarado = c.numeroMascarado || `final ${String(c.numero).slice(-4)}`;
+        const finalDigitos = c.final || (c.numero ? String(c.numero).replace(/\D/g, '').slice(-4) : '');
+        const numMascarado = c.numeroMascarado || (finalDigitos ? `final ${finalDigitos}` : '');
         const pref = c.preferencial ? ' (Preferencial)' : '';
 
         const opt1 = document.createElement('option');

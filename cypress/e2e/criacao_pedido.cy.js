@@ -58,6 +58,23 @@ if (PAUSA_DEMO > 0) {
 }
 
 describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026)', () => {
+  before(() => {
+    cy.request({
+      method: 'DELETE',
+      url: '/api/checkout/limpeza-testes',
+      failOnStatusCode: false
+    });
+  });
+
+  after(() => {
+    cy.request({
+      method: 'DELETE',
+      url: '/api/checkout/limpeza-testes',
+      failOnStatusCode: false
+    });
+  });
+
+
   beforeEach(() => {
     cy.clearLocalStorage();
   });
@@ -412,12 +429,9 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
       }
     });
 
-    // Cria dois cupons promocionais
-    const promo1 = `PROMO-A-${Date.now().toString().slice(-4)}`;
-    const promo2 = `PROMO-B-${Date.now().toString().slice(-4)}`;
-
-    cy.request('POST', '/api/cupons', { codigo: promo1, tipo: 'PROMOCIONAL', valor: 10.00 });
-    cy.request('POST', '/api/cupons', { codigo: promo2, tipo: 'PROMOCIONAL', valor: 15.00 });
+    // Usa os cupons promocionais oficiais PROMO10 e PROMO20
+    const promo1 = 'PROMO10';
+    const promo2 = 'PROMO20';
 
     // Aplica o primeiro
     cy.get('#input-codigo-cupom', { timeout: 15000 }).clear().type(promo1);
