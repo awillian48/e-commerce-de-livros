@@ -250,7 +250,10 @@ export async function obterDadosCheckout(referencia) {
     .filter((e) => e.no_perfil !== false)
     .sort(porCriacao)
     .filter((e) => {
-      const chave = [e.frase_identificadora, e.logradouro, e.numero, e.cep].join('|');
+      const cepLimpo = String(e.cep || '').replace(/\D/g, '');
+      const numLimpo = String(e.numero || '').trim().toLowerCase();
+      const logrLimpo = String(e.logradouro || '').trim().toLowerCase();
+      const chave = `${cepLimpo}|${numLimpo}|${logrLimpo}`;
       if (vistosEnd.has(chave)) return false;
       vistosEnd.add(chave);
       return true;
@@ -261,20 +264,29 @@ export async function obterDadosCheckout(referencia) {
     .filter((card) => card.no_perfil !== false)
     .sort(porCriacao)
     .filter((card) => {
-      if (vistosCartao.has(card.numero)) return false;
-      vistosCartao.add(card.numero);
+      const numLimpo = String(card.numero || '').replace(/\D/g, '');
+      if (vistosCartao.has(numLimpo)) return false;
+      vistosCartao.add(numLimpo);
       return true;
     })
     .map((card) => ({
       id: card.id,
       bandeira: card.bandeira,
-      final: String(card.numero).replace(/\D/g, '').slice(-4),
+      numero: card.numero,
+      final: String(card.numero || '').replace(/\D/g, '').slice(-4),
       nome_impresso: card.nome_impresso,
       preferencial: Boolean(card.preferencial)
     }));
 
+  const vistosCupom = new Set();
   const cupons = [...(c.cupons || []), ...(rPromocionais.data || [])]
     .filter((cp) => !cp.utilizado && (!cp.data_validade || cp.data_validade >= hoje))
+    .filter((cp) => {
+      const cod = String(cp.codigo || '').toUpperCase();
+      if (vistosCupom.has(cod)) return false;
+      vistosCupom.add(cod);
+      return true;
+    })
     .sort((a, b) => Number(b.valor) - Number(a.valor))
     .map((cp) => ({ codigo: cp.codigo, tipo: cp.tipo, valor: Number(cp.valor) }));
 
