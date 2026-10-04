@@ -48,7 +48,8 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     cy.get('#tabela-carrinho-body tr').should('have.length', 2);
 
     // Altera a quantidade do primeiro item de 2 para 4
-    cy.get('.input-qtd-carrinho').first().clear().type('4').trigger('change');
+    cy.get('.input-qtd-carrinho').first().clear();
+    cy.get('.input-qtd-carrinho').first().type('4').trigger('change');
 
     // Valida que o total do carrinho foi recalculado
     cy.get('#total-carrinho').should('not.contain', 'R$ 0,00');

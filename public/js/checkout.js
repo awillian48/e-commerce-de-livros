@@ -267,6 +267,10 @@
     const container = document.getElementById('container-cupons-disponiveis');
     if (!container) return;
 
+    const codigosMarcados = new Set(
+      Array.from(container.querySelectorAll('.chk-cupom:checked')).map(chk => chk.value)
+    );
+
     container.innerHTML = '';
     if (cuponsDisponiveis.length === 0) {
       container.innerHTML = '<span style="color: #64748b; font-size: 0.85rem;">Nenhum cupom disponível na sua conta.</span>';
@@ -283,9 +287,10 @@
 
       const isPromo = cupom.tipo === 'PROMOCIONAL';
       const valorFormatado = Number(cupom.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      const estaMarcado = codigosMarcados.has(cupom.codigo) ? 'checked' : '';
 
       label.innerHTML = `
-        <input type="checkbox" class="chk-cupom" value="${cupom.codigo}" data-tipo="${cupom.tipo}" data-valor="${cupom.valor}">
+        <input type="checkbox" class="chk-cupom" value="${cupom.codigo}" data-tipo="${cupom.tipo}" data-valor="${cupom.valor}" ${estaMarcado}>
         <span class="badge-cupom ${isPromo ? 'badge-promo' : 'badge-troca'}">${cupom.tipo}</span>
         <strong style="color: #1e293b; font-size: 0.9rem;">${cupom.codigo}</strong>
         <span style="color: #475569; font-size: 0.85rem;">(${valorFormatado})</span>

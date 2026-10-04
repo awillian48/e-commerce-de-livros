@@ -97,8 +97,11 @@ function conectarEventosTabela() {
   const inputsQtd = document.querySelectorAll('.input-qtd-carrinho');
   inputsQtd.forEach(input => {
     input.addEventListener('change', (e) => {
+      const rawVal = e.target.value;
+      if (!rawVal || rawVal.trim() === '') return;
       const livroId = e.target.dataset.livroId;
-      const novaQtd = parseInt(e.target.value, 10);
+      const novaQtd = parseInt(rawVal, 10);
+      if (isNaN(novaQtd) || novaQtd < 1) return;
 
       const res = window.Carrinho.alterarQuantidade(livroId, novaQtd);
       if (!res.sucesso) {
