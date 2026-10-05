@@ -15,12 +15,11 @@
 // ============================================================================
 // CONTROLE DE VELOCIDADE E FOCO VISUAL PARA APRESENTAÇÃO (DEMO / SLOW MOTION)
 // ============================================================================
-// Cadência confortável para que o professor e avaliadores acompanhem cada passo:
 const PAUSA_DEMO = 1400;       // Pausa após cliques, selects e transições
 const PAUSA_DIGITACAO = 1000;  // Pausa após digitação de cada campo
 const PAUSA_LIMPEZA = 300;     // Pausa após clear()
 
-// Digitação humanizada e visível caractere por caractere (85ms entre teclas)
+// Digitação visível caractere por caractere (85ms entre teclas)
 Cypress.Keyboard.defaults({
   keystrokeDelay: 85
 });
@@ -37,11 +36,11 @@ function atualizarHUD(mensagem) {
       doc.find('body').append(hud);
     }
     hud.find('#hud-texto').text(mensagem || 'Executando...');
-  } catch (e) {}
+  } catch (e) { }
 }
 
 /**
- * Centraliza suavemente o elemento no meio da tela e aplica destaque visual (Spotlight)
+ * Centraliza o elemento no meio da tela e aplica destaque visual
  */
 function focarNoElemento($el, acao = 'Focando') {
   if (!$el) return;
@@ -52,14 +51,14 @@ function focarNoElemento($el, acao = 'Focando') {
     const isDentroDeModal = domEl.closest && domEl.closest('.modal-overlay, #modal-novo-cartao-checkout, #sistema-modal-dialogo, .modal-box');
 
     // 1. Rolagem de tela:
-    // Se o elemento estiver dentro de um modal fixo, NÃO rola a página de fundo (o modal já está fixado no centro da tela!)
+    // Se o elemento estiver dentro de um modal fixo, NÃO rola a página de fundo
     if (isDentroDeModal) {
       const modalBox = domEl.closest('.modal-box, #sistema-modal-dialogo > div');
       if (modalBox && modalBox.scrollHeight > modalBox.clientHeight && typeof domEl.scrollIntoView === 'function') {
         domEl.scrollIntoView({ block: 'nearest', inline: 'center' });
       }
     } else {
-      // Se for elemento da página comum, centraliza perfeitamente no meio vertical da tela
+      // Se for elemento da página comum, centraliza no meio vertical da tela
       if (typeof domEl.scrollIntoView === 'function') {
         domEl.scrollIntoView({ block: 'center', inline: 'center' });
       }
@@ -69,7 +68,7 @@ function focarNoElemento($el, acao = 'Focando') {
     const rotulo = domEl.getAttribute('id') || domEl.getAttribute('name') || domEl.getAttribute('placeholder') || domEl.textContent?.trim().slice(0, 25) || domEl.tagName;
     atualizarHUD(`${acao}: ${rotulo}`);
 
-    // 3. Destaca visualmente o elemento ativo com Spotlight Âmbar/Dourado inconfundível
+    // 3. Destaca o elemento ativo
     if (domEl.style) {
       domEl.style.transition = 'box-shadow 0.2s ease, border-color 0.2s ease';
       domEl.style.boxShadow = '0 0 0 4px rgba(217, 119, 6, 0.85), 0 0 25px rgba(217, 119, 6, 0.45)';
@@ -83,10 +82,10 @@ function focarNoElemento($el, acao = 'Focando') {
           domEl.style.boxShadow = '';
           domEl.style.borderColor = '';
           domEl.style.backgroundColor = '';
-        } catch (e) {}
+        } catch (e) { }
       }, PAUSA_DEMO + 400);
     }
-  } catch (e) {}
+  } catch (e) { }
 }
 
 if (PAUSA_DEMO > 0) {
@@ -249,7 +248,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
 
     cy.intercept('GET', '/api/checkout/cliente/*').as('carregarCliente');
     cy.intercept('POST', '/api/checkout/frete').as('calcularFrete');
-    
+
 
     cy.visit('/checkout.html', {
       onBeforeLoad(win) {
