@@ -6,6 +6,7 @@ export default defineConfig({
     baseUrl: 'https://e-commerce-de-livros.onrender.com',
     viewportWidth: 1280,
     viewportHeight: 720,
+    scrollBehavior: 'center',
     video: false,
     screenshotOnRunFailure: false,
     supportFile: false,

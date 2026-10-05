@@ -504,7 +504,14 @@
     const modal = document.getElementById('modal-novo-cartao-checkout');
     const erroEl = document.getElementById('erro-novo-cartao');
     if (erroEl) erroEl.style.display = 'none';
-    if (modal) modal.style.display = 'flex';
+    if (modal) {
+      modal.style.display = 'flex';
+      modal.classList.add('active');
+      const box = modal.querySelector('.modal-box');
+      if (box && typeof box.scrollIntoView === 'function') {
+        box.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' });
+      }
+    }
   }
 
   function fecharModalCartao() {

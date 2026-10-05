@@ -13,19 +13,49 @@
  */
 
 // ============================================================================
-// CONTROLE DE VELOCIDADE PARA APRESENTAÇÃO (DEMO / SLOW MOTION)
+// CONTROLE DE VELOCIDADE E FOCO VISUAL PARA APRESENTAÇÃO (DEMO / SLOW MOTION)
 // ============================================================================
-// Ajuste este valor (em ms) para controlar a velocidade do teste:
-// 1000 = 1 segundo de pausa após cada ação (ideal para apresentar ao professor)
-// 800  = ritmo confortável para apresentação
-// 500  = ritmo moderado
+// Ajuste este valor (em ms) para controlar a velocidade da apresentação:
+// 1500 = 1.5 segundos de pausa após ações (ritmo perfeito para explicar ao professor)
+// 1000 = 1 segundo
+// 500  = meio segundo
 // 0    = velocidade máxima sem pausas
-const PAUSA_DEMO = 800;
+const PAUSA_DEMO = 1500;
+const PAUSA_DIGITACAO = 700;
 
-// Digitação humanizada e visível (letra por letra nos campos de formulário)
+// Digitação humanizada e visível caractere por caractere
 Cypress.Keyboard.defaults({
-  keystrokeDelay: 35
+  keystrokeDelay: 65
 });
+
+/**
+ * Centraliza suavemente o elemento no meio da tela e aplica destaque visual (Spotlight)
+ */
+function focarNoElemento($el) {
+  if (!$el) return;
+  const domEl = $el[0] || $el;
+  if (!domEl) return;
+
+  try {
+    // 1. Centraliza exatamente no meio vertical e horizontal da tela
+    if (typeof domEl.scrollIntoView === 'function') {
+      domEl.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' });
+    }
+
+    // 2. Destaca visualmente o campo/botão em ação (Spotlight âmbar/dourado)
+    if (domEl.style) {
+      domEl.style.transition = 'all 0.25s ease-in-out';
+      domEl.style.boxShadow = '0 0 0 4px rgba(217, 119, 6, 0.65), 0 0 20px rgba(217, 119, 6, 0.35)';
+      domEl.style.borderColor = '#d97706';
+      setTimeout(() => {
+        try {
+          domEl.style.boxShadow = '';
+          domEl.style.borderColor = '';
+        } catch (e) {}
+      }, PAUSA_DEMO + 300);
+    }
+  } catch (e) {}
+}
 
 if (PAUSA_DEMO > 0) {
   // Pausa após carregar uma página (visit)
@@ -35,22 +65,33 @@ if (PAUSA_DEMO > 0) {
     });
   });
 
-  // Pausa após cliques em botões, links e cards (click)
+  // Foco no centro + destaque visual + pausa após clique
   Cypress.Commands.overwrite('click', (originalFn, subject, ...args) => {
+    focarNoElemento(subject);
     return originalFn(subject, ...args).then((val) => {
       return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
     });
   });
 
-  // Pausa após seleção de opções em dropdowns (select)
+  // Foco no centro + digitação humanizada + pausa pós-digitação
+  Cypress.Commands.overwrite('type', (originalFn, subject, text, options) => {
+    focarNoElemento(subject);
+    return originalFn(subject, text, options).then((val) => {
+      return Cypress.Promise.delay(PAUSA_DIGITACAO).then(() => val);
+    });
+  });
+
+  // Foco no centro + seleção de dropdown
   Cypress.Commands.overwrite('select', (originalFn, subject, ...args) => {
+    focarNoElemento(subject);
     return originalFn(subject, ...args).then((val) => {
       return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
     });
   });
 
-  // Pausa após marcar checkboxes ou radios (check)
+  // Foco no centro + marcação de checkbox/radio
   Cypress.Commands.overwrite('check', (originalFn, subject, ...args) => {
+    focarNoElemento(subject);
     return originalFn(subject, ...args).then((val) => {
       return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
     });
