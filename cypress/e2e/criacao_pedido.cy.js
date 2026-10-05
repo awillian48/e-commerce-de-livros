@@ -116,7 +116,8 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     cy.get('#total-carrinho').should('not.contain', 'R$ 0,00');
 
     // Valida o botão de Iniciar Compra (RF0033)
-    cy.get('#btn-ir-checkout').should('be.visible').and('not.have.attr', 'disabled');
+    cy.get('#btn-ir-checkout').should('be.visible').and('not.have.attr', 'disabled').click();
+    cy.url().should('include', 'checkout.html');
   });
 
   it('2. Não deve permitir adicionar itens indisponíveis ou quantidade superior ao estoque (RN0031)', () => {
@@ -403,6 +404,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     cy.get('#confirmacao-pedido', { timeout: 20000 }).should('be.visible');
     cy.get('#container-cupom-troca').should('be.visible');
     cy.get('#cupom-troca-gerado').should('contain', 'TR-');
+    cy.get('#pedido-status').should('contain', 'EM PROCESSAMENTO');
   });
 
   // --------------------------------------------------------------------------
