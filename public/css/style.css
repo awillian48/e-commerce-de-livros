@@ -588,6 +588,14 @@ footer {
   pointer-events: auto !important;
 }
 
+
+.modal-overlay[style*="display: none"],
+.modal-overlay[style*="display:none"] {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 .modal-box {
   background: white;
   width: 92%;

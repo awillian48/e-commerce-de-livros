@@ -516,7 +516,10 @@
 
   function fecharModalCartao() {
     const modal = document.getElementById('modal-novo-cartao-checkout');
-    if (modal) modal.style.display = 'none';
+    if (modal) {
+      modal.style.display = 'none';
+      modal.classList.remove('active');
+    }
 
     // Se o select estava em __NOVO__, restaura para o primeiro cartão se disponível
     const sel = document.getElementById(alvoSelectNovoCartao);
