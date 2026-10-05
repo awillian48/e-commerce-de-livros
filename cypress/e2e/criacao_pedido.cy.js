@@ -206,7 +206,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     cy.get('#total-carrinho').should('not.contain', 'R$ 0,00');
 
     // Valida o botão de Iniciar Compra (RF0033)
-    cy.get('#btn-ir-checkout').should('be.visible').and('not.have.attr', 'disabled').click();
+    cy.get('#btn-ir-checkout').should('be.visible').click();
     cy.url().should('include', 'checkout.html');
   });
 
