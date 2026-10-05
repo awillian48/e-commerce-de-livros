@@ -333,7 +333,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     cy.get('#novo-cartao-cvv').type('888');
     cy.get('#novo-cartao-salvar-perfil').should('be.checked'); // Incorpora ao perfil
     cy.wait(1200); // Pausa para conferir todos os campos do modal preenchidos
-    cy.get('#form-novo-cartao-checkout').submit();
+    cy.get('#btn-salvar-novo-cartao').click();
 
     cy.get('#modal-novo-cartao-checkout').should('not.be.visible');
     cy.get('#badge-cartao-feedback').should('be.visible').and('contain', 'final 4444');
