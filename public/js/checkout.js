@@ -507,9 +507,9 @@
     if (modal) {
       modal.style.display = 'flex';
       modal.classList.add('active');
-      const box = modal.querySelector('.modal-box');
-      if (box && typeof box.scrollIntoView === 'function') {
-        box.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' });
+      const inputNum = modal.querySelector('#novo-cartao-numero');
+      if (inputNum) {
+        setTimeout(() => inputNum.focus(), 150);
       }
     }
   }

@@ -15,44 +15,76 @@
 // ============================================================================
 // CONTROLE DE VELOCIDADE E FOCO VISUAL PARA APRESENTAÇÃO (DEMO / SLOW MOTION)
 // ============================================================================
-// Ajuste este valor (em ms) para controlar a velocidade da apresentação:
-// 1500 = 1.5 segundos de pausa após ações (ritmo perfeito para explicar ao professor)
-// 1000 = 1 segundo
-// 500  = meio segundo
-// 0    = velocidade máxima sem pausas
-const PAUSA_DEMO = 1500;
-const PAUSA_DIGITACAO = 700;
+// Cadência confortável para que o professor e avaliadores acompanhem cada passo:
+const PAUSA_DEMO = 1400;       // Pausa após cliques, selects e transições
+const PAUSA_DIGITACAO = 1000;  // Pausa após digitação de cada campo
+const PAUSA_LIMPEZA = 300;     // Pausa após clear()
 
-// Digitação humanizada e visível caractere por caractere
+// Digitação humanizada e visível caractere por caractere (85ms entre teclas)
 Cypress.Keyboard.defaults({
-  keystrokeDelay: 65
+  keystrokeDelay: 85
 });
+
+/**
+ * Cria ou atualiza o HUD (indicador flutuante) de demonstração no topo da tela
+ */
+function atualizarHUD(mensagem) {
+  try {
+    const doc = Cypress.$(cy.state('window').document);
+    let hud = doc.find('#cypress-demo-hud');
+    if (!hud.length) {
+      hud = Cypress.$('<div id="cypress-demo-hud" style="position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 9999999; background: #0f172a; color: #f8fafc; padding: 7px 20px; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5), 0 0 0 2px #d97706; pointer-events: none; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;"><span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #22c55e;"></span><span id="hud-texto"></span></div>');
+      doc.find('body').append(hud);
+    }
+    hud.find('#hud-texto').text(mensagem || 'Executando...');
+  } catch (e) {}
+}
 
 /**
  * Centraliza suavemente o elemento no meio da tela e aplica destaque visual (Spotlight)
  */
-function focarNoElemento($el) {
+function focarNoElemento($el, acao = 'Focando') {
   if (!$el) return;
   const domEl = $el[0] || $el;
   if (!domEl) return;
 
   try {
-    // 1. Centraliza exatamente no meio vertical e horizontal da tela
-    if (typeof domEl.scrollIntoView === 'function') {
-      domEl.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' });
+    const isDentroDeModal = domEl.closest && domEl.closest('.modal-overlay, #modal-novo-cartao-checkout, #sistema-modal-dialogo, .modal-box');
+
+    // 1. Rolagem de tela:
+    // Se o elemento estiver dentro de um modal fixo, NÃO rola a página de fundo (o modal já está fixado no centro da tela!)
+    if (isDentroDeModal) {
+      const modalBox = domEl.closest('.modal-box, #sistema-modal-dialogo > div');
+      if (modalBox && modalBox.scrollHeight > modalBox.clientHeight && typeof domEl.scrollIntoView === 'function') {
+        domEl.scrollIntoView({ block: 'nearest', inline: 'center' });
+      }
+    } else {
+      // Se for elemento da página comum, centraliza perfeitamente no meio vertical da tela
+      if (typeof domEl.scrollIntoView === 'function') {
+        domEl.scrollIntoView({ block: 'center', inline: 'center' });
+      }
     }
 
-    // 2. Destaca visualmente o campo/botão em ação (Spotlight âmbar/dourado)
+    // 2. Atualiza o HUD visual no topo
+    const rotulo = domEl.getAttribute('id') || domEl.getAttribute('name') || domEl.getAttribute('placeholder') || domEl.textContent?.trim().slice(0, 25) || domEl.tagName;
+    atualizarHUD(`${acao}: ${rotulo}`);
+
+    // 3. Destaca visualmente o elemento ativo com Spotlight Âmbar/Dourado inconfundível
     if (domEl.style) {
-      domEl.style.transition = 'all 0.25s ease-in-out';
-      domEl.style.boxShadow = '0 0 0 4px rgba(217, 119, 6, 0.65), 0 0 20px rgba(217, 119, 6, 0.35)';
+      domEl.style.transition = 'box-shadow 0.2s ease, border-color 0.2s ease';
+      domEl.style.boxShadow = '0 0 0 4px rgba(217, 119, 6, 0.85), 0 0 25px rgba(217, 119, 6, 0.45)';
       domEl.style.borderColor = '#d97706';
+      domEl.style.outline = 'none';
+      if (['INPUT', 'SELECT', 'TEXTAREA'].includes(domEl.tagName)) {
+        domEl.style.backgroundColor = '#fffbeb';
+      }
       setTimeout(() => {
         try {
           domEl.style.boxShadow = '';
           domEl.style.borderColor = '';
+          domEl.style.backgroundColor = '';
         } catch (e) {}
-      }, PAUSA_DEMO + 300);
+      }, PAUSA_DEMO + 400);
     }
   } catch (e) {}
 }
@@ -60,38 +92,55 @@ function focarNoElemento($el) {
 if (PAUSA_DEMO > 0) {
   // Pausa após carregar uma página (visit)
   Cypress.Commands.overwrite('visit', (originalFn, ...args) => {
+    atualizarHUD(`Navegando para: ${args[0]}`);
     return originalFn(...args).then((val) => {
       return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
     });
   });
 
-  // Foco no centro + destaque visual + pausa após clique
+  // Foco no centro + clique + pausa posterior
   Cypress.Commands.overwrite('click', (originalFn, subject, ...args) => {
-    focarNoElemento(subject);
+    focarNoElemento(subject, 'Clicando');
     return originalFn(subject, ...args).then((val) => {
       return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
     });
   });
 
-  // Foco no centro + digitação humanizada + pausa pós-digitação
+  // Foco no centro + digitação visível + pausa pós-digitação
   Cypress.Commands.overwrite('type', (originalFn, subject, text, options) => {
-    focarNoElemento(subject);
+    focarNoElemento(subject, 'Digitando');
     return originalFn(subject, text, options).then((val) => {
       return Cypress.Promise.delay(PAUSA_DIGITACAO).then(() => val);
     });
   });
 
-  // Foco no centro + seleção de dropdown
+  // Limpeza de campo
+  Cypress.Commands.overwrite('clear', (originalFn, subject, ...args) => {
+    focarNoElemento(subject, 'Limpando');
+    return originalFn(subject, ...args).then((val) => {
+      return Cypress.Promise.delay(PAUSA_LIMPEZA).then(() => val);
+    });
+  });
+
+  // Seleção de dropdown
   Cypress.Commands.overwrite('select', (originalFn, subject, ...args) => {
-    focarNoElemento(subject);
+    focarNoElemento(subject, 'Selecionando');
     return originalFn(subject, ...args).then((val) => {
       return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
     });
   });
 
-  // Foco no centro + marcação de checkbox/radio
+  // Marcação de checkbox/radio
   Cypress.Commands.overwrite('check', (originalFn, subject, ...args) => {
-    focarNoElemento(subject);
+    focarNoElemento(subject, 'Marcando');
+    return originalFn(subject, ...args).then((val) => {
+      return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
+    });
+  });
+
+  // Submissão de formulário
+  Cypress.Commands.overwrite('submit', (originalFn, subject, ...args) => {
+    focarNoElemento(subject, 'Enviando');
     return originalFn(subject, ...args).then((val) => {
       return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
     });
@@ -275,6 +324,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     // 2. Cadastra novo cartão via modal (RN0024 e RN0025)
     cy.get('#btn-abrir-modal-cartao').click();
     cy.get('#modal-novo-cartao-checkout').should('be.visible');
+    cy.wait(2000); // Pausa estratégica para visualização do modal 100% centralizado!
 
     cy.get('#novo-cartao-numero').type('4111222233334444');
     cy.get('#novo-cartao-nome').type('MACHADO DE ASSIS');
@@ -282,6 +332,7 @@ describe('Criação de Pedido - Roteiro Completo da Apresentação (DRS LES 2026
     cy.get('#novo-cartao-validade').type('1229');
     cy.get('#novo-cartao-cvv').type('888');
     cy.get('#novo-cartao-salvar-perfil').should('be.checked'); // Incorpora ao perfil
+    cy.wait(1200); // Pausa para conferir todos os campos do modal preenchidos
     cy.get('#form-novo-cartao-checkout').submit();
 
     cy.get('#modal-novo-cartao-checkout').should('not.be.visible');

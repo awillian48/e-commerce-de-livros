@@ -28,7 +28,7 @@
     ].join('; ');
 
     modalContainer.innerHTML = [
-      '<div style="background: #ffffff; width: 100%; max-width: 440px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2); overflow: hidden; animation: modalEntrada 0.2s ease-out;">',
+      '<div style="background: #ffffff; width: 90%; max-width: 440px; border-radius: 12px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2); overflow: hidden; animation: modalEntrada 0.2s ease-out;">',
       '  <div style="background: var(--palette-navy-dark, #0f172a); color: white; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center;">',
       '    <strong id="modal-dialogo-titulo" style="font-size: 1rem; font-weight: 700; letter-spacing: -0.01em;">Aviso</strong>',
       '    <button id="modal-dialogo-fechar-topo" type="button" style="background: none; border: none; color: #94a3b8; font-size: 1.3rem; line-height: 1; cursor: pointer; padding: 0 4px;">&times;</button>',
