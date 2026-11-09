@@ -36,8 +36,8 @@
     /* TOP GLOBAL HEADER (Desk Manager Header) */
     .top-header {
       background: #060E28;
-      height: 56px;
-      padding: 0 28px;
+      height: 52px;
+      padding: 0 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -47,7 +47,7 @@
     .brand-area {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
     }
     .desk-logo-box {
       display: flex;
@@ -55,8 +55,8 @@
       gap: 10px;
     }
     .desk-symbol {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       background: linear-gradient(135deg, #0237FF 0%, #00C48C 100%);
       border-radius: 8px;
       display: flex;
@@ -64,12 +64,12 @@
       justify-content: center;
       color: white;
       font-weight: 800;
-      font-size: 19px;
+      font-size: 18px;
       box-shadow: 0 2px 8px rgba(2, 55, 255, 0.4);
     }
     .desk-brand-name {
       color: #FFFFFF;
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 800;
       letter-spacing: -0.5px;
     }
@@ -79,7 +79,7 @@
       color: #A9DBFF;
       padding: 3px 10px;
       border-radius: 6px;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -87,45 +87,44 @@
     .header-nav {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
     }
     .nav-item {
       color: #94A3B8;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
       display: flex;
       align-items: center;
       gap: 6px;
-      cursor: pointer;
     }
     .nav-item.active {
       color: #FFFFFF;
       background: rgba(255, 255, 255, 0.1);
-      padding: 5px 12px;
+      padding: 4px 12px;
       border-radius: 6px;
       border-bottom: 2px solid #0237FF;
     }
     .user-profile {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
     .user-info {
       text-align: right;
     }
     .user-name {
       color: #FFFFFF;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
     }
     .user-role {
       color: #00C48C;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 600;
     }
     .user-avatar {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       background: #0237FF;
       color: #FFFFFF;
@@ -133,21 +132,19 @@
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 13px;
+      font-size: 12.5px;
       border: 2px solid rgba(255,255,255,0.25);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
 
     /* PROJECT SUB-HEADER */
     .project-subheader {
       background: #FFFFFF;
-      padding: 10px 28px;
+      padding: 8px 24px;
       border-bottom: 1px solid #E2E8F0;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       flex-shrink: 0;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
     }
     .project-title-row {
       display: flex;
@@ -160,15 +157,15 @@
       gap: 12px;
     }
     .project-icon {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       border-radius: 8px;
       background: #EEF2FB;
       border: 1px solid #CBD5E1;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 18px;
     }
     .project-titles {
       display: flex;
@@ -176,52 +173,54 @@
       gap: 1px;
     }
     .project-main-title {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 800;
       color: #060E28;
       letter-spacing: -0.3px;
     }
     .project-subtitle {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 600;
       color: #64748B;
     }
     .project-kpis {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     .kpi-card {
       background: #F8FAFC;
       border: 1px solid #E2E8F0;
       border-radius: 6px;
-      padding: 4px 14px;
+      padding: 3px 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 110px;
+      min-width: 105px;
     }
     .kpi-label {
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 700;
       color: #64748B;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
     }
     .kpi-value {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
       color: #060E28;
     }
-    .kpi-value.green { color: #00C48C; }
+    .kpi-value.green { color: #08A045; }
     .kpi-value.blue { color: #0237FF; }
+    .kpi-value.amber { color: #D97706; }
+    .kpi-value.purple { color: #7C3AED; }
 
     /* CONTROLS ROW */
     .controls-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 12px;
     }
     .controls-left {
       display: flex;
@@ -236,16 +235,16 @@
       background: #F1F5F9;
       border: 1px solid #CBD5E1;
       border-radius: 6px;
-      padding: 5px 12px;
-      width: 380px;
-      font-size: 11.5px;
+      padding: 4px 10px;
+      width: 420px;
+      font-size: 11px;
       color: #334155;
     }
     .search-box input {
       border: none;
       background: transparent;
       outline: none;
-      font-size: 11.5px;
+      font-size: 11px;
       width: 100%;
       font-family: inherit;
       color: #1E293B;
@@ -255,22 +254,20 @@
       background: linear-gradient(135deg, #0237FF 0%, #7C3AED 100%);
       color: white;
       border: none;
-      padding: 5px 12px;
+      padding: 4px 10px;
       border-radius: 6px;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 5px;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(2, 55, 255, 0.2);
     }
     .filter-select {
       background: #FFFFFF;
       border: 1px solid #CBD5E1;
       border-radius: 6px;
-      padding: 5px 10px;
-      font-size: 11.5px;
+      padding: 4px 8px;
+      font-size: 11px;
       font-weight: 600;
       color: #334155;
       font-family: inherit;
@@ -283,14 +280,13 @@
       gap: 2px;
     }
     .view-btn {
-      padding: 4px 12px;
-      font-size: 11.5px;
+      padding: 3px 10px;
+      font-size: 11px;
       font-weight: 700;
       border-radius: 5px;
       border: none;
       background: transparent;
       color: #64748B;
-      cursor: pointer;
       font-family: inherit;
     }
     .view-btn.active {
@@ -299,13 +295,13 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
-    /* KANBAN BOARD CONTAINER */
+    /* KANBAN BOARD CONTAINER (5 WORKFLOW COLUMNS) */
     .kanban-board {
       flex: 1;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      padding: 12px 28px;
+      grid-template-columns: 0.92fr 0.95fr 0.95fr 1.06fr 1.12fr;
+      gap: 10px;
+      padding: 10px 24px;
       overflow: hidden;
       background: #EEF2FB;
     }
@@ -313,15 +309,14 @@
     /* COLUMN */
     .kanban-column {
       background: #E2E8F0;
-      border-radius: 9px;
+      border-radius: 8px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       border: 1px solid #CBD5E1;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
     .column-header {
-      padding: 8px 12px;
+      padding: 7px 10px;
       background: #FFFFFF;
       border-bottom: 2px solid #CBD5E1;
       display: flex;
@@ -329,125 +324,135 @@
       justify-content: space-between;
       flex-shrink: 0;
     }
+    .col-header-backlog { border-bottom-color: #64748B; }
+    .col-header-todo { border-bottom-color: #0284C7; }
+    .col-header-doing { border-bottom-color: #7C3AED; }
+    .col-header-testing { border-bottom-color: #F59E0B; }
+    .col-header-done { border-bottom-color: #08A045; }
+
     .col-title-group {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
     .col-dot {
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
     }
     .dot-slate { background: #64748B; }
     .dot-cyan { background: #0284C7; }
-    .dot-blue { background: #0237FF; }
-    .dot-green { background: #00C48C; }
+    .dot-purple { background: #7C3AED; }
+    .dot-amber { background: #F59E0B; }
+    .dot-green { background: #08A045; }
 
     .col-title {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       color: #0F172A;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.25px;
     }
     .col-badge {
       background: #EEF2FB;
       color: #1E293B;
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 800;
-      padding: 1px 7px;
+      padding: 1px 6px;
       border-radius: 10px;
       border: 1px solid #CBD5E1;
     }
     .col-status-pill {
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 700;
-      padding: 2px 7px;
+      padding: 2px 6px;
       border-radius: 4px;
     }
-    .col-status-pill.done {
-      background: #DCFCE7;
-      color: #15803D;
-      border: 1px solid #86EFAC;
-    }
-    .col-status-pill.planned {
-      background: #F1F5F9;
-      color: #475569;
-      border: 1px solid #CBD5E1;
-    }
+    .pill-backlog { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
+    .pill-todo { background: #E0F2FE; color: #0369A1; border: 1px solid #7DD3FC; }
+    .pill-doing { background: #F3E8FF; color: #6D28D9; border: 1px solid #C4B5FD; }
+    .pill-testing { background: #FEF3C7; color: #B45309; border: 1px solid #FCD34D; }
+    .pill-done { background: #DCFCE7; color: #15803D; border: 1px solid #86EFAC; }
 
     /* CARDS CONTAINER */
     .column-cards {
       flex: 1;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      overflow: hidden;
-    }
-    .column-cards.grid-2 {
+      padding: 6px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 7px;
+      align-content: start;
+      gap: 5px;
+      overflow: hidden;
     }
 
     /* CARD ITEM */
     .kanban-card {
       background: #FFFFFF;
-      border-radius: 6px;
-      padding: 7px 9px;
+      border-radius: 5px;
+      padding: 5px 7px;
       border: 1px solid #E2E8F0;
+      border-left: 3px solid #94A3B8;
       box-shadow: 0 1px 2px rgba(0,0,0,0.03);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 4px;
+      gap: 3px;
     }
+    .card-bck { border-left-color: #64748B; }
+    .card-todo { border-left-color: #0284C7; }
+    .card-doing { border-left-color: #7C3AED; }
+    .card-test { border-left-color: #F59E0B; }
+    .card-done { border-left-color: #08A045; }
+
     .card-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 3px;
     }
     .card-id {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
+      font-size: 8.5px;
       font-weight: 800;
       color: #475569;
     }
     .card-tags {
       display: flex;
       align-items: center;
-      gap: 3px;
-      flex-wrap: wrap;
+      gap: 2px;
     }
     .tag {
-      font-size: 8px;
+      font-size: 7.5px;
       font-weight: 700;
-      padding: 1px 4px;
+      padding: 1px 3.5px;
       border-radius: 3px;
       text-transform: uppercase;
-      letter-spacing: 0.2px;
+      letter-spacing: 0.15px;
+      white-space: nowrap;
     }
     .tag-blue { background: #DBEAFE; color: #1D4ED8; }
     .tag-green { background: #DCFCE7; color: #15803D; }
     .tag-purple { background: #F3E8FF; color: #7E22CE; }
     .tag-amber { background: #FEF3C7; color: #B45309; }
-    .tag-red { background: #FEE2E2; color: #B91C1C; }
+    .tag-cyan { background: #E0F2FE; color: #0369A1; }
     .tag-slate { background: #F1F5F9; color: #475569; }
 
     .card-title {
-      font-size: 11px;
+      font-size: 9.5px;
       font-weight: 700;
       color: #0F172A;
-      line-height: 1.25;
-    }
-    .card-desc {
-      font-size: 9.5px;
-      color: #475569;
       line-height: 1.2;
       display: -webkit-box;
       -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-desc {
+      font-size: 8.2px;
+      color: #64748B;
+      line-height: 1.15;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
@@ -457,12 +462,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
-      margin-top: 1px;
+      gap: 4px;
     }
     .progress-bar-bg {
       flex: 1;
-      height: 4px;
+      height: 3.5px;
       background: #E2E8F0;
       border-radius: 2px;
       overflow: hidden;
@@ -471,90 +475,94 @@
       height: 100%;
       border-radius: 2px;
     }
-    .fill-green { background: #00C48C; width: 100%; }
-    .fill-blue { background: #0237FF; width: 100%; }
-    .fill-gray { background: #94A3B8; width: 0%; }
+    .fill-0 { background: #94A3B8; width: 0%; }
+    .fill-65 { background: #7C3AED; width: 65%; }
+    .fill-75 { background: #7C3AED; width: 75%; }
+    .fill-85 { background: #F59E0B; width: 85%; }
+    .fill-90 { background: #F59E0B; width: 90%; }
+    .fill-100 { background: #08A045; width: 100%; }
 
     .checklist-count {
-      font-size: 9px;
+      font-size: 8px;
       font-weight: 800;
       color: #64748B;
       font-family: 'JetBrains Mono', monospace;
     }
-    .checklist-count.all-done {
-      color: #15803D;
-    }
+    .checklist-count.all-done { color: #08A045; }
+    .checklist-count.testing { color: #B45309; }
+    .checklist-count.doing { color: #6D28D9; }
 
     /* CARD FOOTER */
     .card-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-top: 3px;
+      padding-top: 2px;
       border-top: 1px dashed #E2E8F0;
     }
     .card-assignee {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
     }
     .assignee-avatar {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: #0237FF;
       color: white;
-      font-size: 7.5px;
+      font-size: 6.5px;
       font-weight: 800;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .assignee-name {
-      font-size: 9px;
+      font-size: 8px;
       font-weight: 600;
       color: #475569;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 90px;
     }
     .card-meta-right {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
     }
     .card-hours {
-      font-size: 9px;
+      font-size: 7.8px;
       font-weight: 700;
       color: #64748B;
       background: #F1F5F9;
-      padding: 1px 3px;
+      padding: 0.5px 3px;
       border-radius: 3px;
     }
     .status-check {
-      color: #00C48C;
+      color: #08A045;
       font-weight: 900;
-      font-size: 10.5px;
+      font-size: 9.5px;
+    }
+    .status-open {
+      color: #94A3B8;
+      font-weight: 700;
+      font-size: 8.5px;
     }
 
     /* FOOTER STATUS STRIP */
     .footer-strip {
       background: #060E28;
-      height: 28px;
-      padding: 0 28px;
+      height: 26px;
+      padding: 0 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       color: #94A3B8;
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 600;
       flex-shrink: 0;
       border-top: 1px solid rgba(255,255,255,0.1);
     }
     .strip-left {
       display: flex;
-      gap: 24px;
+      gap: 20px;
     }
     .strip-item b {
       color: #FFFFFF;
@@ -570,13 +578,13 @@
         <div class="desk-symbol">D</div>
         <div class="desk-brand-name">Desk Manager</div>
       </div>
-      <div class="app-badge">App Projeto</div>
+      <div class="app-badge">App Projeto • arquitetos.desk.ms</div>
     </div>
 
     <nav class="header-nav">
       <div class="nav-item">Dashboard</div>
-      <div class="nav-item active">Quadro Kanban</div>
-      <div class="nav-item">Lista de Tarefas</div>
+      <div class="nav-item active">Quadro Kanban (#86)</div>
+      <div class="nav-item">Lista de Tarefas (50)</div>
       <div class="nav-item">Gantt & Cronograma</div>
       <div class="nav-item">Gestão de Horas</div>
       <div class="nav-item">Relatórios & Analytics</div>
@@ -585,7 +593,7 @@
     <div class="user-profile">
       <div class="user-info">
         <div class="user-name">Anderson Barros</div>
-        <div class="user-role">Desenvolvedor Responsável • FATEC</div>
+        <div class="user-role">Gerente do Projeto (#53) • FATEC</div>
       </div>
       <div class="user-avatar">AB</div>
     </div>
@@ -597,27 +605,31 @@
       <div class="project-title-left">
         <div class="project-icon">📚</div>
         <div class="project-titles">
-          <h1 class="project-main-title">E-Commerce de Livros Clássicos — Livraria Alexandria</h1>
-          <span class="project-subtitle">Disciplina: Laboratório de Engenharia de Software (LES 2026) • Prof. Nelson • Rastreabilidade DRS Integral</span>
+          <h1 class="project-main-title">E-Commerce de Livros Clássicos — Livraria Alexandria (LES 2026)</h1>
+          <span class="project-subtitle">Quadro Ágil Granulado • Rastreabilidade DRS (RF0021–RF0055, RN0021–RN0044, RNF0011–RNF0046) • Ambiente: arquitetos.desk.ms (Projeto #86)</span>
         </div>
       </div>
 
       <div class="project-kpis">
         <div class="kpi-card">
-          <span class="kpi-label">Sprints Entregues</span>
-          <span class="kpi-value green">5 de 5 (100%)</span>
+          <span class="kpi-label">Total Granulado</span>
+          <span class="kpi-value blue">50 Tarefas</span>
         </div>
         <div class="kpi-card">
-          <span class="kpi-label">Cards Finalizados</span>
-          <span class="kpi-value green">37 de 39</span>
+          <span class="kpi-label">Backlog / To Do</span>
+          <span class="kpi-value">8 / 9 Cards</span>
         </div>
         <div class="kpi-card">
-          <span class="kpi-label">Horas Realizadas</span>
-          <span class="kpi-value blue">368h / 384h</span>
+          <span class="kpi-label">Em Execução</span>
+          <span class="kpi-value purple">8 Cards</span>
         </div>
         <div class="kpi-card">
-          <span class="kpi-label">Testes Cypress E2E</span>
-          <span class="kpi-value green">19/19 Aprovados (100%)</span>
+          <span class="kpi-label">Em Testes (QA)</span>
+          <span class="kpi-value amber">11 Cenários E2E</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Finalizado (Done)</span>
+          <span class="kpi-value green">14 Concluídos ✓</span>
         </div>
       </div>
     </div>
@@ -626,12 +638,12 @@
       <div class="controls-left">
         <div class="search-box">
           <span>🔍</span>
-          <input type="text" value="Ambiente: arquitetos.desk.ms • Projeto #86 • Sprints 1 a 5 (Atividades 1 e 2 100% Concluídas)" readonly>
+          <input type="text" value="Fluxo Kanban: Backlog (8) → To Do (9) → Em Desenvolvimento (8) → Em Testes (11) → Finalizado (14)" readonly>
         </div>
         <button class="btn-ai">✨ Busca Semântica IA</button>
-        <select class="filter-select"><option>Sprint: Todas as Sprints Ativas (1 a 4)</option></select>
-        <select class="filter-select"><option>Responsável: Anderson Barros</option></select>
-        <select class="filter-select"><option>Módulos: Clientes, Vendas, Trocas, E2E</option></select>
+        <select class="filter-select"><option>Visão: Fluxo de Engenharia (5 Estágios)</option></select>
+        <select class="filter-select"><option>Responsável: Anderson Barros (#53)</option></select>
+        <select class="filter-select"><option>Conclusão Automática: Somente na Coluna Finalizado</option></select>
       </div>
 
       <div class="view-switcher">
@@ -643,544 +655,183 @@
     </div>
   </section>
 
-  <!-- KANBAN BOARD -->
-  <main class="kanban-board" id="kanban-board">
+  <!-- KANBAN BOARD: 5 WORKFLOW COLUMNS -->
+  <main class="kanban-board" id="kanban-board"></main>
 
-    <!-- COLUNA 1: BACKLOG -->
-    <div class="kanban-column">
-      <div class="column-header">
-        <div class="col-title-group">
-          <span class="col-dot dot-slate"></span>
-          <span class="col-title">Backlog (Sprint 5)</span>
-          <span class="col-badge">3</span>
-        </div>
-        <span class="col-status-pill planned">Planejado</span>
-      </div>
-
-      <div class="column-cards">
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-034</span>
-            <div class="card-tags">
-              <span class="tag tag-purple">BI / ANALYTICS</span>
-              <span class="tag tag-slate">SPRINT 5</span>
-            </div>
-          </div>
-          <div class="card-title">Dashboard Executivo de Vendas & Heatmap por UF</div>
-          <div class="card-desc">Cruzamento de ticket médio, faturamento mensal, livros mais vendidos e vendas por região.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-gray"></div></div>
-            <span class="checklist-count">0/4</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee">
-              <div class="assignee-avatar">AB</div>
-              <span class="assignee-name">Anderson Barros</span>
-            </div>
-            <div class="card-meta-right">
-              <span class="card-hours">16h</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-035</span>
-            <div class="card-tags">
-              <span class="tag tag-purple">IA GENERATIVA</span>
-              <span class="tag tag-slate">SPRINT 5</span>
-            </div>
-          </div>
-          <div class="card-title">Motor de Recomendação Inteligente de Clássicos</div>
-          <div class="card-desc">Algoritmo preditivo de sugestões literárias baseado em compras prévias e sinopses históricas.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-gray"></div></div>
-            <span class="checklist-count">0/3</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee">
-              <div class="assignee-avatar">AB</div>
-              <span class="assignee-name">Anderson Barros</span>
-            </div>
-            <div class="card-meta-right">
-              <span class="card-hours">20h</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-036</span>
-            <div class="card-tags">
-              <span class="tag tag-blue">NOTIFICAÇÕES</span>
-              <span class="tag tag-slate">SPRINT 5</span>
-            </div>
-          </div>
-          <div class="card-title">Webhooks de Rastreamento PAC & WhatsApp</div>
-          <div class="card-desc">Disparo automático de mensagens para acompanhamento logístico em tempo real.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-gray"></div></div>
-            <span class="checklist-count">0/3</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee">
-              <div class="assignee-avatar">AB</div>
-              <span class="assignee-name">Anderson Barros</span>
-            </div>
-            <div class="card-meta-right">
-              <span class="card-hours">12h</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- COLUNA 2: ARQUITETURA & CLIENTES -->
-    <div class="kanban-column">
-      <div class="column-header">
-        <div class="col-title-group">
-          <span class="col-dot dot-cyan"></span>
-          <span class="col-title">Arquitetura & Clientes</span>
-          <span class="col-badge">6</span>
-        </div>
-        <span class="col-status-pill done">Concluído ✓</span>
-      </div>
-
-      <div class="column-cards grid-2">
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-001</span>
-            <div class="card-tags"><span class="tag tag-blue">C4</span><span class="tag tag-green">DDL</span></div>
-          </div>
-          <div class="card-title">Modelagem C4 & DDL Supabase</div>
-          <div class="card-desc">Níveis C4 e DDL relacional com PKs, FKs, constraints e views.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">5/5</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">16h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-002</span>
-            <div class="card-tags"><span class="tag tag-amber">DESIGN</span><span class="tag tag-green">SEED</span></div>
-          </div>
-          <div class="card-title">Design System & Seed 12 Obras</div>
-          <div class="card-desc">Identidade visual e carga de 12 clássicos canônicos.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">4/4</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">12h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-003</span>
-            <div class="card-tags"><span class="tag tag-blue">CDU02</span><span class="tag tag-red">RN0001</span></div>
-          </div>
-          <div class="card-title">Validação de CPF Único (Módulo 11)</div>
-          <div class="card-desc">Bloqueio de duplicidade cadastral e cálculo de dígitos.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">4/4</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">8h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-004</span>
-            <div class="card-tags"><span class="tag tag-blue">CDU02</span><span class="tag tag-amber">RF0005</span></div>
-          </div>
-          <div class="card-title">Endereço com 10 Campos</div>
-          <div class="card-desc">Tipo de residência, logradouro, CEP, número, bairro e UF.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">6/6</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">10h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-005</span>
-            <div class="card-tags"><span class="tag tag-blue">CDU02</span><span class="tag tag-purple">RN0005</span></div>
-          </div>
-          <div class="card-title">Multi-Cartões com Preferencial</div>
-          <div class="card-desc">Bandeiras Visa, Mastercard, Elo e cartão preferencial.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">5/5</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">8h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-006</span>
-            <div class="card-tags"><span class="tag tag-red">BCRYPT</span><span class="tag tag-green">RN0008</span></div>
-          </div>
-          <div class="card-title">Hash Bcrypt & Inativação Lógica</div>
-          <div class="card-desc">Segurança forte e soft delete preservando histórico.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">4/4</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">8h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-029</span>
-            <div class="card-tags"><span class="tag tag-purple">ANÁLISE</span><span class="tag tag-green">8/8 CYPRESS</span></div>
-          </div>
-          <div class="card-title">Análise de Vendas por Categoria</div>
-          <div class="card-desc">Gráfico de linhas (RNF0043), filtro mensal (RF0055), sub-1s (RNF0011).</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">8/8</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">12h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- COLUNA 3: VENDAS & CHECKOUT -->
-    <div class="kanban-column">
-      <div class="column-header">
-        <div class="col-title-group">
-          <span class="col-dot dot-blue"></span>
-          <span class="col-title">Vendas & Checkout</span>
-          <span class="col-badge">8</span>
-        </div>
-        <span class="col-status-pill done">Concluído ✓</span>
-      </div>
-
-      <div class="column-cards grid-2">
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-011</span>
-            <div class="card-tags"><span class="tag tag-blue">CDU03</span><span class="tag tag-amber">RF0028</span></div>
-          </div>
-          <div class="card-title">Carrinho em SessionStorage</div>
-          <div class="card-desc">Gestão de itens, recálculo reativo e persistência local.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">5/5</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">8h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-012</span>
-            <div class="card-tags"><span class="tag tag-red">ESTOQUE</span><span class="tag tag-red">RN0031</span></div>
-          </div>
-          <div class="card-title">Bloqueio Estoque Insuficiente</div>
-          <div class="card-desc">Validação atômica; bloqueia compra se saldo físico = 0.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">4/4</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">6h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-013</span>
-            <div class="card-tags"><span class="tag tag-blue">FRETE</span><span class="tag tag-amber">RF0034</span></div>
-          </div>
-          <div class="card-title">Frete Dinâmico por Peso e UF</div>
-          <div class="card-desc">Cálculo automatizado por cubagem e região de entrega.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">4/4</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">6h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-014</span>
-            <div class="card-tags"><span class="tag tag-blue">CDU03</span><span class="tag tag-amber">RN0023</span></div>
-          </div>
-          <div class="card-title">Seleção e Cadastro de Endereço</div>
-          <div class="card-desc">Endereços salvos do cliente e modal de novo endereço inline.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">5/5</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">8h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-015</span>
-            <div class="card-tags"><span class="tag tag-purple">CARTÕES</span><span class="tag tag-red">RN0034</span></div>
-          </div>
-          <div class="card-title">Multi-Cartão: Mínimo R$ 10</div>
-          <div class="card-desc">Divisão em cartões com mínimo obrigatório de R$ 10,00 cada.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">5/5</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">10h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-016</span>
-            <div class="card-tags"><span class="tag tag-blue">CUPOM</span><span class="tag tag-amber">RN0033</span></div>
-          </div>
-          <div class="card-title">Cupom Promocional Único</div>
-          <div class="card-desc">Validação de código ativo; limite estrito de 1 cupom promo.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">4/4</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">6h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-017</span>
-            <div class="card-tags"><span class="tag tag-green">TROCO</span><span class="tag tag-green">RN0036</span></div>
-          </div>
-          <div class="card-title">Cupons Troca & Novo Cupom</div>
-          <div class="card-desc">Cupons de troca cumulativos; saldo restante vira novo cupom.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">5/5</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">8h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-018</span>
-            <div class="card-tags"><span class="tag tag-blue">STATUS</span><span class="tag tag-blue">RF0037</span></div>
-          </div>
-          <div class="card-title">'EM PROCESSAMENTO' & Baixa</div>
-          <div class="card-desc">Gravação da venda, baixa imediata e status inicial oficial.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">4/4</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">8h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- COLUNA 4: TROCAS & LOGÍSTICA REVERSA -->
-    <div class="kanban-column">
-      <div class="column-header">
-        <div class="col-title-group">
-          <span class="col-dot dot-green"></span>
-          <span class="col-title">Trocas & Logística Reversa</span>
-          <span class="col-badge">8</span>
-        </div>
-        <span class="col-status-pill done">Concluído ✓</span>
-      </div>
-
-      <div class="column-cards grid-2">
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-021</span>
-            <div class="card-tags"><span class="tag tag-blue">ADMIN</span><span class="tag tag-blue">RF0038</span></div>
-          </div>
-          <div class="card-title">Despacho: 'EM TRANSPORTE'</div>
-          <div class="card-desc">Remessa no admin; EM PROCESSAMENTO → EM TRANSPORTE.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">4/4</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">6h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-022</span>
-            <div class="card-tags"><span class="tag tag-green">ENTREGA</span><span class="tag tag-green">RF0039</span></div>
-          </div>
-          <div class="card-title">Entrega: Status 'ENTREGUE'</div>
-          <div class="card-desc">Confirmação física de recebimento pelo destinatário.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">4/4</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">6h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-023</span>
-            <div class="card-tags"><span class="tag tag-red">BLOQUEIO</span><span class="tag tag-red">RN0041</span></div>
-          </div>
-          <div class="card-title">Bloqueio Troca Não Entregue</div>
-          <div class="card-desc">Impede cliente de solicitar troca antes de estar ENTREGUE.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">4/4</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">6h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-024</span>
-            <div class="card-tags"><span class="tag tag-blue">CDU04</span><span class="tag tag-amber">RF0040</span></div>
-          </div>
-          <div class="card-title">Solicitação Troca: 'EM TROCA'</div>
-          <div class="card-desc">Seleção de itens a devolver; pedido vai para EM TROCA.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">5/5</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">8h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-025</span>
-            <div class="card-tags"><span class="tag tag-purple">ADMIN</span><span class="tag tag-blue">RF0041</span></div>
-          </div>
-          <div class="card-title">Aprovação & Código PAC-REV</div>
-          <div class="card-desc">Triagem admin e notificação ao cliente com PAC-REV (RNF0046).</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">5/5</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">8h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-026</span>
-            <div class="card-tags"><span class="tag tag-green">CD</span><span class="tag tag-green">RF0043</span></div>
-          </div>
-          <div class="card-title">Recebimento CD: 'TROCADO'</div>
-          <div class="card-desc">Inspeção física dos livros; encerra fluxo como TROCADO.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">4/4</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">6h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-027</span>
-            <div class="card-tags"><span class="tag tag-green">CUPOM</span><span class="tag tag-amber">RF0044</span></div>
-          </div>
-          <div class="card-title">Reentrada Estoque & Cupom</div>
-          <div class="card-desc">Reentrada física (RF0054) e cupom de troca nominal emitido.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">5/5</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">8h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-
-        <div class="kanban-card">
-          <div class="card-top">
-            <span class="card-id">#TSK-028</span>
-            <div class="card-tags"><span class="tag tag-green">CYPRESS</span><span class="tag tag-green">100% OK</span></div>
-          </div>
-          <div class="card-title">11 Cenários E2E (100% OK)</div>
-          <div class="card-desc">Suíte completa: compra, frete, cartões, cupons e trocas.</div>
-          <div class="checklist-row">
-            <div class="progress-bar-bg"><div class="progress-bar-fill fill-green"></div></div>
-            <span class="checklist-count all-done">11/11</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-assignee"><div class="assignee-avatar">AB</div><span class="assignee-name">Anderson</span></div>
-            <div class="card-meta-right"><span class="card-hours">16h</span><span class="status-check">✓</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- FOOTER STATUS STRIP -->
+  <!-- FOOTER STRIP -->
   <footer class="footer-strip">
     <div class="strip-left">
-      <span class="strip-item">Sistema: <b>Desk Manager v2026.4 (App Projeto)</b></span>
-      <span class="strip-item">Projeto: <b>#000086 E-Commerce Livraria Alexandria (arquitetos.desk.ms)</b></span>
-      <span class="strip-item">Metodologia: <b>Kanban Ágil + Rastreabilidade DRS Integral</b></span>
+      <span class="strip-item">Portal: <b>https://arquitetos.desk.ms</b></span>
+      <span class="strip-item">Projeto: <b>#86 — E-Commerce Livraria Alexandria</b></span>
+      <span class="strip-item">Produção Render: <b>https://e-commerce-de-livros.onrender.com</b></span>
     </div>
-    <div class="strip-right">
-      <span>Status da Entrega: <b style="color:#00C48C;">● 100% Homologado & Testado via Cypress</b></span>
+    <div>
+      <span>Regra de Workflow Desk Manager: <b>Concluir='S'</b> habilitado exclusivamente na coluna <b>Finalizado</b> (14/50 tarefas concluídas)</span>
     </div>
   </footer>
 
+  <script>
+    const COLUMNS = [
+      {
+        title: 'Backlog',
+        dot: 'dot-slate',
+        headerClass: 'col-header-backlog',
+        pillText: 'Planejado • 0%',
+        pillClass: 'pill-backlog',
+        cardClass: 'card-bck',
+        fillClass: 'fill-0',
+        countClass: '',
+        done: false,
+        tasks: [
+          { id: '#957', tag: 'CDU01', tagCls: 'tag-slate', title: 'Cadastro de Fornecedores e CNPJ Único', desc: 'RF0081: Validação de dígitos verificadores de CNPJ.', pct: '0%', hrs: '8h' },
+          { id: '#958', tag: 'CDU01', tagCls: 'tag-slate', title: 'Consulta Multi-Critério de Fornecedores', desc: 'RF0082: Filtros por Razão Social, CNPJ e UF.', pct: '0%', hrs: '6h' },
+          { id: '#959', tag: 'CDU01', tagCls: 'tag-slate', title: 'Edição e Vínculo de Catálogo Editorial', desc: 'RF0083: Associação entre fornecedor e livros.', pct: '0%', hrs: '6h' },
+          { id: '#960', tag: 'CDU01', tagCls: 'tag-slate', title: 'Inativação Lógica de Fornecedores', desc: 'RF0084: Preservação do histórico de entradas.', pct: '0%', hrs: '6h' },
+          { id: '#961', tag: 'RF0058', tagCls: 'tag-purple', title: 'Exportação Gerencial de Vendas em PDF', desc: 'Relatório consolidado com assinatura de auditoria.', pct: '0%', hrs: '8h' },
+          { id: '#962', tag: 'RF0058', tagCls: 'tag-purple', title: 'Exportação Analítica em CSV / XLSX', desc: 'Download tabular das séries históricas por mês.', pct: '0%', hrs: '6h' },
+          { id: '#963', tag: 'IA GEN', tagCls: 'tag-purple', title: 'Motor de Recomendação por Perfil', desc: 'Sugestão de clássicos pelo histórico ENTREGUE.', pct: '0%', hrs: '10h' },
+          { id: '#964', tag: 'PREDITIVO', tagCls: 'tag-purple', title: 'Projeção de Demanda por Sazonalidade', desc: 'Média móvel trimestral para reposição de estoque.', pct: '0%', hrs: '10h' }
+        ]
+      },
+      {
+        title: 'To Do (A Fazer)',
+        dot: 'dot-cyan',
+        headerClass: 'col-header-todo',
+        pillText: 'A Fazer • 0%',
+        pillClass: 'pill-todo',
+        cardClass: 'card-todo',
+        fillClass: 'fill-0',
+        countClass: '',
+        done: false,
+        tasks: [
+          { id: '#965', tag: 'RNF0045', tagCls: 'tag-cyan', title: 'Parametrização do Timer no Painel Admin', desc: 'Configuração dinâmica do prazo de bloqueio.', pct: '0%', hrs: '6h' },
+          { id: '#979', tag: 'RNF0046', tagCls: 'tag-cyan', title: 'Disparo de E-mail/Webhook na Troca', desc: 'Envio assíncrono do código reverso PAC-REV.', pct: '0%', hrs: '6h' },
+          { id: '#980', tag: 'RF0054', tagCls: 'tag-cyan', title: 'Painel de Auditoria de Avarias Físicas', desc: 'Laudo técnico para itens devolvidos com avaria.', pct: '0%', hrs: '8h' },
+          { id: '#981', tag: 'RF0034', tagCls: 'tag-cyan', title: 'Tabela Configurável de Frete por CEP', desc: 'Matriz parametrizável por UF e peso cubado.', pct: '0%', hrs: '6h' },
+          { id: '#982', tag: 'RNF0012', tagCls: 'tag-blue', title: 'Consulta Avançada de Logs de Auditoria', desc: 'Filtro de trilha JSON por entidade e operador.', pct: '0%', hrs: '6h' },
+          { id: '#983', tag: 'RF0044', tagCls: 'tag-cyan', title: 'Extrato e Histórico de Cupons no Perfil', desc: 'Linha do tempo de geração e consumo de cupons.', pct: '0%', hrs: '6h' },
+          { id: '#984', tag: 'RF0032', tagCls: 'tag-cyan', title: 'Alerta de Últimas Unidades (< 3 livros)', desc: 'Badge preventivo nos cards da vitrine clássica.', pct: '0%', hrs: '4h' },
+          { id: '#985', tag: 'RF0055', tagCls: 'tag-purple', title: 'Atalhos de Período Rápido (3M, 6M, 12M)', desc: 'Preenchimento rápido de datas no painel BI.', pct: '0%', hrs: '4h' },
+          { id: '#986', tag: 'WCAG AA', tagCls: 'tag-blue', title: 'Navegação por Teclado e Contraste UI', desc: 'Atalhos Tab/Esc e foco visível nos modais.', pct: '0%', hrs: '6h' }
+        ]
+      },
+      {
+        title: 'Em Desenvolvimento',
+        dot: 'dot-purple',
+        headerClass: 'col-header-doing',
+        pillText: 'Em Execução • 70%',
+        pillClass: 'pill-doing',
+        cardClass: 'card-doing',
+        fillClass: 'fill-75',
+        countClass: 'doing',
+        done: false,
+        tasks: [
+          { id: '#987', tag: 'RN0032', tagCls: 'tag-purple', title: 'Revalidação de Estoque no Checkout', desc: 'Ajuste automático de quantidades e alerta.', pct: '65%', hrs: '8h' },
+          { id: '#988', tag: 'RNF0042', tagCls: 'tag-purple', title: 'Expiração de Bloqueio e Trava de Compra', desc: 'Remoção de itens expirados e botão desativado.', pct: '70%', hrs: '8h' },
+          { id: '#989', tag: 'RN0037', tagCls: 'tag-purple', title: 'Simulador da Operadora de Cartão', desc: 'Transição EM PROCESSAMENTO → APROVADA/REPROVADA.', pct: '70%', hrs: '8h' },
+          { id: '#990', tag: 'RN0028', tagCls: 'tag-purple', title: 'Desbloqueio sem Baixa em Reprovadas', desc: 'Estorno imediato da reserva sem baixa física.', pct: '65%', hrs: '6h' },
+          { id: '#991', tag: 'RF0040', tagCls: 'tag-purple', title: 'Solicitação Granular de Troca (1 ou Todos)', desc: 'Seleção parcial de item ou pedido completo.', pct: '75%', hrs: '8h' },
+          { id: '#992', tag: 'RNF0046', tagCls: 'tag-purple', title: 'Banner de Notificação de Troca Autorizada', desc: 'Alerta ativo ao cliente em Meus Pedidos.', pct: '75%', hrs: '6h' },
+          { id: '#993', tag: 'RF0054', tagCls: 'tag-purple', title: 'Recebimento Admin e Reentrada no Estoque', desc: 'Confirmação TROCADO + retorno ao saldo físico.', pct: '80%', hrs: '8h' },
+          { id: '#994', tag: 'RNF0011', tagCls: 'tag-purple', title: 'Circuit-Breaker e Fallback Local (< 25ms)', desc: 'Comutação automática Supabase → LocalStore.', pct: '80%', hrs: '8h' }
+        ]
+      },
+      {
+        title: 'Em Testes (QA / Cypress)',
+        dot: 'dot-amber',
+        headerClass: 'col-header-testing',
+        pillText: 'Testing E2E • 85%',
+        pillClass: 'pill-testing',
+        cardClass: 'card-test',
+        fillClass: 'fill-85',
+        countClass: 'testing',
+        done: false,
+        tasks: [
+          { id: '#995', tag: 'E2E #01', tagCls: 'tag-amber', title: 'Teste: Compra Aprovada com 1 Cartão', desc: 'Valida aprovação RF0037 e baixa RF0053.', pct: '85%', hrs: '6h' },
+          { id: '#996', tag: 'E2E #02', tagCls: 'tag-amber', title: 'Teste: Multi-Cartões e Bloqueio < R$ 10', desc: 'Valida bloqueio R$ 5,00 e aprovação RN0034.', pct: '85%', hrs: '6h' },
+          { id: '#997', tag: 'E2E #03', tagCls: 'tag-amber', title: 'Teste: Cupom Promo + Cartão < R$ 10', desc: 'Valida exceção RN0035 com saldo residual.', pct: '85%', hrs: '6h' },
+          { id: '#998', tag: 'E2E #04', tagCls: 'tag-amber', title: 'Teste: Cupom Superior e Cupom de Troco', desc: 'Valida geração automática TROCO-XXXX (RN0036).', pct: '85%', hrs: '6h' },
+          { id: '#999', tag: 'E2E #05', tagCls: 'tag-amber', title: 'Teste: Compra Reprovada sem Baixa', desc: 'Valida status REPROVADA e estoque intacto.', pct: '85%', hrs: '6h' },
+          { id: '#1000', tag: 'E2E #06', tagCls: 'tag-amber', title: 'Teste: Expiração do Bloqueio no Carrinho', desc: 'Valida remoção e botão desabilitado RNF0042.', pct: '85%', hrs: '6h' },
+          { id: '#1001', tag: 'E2E #07', tagCls: 'tag-amber', title: 'Teste: Fluxo Admin Transporte e Entrega', desc: 'Valida APROVADA → EM TRANSPORTE → ENTREGUE.', pct: '90%', hrs: '6h' },
+          { id: '#1002', tag: 'E2E #08', tagCls: 'tag-amber', title: 'Teste: Bloqueio de Troca não ENTREGUE', desc: 'Valida rejeição RN0041 fora de ENTREGUE.', pct: '90%', hrs: '6h' },
+          { id: '#1003', tag: 'E2E #09', tagCls: 'tag-amber', title: 'Teste: Ciclo Completo Troca + Nova Compra', desc: 'Valida solicitação, autorização, cupom e uso.', pct: '90%', hrs: '8h' },
+          { id: '#1004', tag: 'E2E #10', tagCls: 'tag-amber', title: 'Teste: Gráfico de Linhas por Categoria R$', desc: 'Valida filtro período MM/YYYY e Chart.js.', pct: '90%', hrs: '8h' },
+          { id: '#1005', tag: 'E2E #11', tagCls: 'tag-amber', title: 'Teste: Exclusão != ENTREGUE, 403 e < 1s', desc: 'Valida segurança Admin e SLA RNF0011 (< 1s).', pct: '90%', hrs: '8h' }
+        ]
+      },
+      {
+        title: 'Finalizado (Done)',
+        dot: 'dot-green',
+        headerClass: 'col-header-done',
+        pillText: 'Finalizado ✓',
+        pillClass: 'pill-done',
+        cardClass: 'card-done',
+        fillClass: 'fill-100',
+        countClass: 'all-done',
+        done: true,
+        tasks: [
+          { id: '#1006', tag: 'ARQ C4', tagCls: 'tag-green', title: 'Modelagem C4 e Arquitetura Node+Express', desc: 'Camadas REST, Domínio e Repositórios.', pct: '100%', hrs: '12h' },
+          { id: '#1007', tag: 'DDL SQL', tagCls: 'tag-green', title: 'Modelagem Relacional e Persistência Híbrida', desc: 'Tabelas SQL + sincronização LocalStore JSON.', pct: '100%', hrs: '12h' },
+          { id: '#1008', tag: 'UI/UX', tagCls: 'tag-green', title: 'Design System Clássico e Modais Dedicados', desc: 'Identidade Livraria Alexandria sem alerts nativos.', pct: '100%', hrs: '10h' },
+          { id: '#1009', tag: 'ACERVO', tagCls: 'tag-green', title: 'Vitrine Clássica (12 Obras) e Capas SVG', desc: 'Catálogo de 12 clássicos em 6 categorias.', pct: '100%', hrs: '10h' },
+          { id: '#1010', tag: 'CDU02', tagCls: 'tag-green', title: 'CRUD Completo de Clientes e CPF Único', desc: 'RF0021–RF0026: Cadastro, filtro e inativação.', pct: '100%', hrs: '12h' },
+          { id: '#1011', tag: 'RN0023', tagCls: 'tag-green', title: 'Endereços de Cobrança e Entrega (10 Campos)', desc: 'Validação estrita dos 10 campos obrigatórios.', pct: '100%', hrs: '8h' },
+          { id: '#1012', tag: 'RN0024', tagCls: 'tag-green', title: 'Cartões Homologados e Cartão Preferencial', desc: 'Bandeiras Visa, Master, Elo, Amex (RN0025).', pct: '100%', hrs: '8h' },
+          { id: '#1013', tag: 'SHA-256', tagCls: 'tag-green', title: 'Senha Forte e Criptografia Hash Seguro', desc: 'RNF0031–RNF0033: Complexidade e hash.', pct: '100%', hrs: '8h' },
+          { id: '#1014', tag: 'RF0031', tagCls: 'tag-green', title: 'Carrinho com Validação Impeditiva Estoque', desc: 'RN0031: Bloqueio de adição acima do saldo.', pct: '100%', hrs: '10h' },
+          { id: '#1015', tag: 'RF0035', tagCls: 'tag-green', title: 'Checkout: Frete e Novo Endereço no Perfil', desc: 'RF0034/RF0035: Cálculo por UF e incorporação.', pct: '100%', hrs: '10h' },
+          { id: '#1016', tag: 'RF0036', tagCls: 'tag-green', title: 'Motor de Pagamento Combinado (Cartões/Cupons)', desc: 'RN0033–RN0036: Rateio, promo e troco.', pct: '100%', hrs: '12h' },
+          { id: '#1017', tag: 'RF0038', tagCls: 'tag-green', title: 'Painel Admin: Despacho e Entrega de Pedidos', desc: 'RN0039/RN0040: Transporte e confirmação.', pct: '100%', hrs: '10h' },
+          { id: '#1018', tag: 'RF0044', tagCls: 'tag-green', title: 'Painel Admin Trocas e Emissão de Cupom', desc: 'RF0041–RF0044: Autorização PAC-REV e cupom.', pct: '100%', hrs: '10h' },
+          { id: '#1019', tag: 'RF0055', tagCls: 'tag-green', title: 'Motor Analítico e Gráfico por Categoria R$', desc: 'RNF0043: Gráfico de linhas MM/YYYY (Chart.js).', pct: '100%', hrs: '12h' }
+        ]
+      }
+    ];
+
+    const boardEl = document.getElementById('kanban-board');
+    boardEl.innerHTML = COLUMNS.map(col => `
+      <div class="kanban-column">
+        <div class="column-header ${col.headerClass}">
+          <div class="col-title-group">
+            <span class="col-dot ${col.dot}"></span>
+            <span class="col-title">${col.title}</span>
+            <span class="col-badge">${col.tasks.length}</span>
+          </div>
+          <span class="col-status-pill ${col.pillClass}">${col.pillText}</span>
+        </div>
+        <div class="column-cards">
+          ${col.tasks.map(t => `
+            <div class="kanban-card ${col.cardClass}">
+              <div class="card-top">
+                <span class="card-id">${t.id}</span>
+                <div class="card-tags">
+                  <span class="tag ${t.tagCls}">${t.tag}</span>
+                </div>
+              </div>
+              <div class="card-title">${t.title}</div>
+              <div class="card-desc">${t.desc}</div>
+              <div class="checklist-row">
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill ${col.fillClass}"></div>
+                </div>
+                <span class="checklist-count ${col.countClass}">${t.pct}</span>
+              </div>
+              <div class="card-footer">
+                <div class="card-assignee">
+                  <div class="assignee-avatar">AB</div>
+                  <span class="assignee-name">Anderson</span>
+                </div>
+                <div class="card-meta-right">
+                  <span class="card-hours">${t.hrs}</span>
+                  ${col.done ? '<span class="status-check">✓</span>' : '<span class="status-open">○</span>'}
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
+  </script>
 </body>
 </html>

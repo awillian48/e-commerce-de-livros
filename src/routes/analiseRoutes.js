@@ -13,7 +13,7 @@ const router = express.Router();
  * Middleware para validar perfil Administrador (Critério 3.b e Cenário 7)
  */
 function verificarPerfilAdmin(req, res, next) {
-  const roleHeader = req.headers['x-user-role'] || req.headers['x-role'] || '';
+  const roleHeader = req.headers['x-user-role'] || req.headers['x-role'] || req.headers['x-perfil'] || '';
   const perfilQuery = req.query.perfil || '';
   
   // Se explicitamente informado perfil não-admin (ex: CLIENTE, VISITANTE), bloqueia (403)

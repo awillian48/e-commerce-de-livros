@@ -8,12 +8,20 @@
     "nome": "Anderson Barros"
   },
   "colunas_status": {
-    "Backlog (Futuro)": "233",
-    "Sprint 1 — Arquitetura & Acervo": "234",
-    "Sprint 2 — CRUD Clientes (CDU02)": "235",
-    "Sprint 3 — Vendas & Checkout (Ativ. 1)": "236",
-    "Sprint 4 — Trocas & Reversa (Ativ. 1)": "237",
-    "Sprint 5 — Análise Gráfica BI (Ativ. 2)": "238"
+    "Backlog": "233",
+    "To Do": "234",
+    "Em Desenvolvimento": "235",
+    "Em Homologação": "236",
+    "Em Testes (Cypress)": "237",
+    "Finalizado": "238"
+  },
+  "distribuicao_por_coluna": {
+    "Backlog": 8,
+    "To Do": 9,
+    "Em Desenvolvimento": 4,
+    "Em Homologação": 4,
+    "Em Testes (Cypress)": 11,
+    "Finalizado": 14
   },
   "labels": {
     "Acervo-Estoque": "79",
@@ -23,242 +31,558 @@
     "Cypress-E2E": "76",
     "DRS-LES-2026": "75"
   },
-  "total_tarefas": 39,
-  "total_concluidas": 37,
-  "total_backlog": 2,
+  "total_tarefas": 50,
+  "total_finalizadas": 14,
+  "total_em_aberto": 36,
   "tarefas": [
     {
       "chave": "957",
-      "titulo": "Módulo de Cadastro e Gestão de Fornecedores (CDU01, RF0081-RF0085)",
-      "coluna": "Backlog (Futuro)",
+      "codigo_interno": "bck-01-fornecedores-cnpj",
+      "titulo": "[CDU01 / RF0081] Cadastro de Fornecedores e Validação de CNPJ Único",
+      "descricao": "Formulário e endpoint de cadastro de fornecedores editoriais com validação de dígitos verificadores de CNPJ.",
+      "coluna_id": "233",
+      "coluna": "Backlog",
+      "percentual": 0,
+      "horas": "8",
       "concluida": false
     },
     {
       "chave": "958",
-      "titulo": "Exportação de Relatórios Gerenciais de Vendas (RF0058)",
-      "coluna": "Backlog (Futuro)",
+      "codigo_interno": "bck-02-fornecedores-busca",
+      "titulo": "[CDU01 / RF0082] Consulta e Filtros Multi-Critério de Fornecedores",
+      "descricao": "Listagem paginada e busca combinada de fornecedores por Razão Social, Nome Fantasia, CNPJ e UF.",
+      "coluna_id": "233",
+      "coluna": "Backlog",
+      "percentual": 0,
+      "horas": "6",
       "concluida": false
     },
     {
       "chave": "959",
-      "titulo": "Arquitetura do Sistema e Modelagem C4",
-      "coluna": "Sprint 1 — Arquitetura & Acervo",
-      "concluida": true
+      "codigo_interno": "bck-03-fornecedores-catalogo",
+      "titulo": "[CDU01 / RF0083] Edição Cadastral e Vínculo de Catálogo Editorial",
+      "descricao": "Atualização de dados comerciais do fornecedor e associação direta com títulos do acervo de livros.",
+      "coluna_id": "233",
+      "coluna": "Backlog",
+      "percentual": 0,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "960",
-      "titulo": "Modelagem Relacional e DDL no Supabase",
-      "coluna": "Sprint 1 — Arquitetura & Acervo",
-      "concluida": true
+      "codigo_interno": "bck-04-fornecedores-inativacao",
+      "titulo": "[CDU01 / RF0084] Inativação Lógica de Fornecedores sem Romper Histórico",
+      "descricao": "Inativação lógica preservando integridade referencial das notas de entrada de estoque anteriores.",
+      "coluna_id": "233",
+      "coluna": "Backlog",
+      "percentual": 0,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "961",
-      "titulo": "Design System e Protótipo de Alta Fidelidade",
-      "coluna": "Sprint 1 — Arquitetura & Acervo",
-      "concluida": true
+      "codigo_interno": "bck-05-exportacao-pdf",
+      "titulo": "[RF0058] Exportação de Relatórios Gerenciais de Vendas em PDF",
+      "descricao": "Geração de relatório PDF formatado com consolidador de vendas por categoria e assinatura de auditoria.",
+      "coluna_id": "233",
+      "coluna": "Backlog",
+      "percentual": 0,
+      "horas": "8",
+      "concluida": false
     },
     {
       "chave": "962",
-      "titulo": "Vitrine Resiliente do Acervo (12 Obras) & Fallback Instantâneo (< 5ms)",
-      "coluna": "Sprint 1 — Arquitetura & Acervo",
-      "concluida": true
+      "codigo_interno": "bck-06-exportacao-csv",
+      "titulo": "[RF0058] Exportação de Planilhas Analíticas de Vendas em CSV/XLSX",
+      "descricao": "Download de dados tabulares das séries temporais de vendas por categoria para análise externa.",
+      "coluna_id": "233",
+      "coluna": "Backlog",
+      "percentual": 0,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "963",
-      "titulo": "Cadastro de Clientes e Validação de CPF Único (RF0021, RF0024)",
-      "coluna": "Sprint 2 — CRUD Clientes (CDU02)",
-      "concluida": true
+      "codigo_interno": "bck-07-recomendacao-ia",
+      "titulo": "[IA / Backlog] Motor de Recomendação Inteligente por Perfil Literário",
+      "descricao": "Evolução do Recomendador Virtual para sugerir clássicos com base no histórico de compras ENTREGUE.",
+      "coluna_id": "233",
+      "coluna": "Backlog",
+      "percentual": 0,
+      "horas": "10",
+      "concluida": false
     },
     {
       "chave": "964",
-      "titulo": "Composição Obrigatória de Endereços com 10 Campos (RN0023)",
-      "coluna": "Sprint 2 — CRUD Clientes (CDU02)",
-      "concluida": true
+      "codigo_interno": "bck-08-projecao-demanda",
+      "titulo": "[BI / Backlog] Projeção Preditiva de Demanda e Estoque por Sazonalidade",
+      "descricao": "Estimativa de reposição de estoque por categoria literária a partir da média móvel trimestral.",
+      "coluna_id": "233",
+      "coluna": "Backlog",
+      "percentual": 0,
+      "horas": "10",
+      "concluida": false
     },
     {
       "chave": "965",
-      "titulo": "Gestão de Cartões e Cartão Preferencial (RF0027, RN0024, RN0025)",
-      "coluna": "Sprint 2 — CRUD Clientes (CDU02)",
-      "concluida": true
+      "codigo_interno": "todo-01-timer-admin",
+      "titulo": "[RN0044 / RNF0045] Parametrização Dinâmica do Timer do Carrinho no Admin",
+      "descricao": "Permitir configurar em tela administrativa o tempo de expiração do bloqueio temporário do carrinho.",
+      "coluna_id": "234",
+      "coluna": "To Do",
+      "percentual": 0,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "979",
-      "titulo": "Validação de Complexidade de Senha Forte (RNF0031, RNF0032)",
-      "coluna": "Sprint 2 — CRUD Clientes (CDU02)",
-      "concluida": true
+      "codigo_interno": "todo-02-webhook-troca",
+      "titulo": "[RNF0046] Disparo de Alerta por E-mail/Webhook na Autorização de Troca",
+      "descricao": "Complementar a notificação interna do portal do cliente com envio de e-mail contendo o código PAC-REV.",
+      "coluna_id": "234",
+      "coluna": "To Do",
+      "percentual": 0,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "980",
-      "titulo": "Armazenamento Criptografado com Hash Seguro (RNF0033)",
-      "coluna": "Sprint 2 — CRUD Clientes (CDU02)",
-      "concluida": true
+      "codigo_interno": "todo-03-auditoria-avarias",
+      "titulo": "[RF0054] Painel de Auditoria de Avarias e Descarte de Itens Devolvidos",
+      "descricao": "Registrar laudo técnico quando um livro recebido em troca apresentar avaria física e não retornar ao estoque.",
+      "coluna_id": "234",
+      "coluna": "To Do",
+      "percentual": 0,
+      "horas": "8",
+      "concluida": false
     },
     {
       "chave": "981",
-      "titulo": "Consulta, Alteração e Inativação Lógica de Clientes (RF0022, RF0024, RF0025)",
-      "coluna": "Sprint 2 — CRUD Clientes (CDU02)",
-      "concluida": true
+      "codigo_interno": "todo-04-tabela-frete-cep",
+      "titulo": "[RF0034] Tabela Configurável de Frete por Faixa de CEP e Peso Cubado",
+      "descricao": "Externalizar matriz de cálculo de frete regional (SP/Sudeste vs. demais regiões e peso por item).",
+      "coluna_id": "234",
+      "coluna": "To Do",
+      "percentual": 0,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "982",
-      "titulo": "Suíte Automatizada E2E do Módulo de Clientes",
-      "coluna": "Sprint 2 — CRUD Clientes (CDU02)",
-      "concluida": true
+      "codigo_interno": "todo-05-consulta-logs",
+      "titulo": "[RNF0012] Consulta Avançada de Logs de Auditoria por Entidade e Operador",
+      "descricao": "Interface administrativa para filtrar a trilha de auditoria JSON por data/hora, usuário e operação.",
+      "coluna_id": "234",
+      "coluna": "To Do",
+      "percentual": 0,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "983",
-      "titulo": "Gestão Completa de Itens no Carrinho (RF0031, RF0032)",
-      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "todo-06-extrato-cupons",
+      "titulo": "[RF0044] Extrato Detalhado de Uso e Histórico de Cupons no Perfil Cliente",
+      "descricao": "Exibir em Minha Conta a linha do tempo de geração e consumo de cada cupom (TROCA-XXXX e TROCO-XXXX).",
+      "coluna_id": "234",
+      "coluna": "To Do",
+      "percentual": 0,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "984",
-      "titulo": "Validação Impeditiva de Estoque Físico (RN0031)",
-      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "todo-07-alerta-ultimas-unidades",
+      "titulo": "[RF0032] Alerta Preventivo de Últimas Unidades na Vitrine (< 3 exemplares)",
+      "descricao": "Destacar visualmente nos cards do acervo quando o estoque disponível for inferior a 3 unidades.",
+      "coluna_id": "234",
+      "coluna": "To Do",
+      "percentual": 0,
+      "horas": "4",
+      "concluida": false
     },
     {
       "chave": "985",
-      "titulo": "Início da Realização de Compra (RF0033)",
-      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "todo-08-atalhos-periodo-bi",
+      "titulo": "[RF0055] Atalhos de Período Rápido (3, 6 e 12 Meses) no Gráfico Analítico",
+      "descricao": "Botões de preenchimento rápido de datas (Último Trimestre, Semestre e Ano) na Análise por Categoria.",
+      "coluna_id": "234",
+      "coluna": "To Do",
+      "percentual": 0,
+      "horas": "4",
+      "concluida": false
     },
     {
       "chave": "986",
-      "titulo": "Cálculo de Frete Regional por Peso e UF (RF0034)",
-      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "todo-09-acessibilidade-wcag",
+      "titulo": "[UI / Acessibilidade] Navegação por Teclado e Contraste WCAG AA no Checkout",
+      "descricao": "Aprimorar atributos ARIA, foco visível e atalhos de teclado nos modais de endereço, cartão e pedido.",
+      "coluna_id": "234",
+      "coluna": "To Do",
+      "percentual": 0,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "987",
-      "titulo": "Seleção e Cadastro de Endereço no Checkout (RF0035, RN0023)",
-      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "dev-01-revalidacao-estoque",
+      "titulo": "[RN0032] Revalidação de Estoque no Checkout com Ajuste de Quantidades",
+      "descricao": "Confrontar quantidades do carrinho com estoque físico no instante de finalização da compra e alertar usuário.",
+      "coluna_id": "235",
+      "coluna": "Em Desenvolvimento",
+      "percentual": 60,
+      "horas": "8",
+      "concluida": false
     },
     {
       "chave": "988",
-      "titulo": "Modal Centralizado de Cartão de Crédito e Foco (RN0024, RN0025)",
-      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "dev-02-expiracao-bloqueio",
+      "titulo": "[RN0044 / RNF0042] Expiração do Bloqueio no Carrinho e Travamento de Compra",
+      "descricao": "Timer regressivo contado do último item incluído; ao expirar, remove itens da reserva e desabilita compra.",
+      "coluna_id": "235",
+      "coluna": "Em Desenvolvimento",
+      "percentual": 65,
+      "horas": "8",
+      "concluida": false
     },
     {
       "chave": "989",
-      "titulo": "Pagamento com Múltiplos Cartões e Mínimo R$ 10,00 (RF0036, RN0034)",
-      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "dev-03-simulador-operadora",
+      "titulo": "[RN0037 / RN0038] Integração do Simulador de Operadora (Aprovação e Recusa)",
+      "descricao": "Validar cupons e simular aceite ou recusa da operadora de cartões, transitando para APROVADA ou REPROVADA.",
+      "coluna_id": "235",
+      "coluna": "Em Desenvolvimento",
+      "percentual": 70,
+      "horas": "8",
+      "concluida": false
     },
     {
       "chave": "990",
-      "titulo": "Limite Estrito de 1 Cupom Promocional por Compra (RF0037, RN0033)",
-      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "dev-04-estorno-reserva-reprovada",
+      "titulo": "[RF0053 / RN0028] Desbloqueio sem Baixa de Estoque em Compras Reprovadas",
+      "descricao": "Garantir que compras REPROVADAS desbloqueiem os itens reservados mantendo o saldo físico intacto.",
+      "coluna_id": "235",
+      "coluna": "Em Desenvolvimento",
+      "percentual": 60,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "991",
-      "titulo": "Exceção de Cupom com Cartão Menor que R$ 10,00 (RN0035)",
-      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "dev-05-solicitacao-troca-granular",
+      "titulo": "[RF0040 / RN0043] Solicitação Granular de Troca (Item Único ou Compra Inteira)",
+      "descricao": "Permitir ao cliente solicitar troca de 1 item específico ou da compra completa em pedidos ENTREGUE.",
+      "coluna_id": "236",
+      "coluna": "Em Homologação",
+      "percentual": 75,
+      "horas": "8",
+      "concluida": false
     },
     {
       "chave": "992",
-      "titulo": "Cupons de Troca, Bloqueio Redundante e Troco (RN0036)",
-      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "dev-06-notificacao-troca-cliente",
+      "titulo": "[RNF0046] Banner e Badge de Notificação ao Cliente na Troca Autorizada",
+      "descricao": "Gerar e exibir notificação ao cliente quando o administrador autorizar a troca para TROCA AUTORIZADA.",
+      "coluna_id": "236",
+      "coluna": "Em Homologação",
+      "percentual": 75,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "993",
-      "titulo": "Fechamento do Pedido com Status 'EM PROCESSAMENTO' (RF0038)",
-      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "dev-07-recebimento-reentrada-estoque",
+      "titulo": "[RF0043 / RF0054] Confirmação de Recebimento Admin e Reentrada no Estoque",
+      "descricao": "Confirmar chegada dos itens trocados (status TROCADO), retornar exemplares ao estoque e gerar cupom.",
+      "coluna_id": "236",
+      "coluna": "Em Homologação",
+      "percentual": 80,
+      "horas": "8",
+      "concluida": false
     },
     {
       "chave": "994",
-      "titulo": "Auditoria de Transações e Tempo de Resposta (RNF0011, RNF0012)",
-      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "dev-08-circuit-breaker-acervo",
+      "titulo": "[RNF0011] Circuit-Breaker e Fallback Local (< 25ms) para Alta Disponibilidade",
+      "descricao": "Detectar indisponibilidade do Supabase em 1,5s e comutar para LocalStore JSON em memória (< 25ms).",
+      "coluna_id": "236",
+      "coluna": "Em Homologação",
+      "percentual": 80,
+      "horas": "8",
+      "concluida": false
     },
     {
       "chave": "995",
-      "titulo": "Suíte Cypress E2E com 8 Cenários, Slow Motion e HUD Visual",
-      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "tst-01-compra-1-cartao",
+      "titulo": "[Cypress E2E #01] Cenário 1: Compra Aprovada com 1 Cartão e Baixa de Estoque",
+      "descricao": "Teste funcional automatizado validando compra com 1 cartão, aprovação e baixa física no estoque (RF0037, RF0053).",
+      "coluna_id": "237",
+      "coluna": "Em Testes (Cypress)",
+      "percentual": 85,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "996",
-      "titulo": "Elaboração do Plano de Testes Oficial (Word .docx)",
-      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "tst-02-multi-cartoes-minimo-10",
+      "titulo": "[Cypress E2E #02] Cenário 2: Múltiplos Cartões e Bloqueio de Valor < R$ 10,00",
+      "descricao": "Teste funcional automatizado validando bloqueio de rateio < R$ 10,00 em um dos cartões e aprovação >= R$ 10,00 (RN0034).",
+      "coluna_id": "237",
+      "coluna": "Em Testes (Cypress)",
+      "percentual": 85,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "997",
-      "titulo": "Despacho, Transporte e Confirmação de Entrega (RF0039, RF0040)",
-      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "tst-03-cupom-promo-cartao-menor-10",
+      "titulo": "[Cypress E2E #03] Cenário 3: Cupom Promocional + Cartão < R$ 10,00 Permitido",
+      "descricao": "Teste funcional automatizado validando exceção RN0035: saldo residual < R$ 10,00 no cartão após abatimento por cupons.",
+      "coluna_id": "237",
+      "coluna": "Em Testes (Cypress)",
+      "percentual": 85,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "998",
-      "titulo": "Modelagem de Dados e DDL de Trocas no Supabase (CDU04)",
-      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "tst-04-cupom-troca-troco",
+      "titulo": "[Cypress E2E #04] Cenário 4: Cupom de Troca Superior à Compra e Cupom de Troco",
+      "descricao": "Teste funcional automatizado validando geração de novo cupom de troca (TROCO-XXXX) pela diferença excedente (RN0036).",
+      "coluna_id": "237",
+      "coluna": "Em Testes (Cypress)",
+      "percentual": 85,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "999",
-      "titulo": "Interface do Cliente para Solicitação de Troca (RF0041)",
-      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "tst-05-compra-reprovada-estoque",
+      "titulo": "[Cypress E2E #05] Cenário 5: Compra Reprovada sem Baixa Física no Estoque",
+      "descricao": "Teste funcional automatizado validando compra REPROVADA com desbloqueio de itens e manutenção do estoque (RN0038, RN0028).",
+      "coluna_id": "237",
+      "coluna": "Em Testes (Cypress)",
+      "percentual": 85,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "1000",
-      "titulo": "Fluxo Administrativo de Autorização e Código de Postagem (RF0042)",
-      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "tst-06-expiracao-carrinho",
+      "titulo": "[Cypress E2E #06] Cenário 6: Expiração de Bloqueio no Carrinho e Botão Desativado",
+      "descricao": "Teste funcional automatizado validando remoção de itens expirados e desativação do botão de compra (RNF0042).",
+      "coluna_id": "237",
+      "coluna": "Em Testes (Cypress)",
+      "percentual": 85,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "1001",
-      "titulo": "Conferência Física e Recebimento de Produtos (RF0043)",
-      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "tst-07-fluxo-admin-entrega",
+      "titulo": "[Cypress E2E #07] Cenário 7: Fluxo Admin APROVADA -> EM TRANSPORTE -> ENTREGUE",
+      "descricao": "Teste funcional automatizado validando despacho para transporte e confirmação de entrega pelo administrador (RF0038, RF0039).",
+      "coluna_id": "237",
+      "coluna": "Em Testes (Cypress)",
+      "percentual": 90,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "1002",
-      "titulo": "Reincorporação ao Estoque ou Descarte de Avarias (RF0044)",
-      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "tst-08-bloqueio-troca-nao-entregue",
+      "titulo": "[Cypress E2E #08] Cenário 8: Bloqueio de Solicitação de Troca fora de ENTREGUE",
+      "descricao": "Teste funcional automatizado garantindo bloqueio de solicitação de troca em pedidos não entregues (RN0041).",
+      "coluna_id": "237",
+      "coluna": "Em Testes (Cypress)",
+      "percentual": 90,
+      "horas": "6",
+      "concluida": false
     },
     {
       "chave": "1003",
-      "titulo": "Emissão e Crédito Automático de Cupom de Troca (RF0045)",
-      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "tst-09-ciclo-troca-completo",
+      "titulo": "[Cypress E2E #09] Cenários 9-11: Ciclo Completo de Troca, Cupom e Nova Compra",
+      "descricao": "Teste funcional automatizado cobrindo troca de 1 item e compra inteira, autorização, notificação, recebimento, cupom e nova compra.",
+      "coluna_id": "237",
+      "coluna": "Em Testes (Cypress)",
+      "percentual": 90,
+      "horas": "8",
+      "concluida": false
     },
     {
       "chave": "1004",
-      "titulo": "Suíte Cypress E2E para o Fluxo Completo de Trocas",
-      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
-      "concluida": true
+      "codigo_interno": "tst-10-bi-grafico-linhas",
+      "titulo": "[Cypress E2E #10] Atividade 2: Gráfico de Linhas por Categoria em R$ (MM/YYYY)",
+      "descricao": "Teste funcional automatizado validando consulta por período, comparação de categorias e gráfico de linhas em reais (RF0055, RNF0043).",
+      "coluna_id": "237",
+      "coluna": "Em Testes (Cypress)",
+      "percentual": 90,
+      "horas": "8",
+      "concluida": false
     },
     {
       "chave": "1005",
-      "titulo": "Análise Gráfica do Histórico de Vendas por Categoria em Linha (RF0055, RNF0043)",
-      "coluna": "Sprint 5 — Análise Gráfica BI (Ativ. 2)",
-      "concluida": true
+      "codigo_interno": "tst-11-bi-seguranca-sla",
+      "titulo": "[Cypress E2E #11] Atividade 2: Exclusão Status != ENTREGUE, Bloqueio 403 e SLA < 1s",
+      "descricao": "Teste funcional automatizado comprovando cálculo exclusivo de pedidos ENTREGUE, restrição admin e resposta < 1s (RNF0011).",
+      "coluna_id": "237",
+      "coluna": "Em Testes (Cypress)",
+      "percentual": 90,
+      "horas": "8",
+      "concluida": false
     },
     {
       "chave": "1006",
-      "titulo": "Filtro por Período (Início/Fim) e Comparação Multi-Categorias (RF0055)",
-      "coluna": "Sprint 5 — Análise Gráfica BI (Ativ. 2)",
+      "codigo_interno": "done-01-arquitetura-c4",
+      "titulo": "[Arquitetura] Modelagem C4 e Estrutura Full-Stack Node.js + Express",
+      "descricao": "Definição da arquitetura em camadas (Rotas, Domínio, Repositórios e Persistência Híbrida) do E-Commerce Livraria Alexandria.",
+      "coluna_id": "238",
+      "coluna": "Finalizado",
+      "percentual": 100,
+      "horas": "12",
       "concluida": true
     },
     {
       "chave": "1007",
-      "titulo": "Bloqueio Temporário de Estoque no Carrinho e Expiração Automática (RN0044, RNF0042, RNF0045)",
-      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "codigo_interno": "done-02-ddl-relacional",
+      "titulo": "[Banco de Dados] Modelagem Relacional DDL e Persistência Híbrida",
+      "descricao": "Scripts DDL SQL (clientes, enderecos, cartoes, livros, pedidos, cupons, trocas, notificacoes) e LocalStore JSON.",
+      "coluna_id": "238",
+      "coluna": "Finalizado",
+      "percentual": 100,
+      "horas": "12",
       "concluida": true
     },
     {
       "chave": "1008",
-      "titulo": "Suíte Automatizada Cypress E2E — Análise Gráfica por Categorias (8/8 Cenários Aprovados)",
-      "coluna": "Sprint 5 — Análise Gráfica BI (Ativ. 2)",
+      "codigo_interno": "done-03-design-system",
+      "titulo": "[Design System] Identidade Visual Clássica, Modais e Responsividade",
+      "descricao": "Folha de estilos unificada, paleta editorial Livraria Alexandria e componentes modais customizados.",
+      "coluna_id": "238",
+      "coluna": "Finalizado",
+      "percentual": 100,
+      "horas": "10",
+      "concluida": true
+    },
+    {
+      "chave": "1009",
+      "codigo_interno": "done-04-acervo-12-obras",
+      "titulo": "[Acervo] Vitrine Clássica (12 Obras), Busca Multi-Critério e Capas SVG",
+      "descricao": "Catálogo de 12 obras clássicas distribuídas em 6 categorias literárias com capas vetoriais dedicadas.",
+      "coluna_id": "238",
+      "coluna": "Finalizado",
+      "percentual": 100,
+      "horas": "10",
+      "concluida": true
+    },
+    {
+      "chave": "1010",
+      "codigo_interno": "done-05-crud-clientes",
+      "titulo": "[CDU02 / RF0021] CRUD Completo de Clientes, CPF Único e Inativação Lógica",
+      "descricao": "Cadastro, consulta filtrada, edição cadastral, ranking e inativação lógica de clientes (RF0021 a RF0026).",
+      "coluna_id": "238",
+      "coluna": "Finalizado",
+      "percentual": 100,
+      "horas": "12",
+      "concluida": true
+    },
+    {
+      "chave": "1011",
+      "codigo_interno": "done-06-enderecos-10-campos",
+      "titulo": "[CDU02 / RN0023] Cadastro de Endereços de Cobrança e Entrega (10 Campos)",
+      "descricao": "Validação estrita dos 10 atributos obrigatórios de endereço e associação mínima de cobrança e entrega.",
+      "coluna_id": "238",
+      "coluna": "Finalizado",
+      "percentual": 100,
+      "horas": "8",
+      "concluida": true
+    },
+    {
+      "chave": "1012",
+      "codigo_interno": "done-07-cartoes-homologados",
+      "titulo": "[CDU02 / RN0024] Gestão de Cartões Homologados e Cartão Preferencial",
+      "descricao": "Cadastro de múltiplos cartões vinculados ao cliente com validação de bandeiras homologadas e flag preferencial.",
+      "coluna_id": "238",
+      "coluna": "Finalizado",
+      "percentual": 100,
+      "horas": "8",
+      "concluida": true
+    },
+    {
+      "chave": "1013",
+      "codigo_interno": "done-08-senha-forte-hash",
+      "titulo": "[Segurança] Validação de Senha Forte e Criptografia Hash SHA-256",
+      "descricao": "Regras RNF0031, RNF0032 e RNF0033 exigindo 8+ caracteres, maiúsculas, minúsculas, especiais e hash seguro.",
+      "coluna_id": "238",
+      "coluna": "Finalizado",
+      "percentual": 100,
+      "horas": "8",
+      "concluida": true
+    },
+    {
+      "chave": "1014",
+      "codigo_interno": "done-09-carrinho-estoque",
+      "titulo": "[RF0031 / RN0031] Carrinho de Compras com Validação Impeditiva de Estoque",
+      "descricao": "Adição, alteração de quantidades e remoção de itens no carrinho validando saldo disponível em tempo real.",
+      "coluna_id": "238",
+      "coluna": "Finalizado",
+      "percentual": 100,
+      "horas": "10",
+      "concluida": true
+    },
+    {
+      "chave": "1015",
+      "codigo_interno": "done-10-checkout-frete-endereco",
+      "titulo": "[RF0034 / RF0035] Checkout com Cálculo de Frete e Novo Endereço Incorporável",
+      "descricao": "Cálculo automático de frete pelos itens e endereço, com opção de cadastrar novo endereço e salvá-lo no perfil.",
+      "coluna_id": "238",
+      "coluna": "Finalizado",
+      "percentual": 100,
+      "horas": "10",
+      "concluida": true
+    },
+    {
+      "chave": "1016",
+      "codigo_interno": "done-11-pagamento-combinado",
+      "titulo": "[RF0036 / RN0033] Motor de Pagamento Combinado (Cartões, Promo e Troca)",
+      "descricao": "Pagamento com 1 ou mais cartões (mínimo R$ 10,00 salvo cobertura por cupons), cupom promocional e cupons de troca.",
+      "coluna_id": "238",
+      "coluna": "Finalizado",
+      "percentual": 100,
+      "horas": "12",
+      "concluida": true
+    },
+    {
+      "chave": "1017",
+      "codigo_interno": "done-12-admin-despacho-entrega",
+      "titulo": "[RF0038 / RF0039] Painel Admin de Pedidos: Despacho e Confirmação de Entrega",
+      "descricao": "Consulta administrativa de pedidos, despacho APROVADA -> EM TRANSPORTE e confirmação ENTREGUE.",
+      "coluna_id": "238",
+      "coluna": "Finalizado",
+      "percentual": 100,
+      "horas": "10",
+      "concluida": true
+    },
+    {
+      "chave": "1018",
+      "codigo_interno": "done-13-admin-trocas-cupom",
+      "titulo": "[RF0041 / RF0044] Painel Admin de Trocas: Autorização PAC-REV e Emissão de Cupom",
+      "descricao": "Visualização de pedidos EM TROCA (RF0042), autorização administrativa e geração automática de cupom de troca.",
+      "coluna_id": "238",
+      "coluna": "Finalizado",
+      "percentual": 100,
+      "horas": "10",
+      "concluida": true
+    },
+    {
+      "chave": "1019",
+      "codigo_interno": "done-14-bi-historico-categorias",
+      "titulo": "[RF0055 / RNF0043] Motor Analítico e Gráfico de Linhas por Categoria (Chart.js)",
+      "descricao": "Endpoint e dashboard administrativo com gráfico de linhas comparando vendas ENTREGUE em R$ por categoria e mês/ano.",
+      "coluna_id": "238",
+      "coluna": "Finalizado",
+      "percentual": 100,
+      "horas": "12",
       "concluida": true
     }
   ]

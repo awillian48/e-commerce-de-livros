@@ -30,7 +30,7 @@ if (supabaseUrl && supabaseKey && supabaseUrl.startsWith('http')) {
       signal: AbortSignal.timeout(1500)
     })
       .then((res) => {
-        supabaseOnline = res.ok || res.status === 401 || res.status === 404;
+        supabaseOnline = res.ok;
         if (supabaseOnline) {
           console.log('✅ Conexão com Supabase validada e online!');
         } else {
