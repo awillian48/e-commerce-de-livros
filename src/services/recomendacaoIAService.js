@@ -574,6 +574,83 @@ const conhecimentoDetalhadoObras = {
   }
 };
 
+export async function testarEConfigurarGeminiKey(chave) {
+  const chaveLimpa = String(chave || '').trim();
+  if (!chaveLimpa || chaveLimpa.length < 15) {
+    return {
+      sucesso: false,
+      erro: 'A chave fornecida parece inválida ou curta demais (deve ser no padrão do Google AI Studio começando com AIzaSy...).'
+    };
+  }
+
+  const promptTeste = 'Responda apenas "OK" em uma única palavra para validar a conexão.';
+  const modelos = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+  let ultimoErro = '';
+
+  for (const modelo of modelos) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${chaveLimpa}`;
+      const resp = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: promptTeste }] }],
+          generationConfig: { maxOutputTokens: 10 }
+        })
+      });
+      if (resp.ok) {
+        process.env.GEMINI_API_KEY = chaveLimpa;
+        return {
+          sucesso: true,
+          modeloAtivo: modelo,
+          chaveMascarada: `${chaveLimpa.slice(0, 7)}...${chaveLimpa.slice(-4)}`,
+          mensagem: `Conexão estabelecida com sucesso com o Google Gemini (${modelo})!`
+        };
+      } else {
+        const errJson = await resp.json().catch(() => ({}));
+        ultimoErro = errJson?.error?.message || `HTTP ${resp.status}`;
+      }
+    } catch (e) {
+      ultimoErro = e.message;
+    }
+  }
+
+  return {
+    sucesso: false,
+    erro: `Falha ao conectar à API do Google Gemini: ${ultimoErro}`
+  };
+}
+
+export async function chamarGeminiAPI(prompt, geminiKey) {
+  const modelos = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+  for (const modelo of modelos) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${geminiKey}`;
+      const resp = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.6, maxOutputTokens: 750 }
+        })
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        const texto = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (texto && texto.trim()) {
+          return { sucesso: true, texto: texto.trim(), modelo };
+        }
+      } else {
+        const errJson = await resp.json().catch(() => ({}));
+        console.warn(`[GEMINI API] ${modelo} respondeu ${resp.status}: ${errJson?.error?.message || ''}`);
+      }
+    } catch (e) {
+      console.warn(`[GEMINI API] Erro ao chamar ${modelo}: ${e.message}`);
+    }
+  }
+  return { sucesso: false };
+}
+
 // ============================================================================
 // 7. MOTOR DE RESPOSTA CONVERSACIONAL + INTEGRAÇÃO GEMINI (CRITÉRIOS 3.a-3.e)
 // ============================================================================
@@ -595,42 +672,34 @@ export async function processarMensagemChatbot({
   let respostaTexto = '';
   let intencaoDetectada = 'CONVERSA_LIVRE';
   let livrosSugeridos = [];
-  let motorUtilizado = 'Google Gemini 2.5 Flash + Camada Neural Fine-Tuned (' + estadoModeloIA.versaoAjusteFino + ')';
+  let motorUtilizado = `Motor Neural Local Embarcado (${estadoModeloIA.versaoAjusteFino})`;
 
   // 1. Tenta acionar API externa do Google Gemini caso GEMINI_API_KEY esteja definida
   const geminiKey = process.env.GEMINI_API_KEY;
   if (geminiKey && geminiKey.length > 15) {
-    try {
-      const promptSistema = construirPromptFineTunedGemini(texto, perfilRec, livros);
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`;
-      const resp = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: promptSistema }] }],
-          generationConfig: { temperature: 0.4, maxOutputTokens: 600 }
-        })
-      });
-      if (resp.ok) {
-        const data = await resp.json();
-        const gerado = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (gerado) {
-          respostaTexto = gerado;
-          motorUtilizado = `Google Gemini API Live + Pesos Fine-Tuned (${estadoModeloIA.versaoAjusteFino})`;
-        }
-      }
-    } catch (e) {
-      // Fallback transparente
+    const promptSistema = construirPromptFineTunedGemini(texto, perfilRec, livros);
+    const resultadoGemini = await chamarGeminiAPI(promptSistema, geminiKey);
+    if (resultadoGemini.sucesso) {
+      respostaTexto = resultadoGemini.texto;
+      motorUtilizado = `Google Gemini (${resultadoGemini.modelo}) Live + Pesos Fine-Tuned (${estadoModeloIA.versaoAjusteFino})`;
+      intencaoDetectada = 'GEMINI_GENERATIVO_LIVE';
+
+      // Detecta obras do catálogo mencionadas na resposta do Gemini para renderizar os cards interativos
+      const mencionados = livros.filter(l =>
+        respostaTexto.toLowerCase().includes(l.titulo.toLowerCase()) ||
+        respostaTexto.toLowerCase().includes(l.autor.toLowerCase().split(' ').slice(-1)[0])
+      );
+      livrosSugeridos = mencionados.length > 0 ? mencionados.slice(0, 3) : topLivros.slice(0, 3);
     }
   }
 
-  // 2. Motor Generativo Semântico Embarcado + Pesos do Modelo Treinado
+  // 2. Motor Generativo Semântico Embarcado + Pesos do Modelo Treinado (Fallback ou Modo Offline)
   if (!respostaTexto) {
     const analise = gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros);
     respostaTexto = analise.resposta;
     intencaoDetectada = analise.intencao;
     livrosSugeridos = analise.livrosSugeridos;
-  } else {
+  } else if (!livrosSugeridos.length) {
     livrosSugeridos = topLivros.slice(0, 3);
   }
 
@@ -838,7 +907,39 @@ function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros
     };
   }
 
-  // E) Recomendação Personalizada Padrão baseada no Histórico de Compras + Preferências + Modelo Treinado (Cenários 2 e 3)
+  // E) Menção a gêneros ou temas específicos fora do catálogo padrão (Fantasia, Ficção Científica, Suspense, Terror, Aventura, Mitologia)
+  const generosFora = [
+    { termo: 'fantasia', sugestoes: ['LIV-010', 'LIV-005', 'LIV-009'], motivo: 'epopeias com monstros e mitologias ou narrativas com elementos fantásticos e sobrenaturais' },
+    { termo: 'ficção científica', sugestoes: ['LIV-012', 'LIV-006', 'LIV-003'], motivo: 'discussões sobre ciência, razão e tecnologia aplicadas à sociedade' },
+    { termo: 'ficcao cientifica', sugestoes: ['LIV-012', 'LIV-006', 'LIV-003'], motivo: 'discussões sobre ciência, razão e tecnologia aplicadas à sociedade' },
+    { termo: 'sci-fi', sugestoes: ['LIV-012', 'LIV-006', 'LIV-003'], motivo: 'discussões sobre ciência, razão e tecnologia aplicadas à sociedade' },
+    { termo: 'terror', sugestoes: ['LIV-005', 'LIV-012', 'LIV-009'], motivo: 'pactos com o Diabo, hospícios sinistros e narrativas de defuntos' },
+    { termo: 'suspense', sugestoes: ['LIV-001', 'LIV-012', 'LIV-005'], motivo: 'enigmas psicológicos, dúvidas sobre adultério e conflitos armados no sertão' },
+    { termo: 'mitologia', sugestoes: ['LIV-010', 'LIV-011', 'LIV-006'], motivo: 'epopeias com deuses do Olimpo, ninfas e grandes figuras heroicas' }
+  ];
+
+  const matchGeneroFora = generosFora.find(g => textoLower.includes(g.termo));
+  if (matchGeneroFora) {
+    const livrosMatch = matchGeneroFora.sugestoes
+      .map(id => livros.find(l => l.id === id))
+      .filter(Boolean);
+
+    const listaForm = livrosMatch
+      .map((l, idx) => `${idx + 1}. **${l.titulo}** (*${l.autor}* — R$ ${l.preco.toFixed(2).replace('.', ',')}) — *${l.categoria}*\n   ↳ *Ponte com o seu interesse em ${matchGeneroFora.termo}:* ${conhecimentoDetalhadoObras[l.id]?.curiosidades || l.sinopse}`)
+      .join('\n\n');
+
+    return {
+      intencao: 'RECOMENDACAO_GENERO_CORRELATO',
+      livrosSugeridos: livrosMatch,
+      resposta:
+        `Olá, **${nomeCliente}**! O catálogo da **Livraria Alexandria** é focado em **Literatura Brasileira Clássica**, **Obras Raras**, **Filosofia** e **Engenharia de Software** (não dispomos de uma seção comercial de ${matchGeneroFora.termo} moderna).\n\n` +
+        `Contudo, analisando os pesos ajustados do modelo (**${estadoModeloIA.versaoAjusteFino}**) e o seu perfil, selecionei as obras do nosso acervo com os mais ricos elementos de **${matchGeneroFora.motivo}** que certamente você vai apreciar:\n\n` +
+        `${listaForm}\n\n` +
+        `Qual dessas obras desperta mais a sua curiosidade? Avalie esta resposta com **👍 Útil** ou **👎 Não útil** abaixo para continuar calibrando a IA!`
+    };
+  }
+
+  // F) Recomendação Personalizada Padrão baseada no Histórico de Compras + Preferências + Modelo Treinado (Cenários 2 e 3)
   const livrosHistoricoStr =
     historicoResumo.livrosCompradosTitulos.length > 0
       ? historicoResumo.livrosCompradosTitulos.slice(0, 3).join(', ')
@@ -869,18 +970,26 @@ function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros
 
 function construirPromptFineTunedGemini(perguntaUsuario, perfilRec, livros) {
   const resumoCatalogo = livros
-    .map(l => `[${l.id}] ${l.titulo} (${l.autor}) - Cat: ${l.categoria} - R$ ${l.preco.toFixed(2)} - Estoque: ${l.estoque}`)
+    .map(l => `• [${l.id}] "${l.titulo}", de ${l.autor} | Categoria: ${l.categoria} | R$ ${l.preco.toFixed(2).replace('.', ',')} | Estoque: ${l.estoque} un.`)
     .join('\n');
 
-  return (
-    `Você é o Livreiro Virtual da Livraria Alexandria (Modelo Ajustado: ${estadoModeloIA.versaoAjusteFino}).\n` +
-    `Cliente Ativo: ${perfilRec.nomeCliente} (${perfilRec.clienteId}).\n` +
-    `Histórico de Compras do Cliente: ${perfilRec.historicoResumo.livrosCompradosTitulos.join(', ') || 'Sem compras anteriores'}.\n` +
-    `Preferências do Cliente: Categorias=${perfilRec.preferencias.categoriasFavoritas.join(', ')}; Temas=${perfilRec.preferencias.temasInteresse.join(', ')}.\n` +
-    `Top Recomendações Calculadas pelos Pesos do Modelo Treinado (RLHF): ${perfilRec.recomendacoes.map(r => `${r.titulo} (${r.afinidadePercentual}% afinidade)`).join(', ')}.\n` +
-    `Catálogo Oficial:\n${resumoCatalogo}\n\n` +
-    `Responda em português de forma elegante, objetiva e personalizada à mensagem do cliente: "${perguntaUsuario}"`
-  );
+  return `Você é o Livreiro Virtual e Assistente Especialista da Livraria Alexandria, um e-commerce de edições especiais, clássicos e bibliografias essenciais (LES 2026 - RNF0044).
+Contexto do Cliente Ativo:
+- Nome: ${perfilRec.nomeCliente} (${perfilRec.clienteId})
+- Histórico de Compras: ${perfilRec.historicoResumo.livrosCompradosTitulos.join(', ') || 'Nenhuma compra anterior'}
+- Preferências Cadastradas: Categorias: ${perfilRec.preferencias.categoriasFavoritas.join(', ')}; Temas: ${perfilRec.preferencias.temasInteresse.join(', ')}
+- Top Recomendações dos Pesos do Modelo Treinado (${estadoModeloIA.versaoAjusteFino}): ${perfilRec.recomendacoes.map(r => `"${r.titulo}" (${r.afinidadePercentual}% afinidade)`).join(', ')}
+
+Catálogo Oficial Disponível no Acervo (apenas estas 12 obras existem na loja):
+${resumoCatalogo}
+
+Diretrizes de Atendimento:
+1. Responda em português com tom culto, prestativo e cordial de um livreiro experiente.
+2. Quando o cliente perguntar sobre gêneros ou temas que não são o foco principal do catálogo (por exemplo: "fantasia", "ficção científica", "policial"), explique com simpatia que o acervo da Alexandria é focado em Literatura Brasileira Clássica, Obras Raras, Filosofia e Engenharia de Software. Em seguida, faça pontes inteligentes e recomende as obras do acervo que mais se aproximam daquele interesse (exemplo: se pedir fantasia, recomende "Os Lusíadas" por ter a Ilha dos Amores e o gigante mitológico Adamastor, ou "Grande Sertão: Veredas" pelo pacto com o Diabo e misticismo popular, ou "Memórias Póstumas" pelo narrador defunto autor).
+3. Se o cliente pedir busca, dúvidas de enredo ou detalhes de preço, consulte e cite com precisão as obras reais do catálogo acima.
+4. Ao final da resposta, convide o cliente a avaliar a resposta com 👍 Útil ou 👎 Não útil para continuar calibrando o modelo.
+
+Mensagem do Cliente: "${perguntaUsuario}"`;
 }
 
 // ============================================================================
@@ -989,6 +1098,8 @@ export function obterEstadoCompletoIA(livrosRaw = [], pedidosRaw = []) {
         'O DRS não fixa a forma de obtenção das preferências (Critério 3.e). Adotamos a abordagem Híbrida: (1) Explícita, onde o cliente seleciona suas categorias, autores e temas favoritos no Perfil/Chatbot; e (2) Implícita, extraída automaticamente das categorias e obras adquiridas nos pedidos anteriores.'
     },
     estadoModelo: estadoModeloIA,
+    geminiConfigurado: Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.length > 15),
+    geminiKeyMascarada: process.env.GEMINI_API_KEY ? `${process.env.GEMINI_API_KEY.slice(0, 7)}...${process.env.GEMINI_API_KEY.slice(-4)}` : null,
     preferenciasClientes,
     feedbacksRegistrados: avaliacoesFeedback,
     ultimasInteracoes: interacoesChat.slice(0, 15)

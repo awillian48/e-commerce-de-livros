@@ -159,10 +159,13 @@
           Integração com <strong>Google Gemini 2.5 Flash</strong> + <strong>Ajuste Fino Contínuo (RLHF & Matriz Colaborativa de Vendas)</strong> — Rastreável ao <strong>RNF0044 (Itens 1, 2 e 3)</strong>.
         </p>
       </div>
-      <div style="display: flex; gap: 10px; align-items: center;">
+      <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
         <span id="badge-versao-modelo" style="background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.3); padding: 7px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 700;">
-          Modelo: alexandria-ft-v2.4.0
+          Modelo: alexandria-ft-v2.5.0
         </span>
+        <button type="button" id="btn-modal-gemini" style="background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.35); color: #fff; padding: 7px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer;">
+          🔑 <span id="lbl-status-gemini">Configurar Gemini API</span>
+        </button>
         <button type="button" id="btn-retreinar-modelo" style="background: #f59e0b; color: #0f172a; border: none; padding: 9px 16px; border-radius: 8px; font-weight: 800; font-size: 0.83rem; cursor: pointer;">
           ⚡ Executar Ajuste Fino Agora
         </button>
@@ -370,6 +373,45 @@
       </div>
     </div>
   </main>
+
+  <!-- Modal de Configuração da Chave do Google Gemini (Google AI Studio) -->
+  <div id="modal-config-gemini" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 10000; align-items: center; justify-content: center;">
+    <div style="background: #ffffff; width: 92%; max-width: 580px; border-radius: 12px; padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); position: relative;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+        <h3 style="margin: 0; color: #1b2a47; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+          <span>🔑</span> Conectar Chave do Google Gemini (Live API)
+        </h3>
+        <button type="button" id="btn-fechar-modal-gemini" style="background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #64748b;">✕</button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: #475569; line-height: 1.5; margin-bottom: 14px;">
+        Você pode conectar sua chave gratuita gerada no <strong>Google AI Studio</strong>. Quando conectada, o chatbot responderá utilizando a IA Generativa em tempo real com o modelo <strong>Gemini 2.5 / 2.0 Flash</strong> ponderado pelos pesos do nosso modelo ajustado!
+      </p>
+
+      <div style="background: #f1f5f9; border-left: 4px solid #0284c7; padding: 10px 14px; border-radius: 6px; font-size: 0.8rem; color: #334155; margin-bottom: 16px;">
+        <strong>Onde pegar sua chave gratuita (30 segundos):</strong><br>
+        1. Acesse: <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: #0284c7; font-weight: 700; text-decoration: underline;">https://aistudio.google.com/app/apikey</a><br>
+        2. Clique em <em>"Create API key"</em> e copie o código (começa com <code>AIzaSy...</code>)<br>
+        3. Cole no campo abaixo e clique em <strong>Testar & Salvar</strong>!
+      </div>
+
+      <div id="box-status-chave-atual" style="margin-bottom: 14px; font-size: 0.82rem; padding: 8px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #cbd5e1;">
+        Status atual: <strong id="txt-status-chave-atual">Verificando...</strong>
+      </div>
+
+      <form id="form-salvar-gemini-key" style="display: flex; flex-direction: column; gap: 12px;">
+        <div>
+          <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #1e293b; margin-bottom: 4px;">Cole sua Chave da API do Gemini:</label>
+          <input type="password" id="input-gemini-key" placeholder="AIzaSy..." style="width: 100%; padding: 10px 12px; border: 1px solid #94a3b8; border-radius: 6px; font-size: 0.88rem; font-family: monospace;" required>
+        </div>
+        <div id="msg-retorno-gemini" style="display: none; font-size: 0.82rem; padding: 8px 12px; border-radius: 6px;"></div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
+          <button type="button" id="btn-cancelar-gemini" style="background: #e2e8f0; color: #475569; border: none; padding: 9px 18px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">Cancelar</button>
+          <button type="submit" id="btn-salvar-gemini" style="background: #0f766e; color: #fff; border: none; padding: 9px 22px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 0.85rem;">Testar & Salvar Chave</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script src="/js/chatbot.js"></script>
 </body>

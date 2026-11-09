@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import express from 'express';
 import { listarLivros } from '../data/livroRepository.js';
 import { listarPedidos } from '../data/vendaRepository.js';
@@ -7,7 +9,8 @@ import {
   processarMensagemChatbot,
   registrarFeedbackChatbot,
   atualizarPreferenciasCliente,
-  treinarModeloIA
+  treinarModeloIA,
+  testarEConfigurarGeminiKey
 } from '../services/recomendacaoIAService.js';
 
 const router = express.Router();
@@ -92,6 +95,35 @@ router.post('/treinar', async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ erro: 'Erro ao executar treinamento do modelo IA', mensagem: err.message });
+  }
+});
+
+// 7. Configuração / Validação da Chave da API do Google Gemini Live
+router.post('/configurar-gemini', async (req, res) => {
+  try {
+    const { chave } = req.body || {};
+    const resultado = await testarEConfigurarGeminiKey(chave);
+    if (!resultado.sucesso) {
+      return res.status(400).json(resultado);
+    }
+    // Grava também no .env para persistir entre reinicializações
+    try {
+      const envPath = path.resolve(process.cwd(), '.env');
+      if (fs.existsSync(envPath)) {
+        let envContent = fs.readFileSync(envPath, 'utf-8');
+        if (envContent.includes('GEMINI_API_KEY=')) {
+          envContent = envContent.replace(/GEMINI_API_KEY=.*/g, `GEMINI_API_KEY=${chave.trim()}`);
+        } else {
+          envContent += `\nGEMINI_API_KEY=${chave.trim()}\n`;
+        }
+        fs.writeFileSync(envPath, envContent, 'utf-8');
+      }
+    } catch (e) {
+      console.warn('[CONFIG GEMINI] Aviso ao gravar .env:', e.message);
+    }
+    res.json(resultado);
+  } catch (err) {
+    res.status(500).json({ erro: 'Erro ao configurar chave do Gemini', mensagem: err.message });
   }
 });
 

@@ -59,6 +59,17 @@ document.addEventListener('DOMContentLoaded', () => {
         kpiAmostras.textContent = `${ultTreino?.amostrasVendas || 12} Vendas + ${feedbacks.length} Feedbacks`;
       }
 
+      // Indicador da API do Google Gemini Live
+      const lblGemini = document.getElementById('lbl-status-gemini');
+      const txtStatusGemini = document.getElementById('txt-status-chave-atual');
+      if (estado.geminiConfigurado) {
+        if (lblGemini) lblGemini.innerHTML = `<span style="color: #4ade80;">🟢 Gemini Live Ativo (${estado.geminiKeyMascarada})</span>`;
+        if (txtStatusGemini) txtStatusGemini.innerHTML = `<span style="color: #166534;">🟢 Chave configurada e conectada (${estado.geminiKeyMascarada}). As respostas livres usam o Google Gemini Live!</span>`;
+      } else {
+        if (lblGemini) lblGemini.textContent = 'Conectar Gemini API';
+        if (txtStatusGemini) txtStatusGemini.innerHTML = `<span style="color: #b45309;">🟡 Nenhuma chave configurada. O sistema está usando o Motor Neural Local Embarcado.</span>`;
+      }
+
       // Contexto do cliente selecionado
       const lblNome = document.getElementById('lbl-nome-cliente');
       const lblHist = document.getElementById('lbl-historico-livros');
@@ -397,6 +408,86 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         btnRetreinar.textContent = '⚡ Executar Ajuste Fino Agora';
       }, 2200);
+    });
+  }
+
+  // Modal de Configuração do Google Gemini Live
+  const btnModalGemini = document.getElementById('btn-modal-gemini');
+  const modalGemini = document.getElementById('modal-config-gemini');
+  const btnFecharModalGemini = document.getElementById('btn-fechar-modal-gemini');
+  const btnCancelarGemini = document.getElementById('btn-cancelar-gemini');
+  const formSalvarGemini = document.getElementById('form-salvar-gemini-key');
+  const inputGemini = document.getElementById('input-gemini-key');
+  const msgRetornoGemini = document.getElementById('msg-retorno-gemini');
+
+  function abrirModalGemini() {
+    if (modalGemini) {
+      modalGemini.style.display = 'flex';
+      if (msgRetornoGemini) msgRetornoGemini.style.display = 'none';
+      if (inputGemini) inputGemini.focus();
+    }
+  }
+
+  function fecharModalGemini() {
+    if (modalGemini) modalGemini.style.display = 'none';
+  }
+
+  if (btnModalGemini) btnModalGemini.addEventListener('click', abrirModalGemini);
+  if (btnFecharModalGemini) btnFecharModalGemini.addEventListener('click', fecharModalGemini);
+  if (btnCancelarGemini) btnCancelarGemini.addEventListener('click', fecharModalGemini);
+
+  if (formSalvarGemini) {
+    formSalvarGemini.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const chave = inputGemini?.value.trim();
+      if (!chave) return;
+
+      const btnSalvar = document.getElementById('btn-salvar-gemini');
+      if (btnSalvar) {
+        btnSalvar.disabled = true;
+        btnSalvar.textContent = '⏳ Validando Chave com Google...';
+      }
+
+      try {
+        const resp = await fetch('/api/chatbot/configurar-gemini', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chave })
+        });
+        const resJson = await resp.json();
+
+        if (msgRetornoGemini) {
+          msgRetornoGemini.style.display = 'block';
+          if (resp.ok && resJson.sucesso) {
+            msgRetornoGemini.style.background = '#ecfdf5';
+            msgRetornoGemini.style.border = '1px solid #6ee7b7';
+            msgRetornoGemini.style.color = '#065f46';
+            msgRetornoGemini.textContent = `✓ ${resJson.mensagem} (Modelo: ${resJson.modeloAtivo})`;
+            setTimeout(() => {
+              fecharModalGemini();
+            }, 1800);
+            await carregarEstadoEPesos();
+          } else {
+            msgRetornoGemini.style.background = '#fef2f2';
+            msgRetornoGemini.style.border = '1px solid #fca5a5';
+            msgRetornoGemini.style.color = '#991b1b';
+            msgRetornoGemini.textContent = `Erro: ${resJson.erro || 'Não foi possível validar a chave'}`;
+          }
+        }
+      } catch (err) {
+        if (msgRetornoGemini) {
+          msgRetornoGemini.style.display = 'block';
+          msgRetornoGemini.style.background = '#fef2f2';
+          msgRetornoGemini.style.border = '1px solid #fca5a5';
+          msgRetornoGemini.style.color = '#991b1b';
+          msgRetornoGemini.textContent = `Erro de rede: ${err.message}`;
+        }
+      } finally {
+        if (btnSalvar) {
+          btnSalvar.disabled = false;
+          btnSalvar.textContent = 'Testar & Salvar Chave';
+        }
+      }
     });
   }
 
