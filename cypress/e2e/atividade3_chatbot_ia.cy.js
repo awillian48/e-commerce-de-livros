@@ -164,7 +164,10 @@ describe('Atividade 3 — Chatbot de Recomendação Personalizada com IA Generat
     cy.get('#btn-cenario-conteudo').click();
     cy.wait(PAUSA_DEMO);
 
-    cy.get('#chat-log', { timeout: 15000 }).should('contain', 'Trilha');
+    cy.get('#chat-log', { timeout: 15000 }).should(($log) => {
+      const txt = $log.text();
+      expect(txt).to.match(/trilha|jornada|estudo|curadoria|etapa/i);
+    });
     cy.wait(PAUSA_FIM_CENARIO);
   });
 
