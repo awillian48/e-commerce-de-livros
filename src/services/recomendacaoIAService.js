@@ -584,7 +584,15 @@ export async function testarEConfigurarGeminiKey(chave) {
   }
 
   const promptTeste = 'Responda apenas "OK" em uma única palavra para validar a conexão.';
-  const modelos = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+  const modelos = [
+    'gemini-3.5-flash',
+    'gemini-3.7-flash',
+    'gemini-3.8-flash',
+    'gemini-flash-latest',
+    'gemini-2.5-flash',
+    'gemini-2.0-flash',
+    'gemini-1.5-flash'
+  ];
   let ultimoErro = '';
 
   for (const modelo of modelos) {
@@ -622,7 +630,15 @@ export async function testarEConfigurarGeminiKey(chave) {
 }
 
 export async function chamarGeminiAPI(prompt, geminiKey) {
-  const modelos = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+  const modelos = [
+    'gemini-3.5-flash',
+    'gemini-3.7-flash',
+    'gemini-3.8-flash',
+    'gemini-flash-latest',
+    'gemini-2.5-flash',
+    'gemini-2.0-flash',
+    'gemini-1.5-flash'
+  ];
   for (const modelo of modelos) {
     try {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${geminiKey}`;
@@ -631,7 +647,7 @@ export async function chamarGeminiAPI(prompt, geminiKey) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.6, maxOutputTokens: 750 }
+          generationConfig: { temperature: 0.6, maxOutputTokens: 1200 }
         })
       });
       if (resp.ok) {
