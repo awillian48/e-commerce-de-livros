@@ -1,0 +1,265 @@
+{
+  "ambiente": "arquitetos.desk.ms",
+  "url_portal": "https://arquitetos.desk.ms",
+  "projeto_chave": 86,
+  "projeto_nome": "E-Commerce de Livros Clássicos — Livraria Alexandria (LES 2026)",
+  "gerente_operador": {
+    "chave": "53",
+    "nome": "Anderson Barros"
+  },
+  "colunas_status": {
+    "Backlog (Futuro)": "233",
+    "Sprint 1 — Arquitetura & Acervo": "234",
+    "Sprint 2 — CRUD Clientes (CDU02)": "235",
+    "Sprint 3 — Vendas & Checkout (Ativ. 1)": "236",
+    "Sprint 4 — Trocas & Reversa (Ativ. 1)": "237",
+    "Sprint 5 — Análise Gráfica BI (Ativ. 2)": "238"
+  },
+  "labels": {
+    "Acervo-Estoque": "79",
+    "Ativ1-Vendas-Trocas": "77",
+    "Ativ2-BI-Categorias": "78",
+    "Backlog": "80",
+    "Cypress-E2E": "76",
+    "DRS-LES-2026": "75"
+  },
+  "total_tarefas": 39,
+  "total_concluidas": 37,
+  "total_backlog": 2,
+  "tarefas": [
+    {
+      "chave": "957",
+      "titulo": "Módulo de Cadastro e Gestão de Fornecedores (CDU01, RF0081-RF0085)",
+      "coluna": "Backlog (Futuro)",
+      "concluida": false
+    },
+    {
+      "chave": "958",
+      "titulo": "Exportação de Relatórios Gerenciais de Vendas (RF0058)",
+      "coluna": "Backlog (Futuro)",
+      "concluida": false
+    },
+    {
+      "chave": "959",
+      "titulo": "Arquitetura do Sistema e Modelagem C4",
+      "coluna": "Sprint 1 — Arquitetura & Acervo",
+      "concluida": true
+    },
+    {
+      "chave": "960",
+      "titulo": "Modelagem Relacional e DDL no Supabase",
+      "coluna": "Sprint 1 — Arquitetura & Acervo",
+      "concluida": true
+    },
+    {
+      "chave": "961",
+      "titulo": "Design System e Protótipo de Alta Fidelidade",
+      "coluna": "Sprint 1 — Arquitetura & Acervo",
+      "concluida": true
+    },
+    {
+      "chave": "962",
+      "titulo": "Vitrine Resiliente do Acervo (12 Obras) & Fallback Instantâneo (< 5ms)",
+      "coluna": "Sprint 1 — Arquitetura & Acervo",
+      "concluida": true
+    },
+    {
+      "chave": "963",
+      "titulo": "Cadastro de Clientes e Validação de CPF Único (RF0021, RF0024)",
+      "coluna": "Sprint 2 — CRUD Clientes (CDU02)",
+      "concluida": true
+    },
+    {
+      "chave": "964",
+      "titulo": "Composição Obrigatória de Endereços com 10 Campos (RN0023)",
+      "coluna": "Sprint 2 — CRUD Clientes (CDU02)",
+      "concluida": true
+    },
+    {
+      "chave": "965",
+      "titulo": "Gestão de Cartões e Cartão Preferencial (RF0027, RN0024, RN0025)",
+      "coluna": "Sprint 2 — CRUD Clientes (CDU02)",
+      "concluida": true
+    },
+    {
+      "chave": "979",
+      "titulo": "Validação de Complexidade de Senha Forte (RNF0031, RNF0032)",
+      "coluna": "Sprint 2 — CRUD Clientes (CDU02)",
+      "concluida": true
+    },
+    {
+      "chave": "980",
+      "titulo": "Armazenamento Criptografado com Hash Seguro (RNF0033)",
+      "coluna": "Sprint 2 — CRUD Clientes (CDU02)",
+      "concluida": true
+    },
+    {
+      "chave": "981",
+      "titulo": "Consulta, Alteração e Inativação Lógica de Clientes (RF0022, RF0024, RF0025)",
+      "coluna": "Sprint 2 — CRUD Clientes (CDU02)",
+      "concluida": true
+    },
+    {
+      "chave": "982",
+      "titulo": "Suíte Automatizada E2E do Módulo de Clientes",
+      "coluna": "Sprint 2 — CRUD Clientes (CDU02)",
+      "concluida": true
+    },
+    {
+      "chave": "983",
+      "titulo": "Gestão Completa de Itens no Carrinho (RF0031, RF0032)",
+      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "984",
+      "titulo": "Validação Impeditiva de Estoque Físico (RN0031)",
+      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "985",
+      "titulo": "Início da Realização de Compra (RF0033)",
+      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "986",
+      "titulo": "Cálculo de Frete Regional por Peso e UF (RF0034)",
+      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "987",
+      "titulo": "Seleção e Cadastro de Endereço no Checkout (RF0035, RN0023)",
+      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "988",
+      "titulo": "Modal Centralizado de Cartão de Crédito e Foco (RN0024, RN0025)",
+      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "989",
+      "titulo": "Pagamento com Múltiplos Cartões e Mínimo R$ 10,00 (RF0036, RN0034)",
+      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "990",
+      "titulo": "Limite Estrito de 1 Cupom Promocional por Compra (RF0037, RN0033)",
+      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "991",
+      "titulo": "Exceção de Cupom com Cartão Menor que R$ 10,00 (RN0035)",
+      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "992",
+      "titulo": "Cupons de Troca, Bloqueio Redundante e Troco (RN0036)",
+      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "993",
+      "titulo": "Fechamento do Pedido com Status 'EM PROCESSAMENTO' (RF0038)",
+      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "994",
+      "titulo": "Auditoria de Transações e Tempo de Resposta (RNF0011, RNF0012)",
+      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "995",
+      "titulo": "Suíte Cypress E2E com 8 Cenários, Slow Motion e HUD Visual",
+      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "996",
+      "titulo": "Elaboração do Plano de Testes Oficial (Word .docx)",
+      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "997",
+      "titulo": "Despacho, Transporte e Confirmação de Entrega (RF0039, RF0040)",
+      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "998",
+      "titulo": "Modelagem de Dados e DDL de Trocas no Supabase (CDU04)",
+      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "999",
+      "titulo": "Interface do Cliente para Solicitação de Troca (RF0041)",
+      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "1000",
+      "titulo": "Fluxo Administrativo de Autorização e Código de Postagem (RF0042)",
+      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "1001",
+      "titulo": "Conferência Física e Recebimento de Produtos (RF0043)",
+      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "1002",
+      "titulo": "Reincorporação ao Estoque ou Descarte de Avarias (RF0044)",
+      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "1003",
+      "titulo": "Emissão e Crédito Automático de Cupom de Troca (RF0045)",
+      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "1004",
+      "titulo": "Suíte Cypress E2E para o Fluxo Completo de Trocas",
+      "coluna": "Sprint 4 — Trocas & Reversa (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "1005",
+      "titulo": "Análise Gráfica do Histórico de Vendas por Categoria em Linha (RF0055, RNF0043)",
+      "coluna": "Sprint 5 — Análise Gráfica BI (Ativ. 2)",
+      "concluida": true
+    },
+    {
+      "chave": "1006",
+      "titulo": "Filtro por Período (Início/Fim) e Comparação Multi-Categorias (RF0055)",
+      "coluna": "Sprint 5 — Análise Gráfica BI (Ativ. 2)",
+      "concluida": true
+    },
+    {
+      "chave": "1007",
+      "titulo": "Bloqueio Temporário de Estoque no Carrinho e Expiração Automática (RN0044, RNF0042, RNF0045)",
+      "coluna": "Sprint 3 — Vendas & Checkout (Ativ. 1)",
+      "concluida": true
+    },
+    {
+      "chave": "1008",
+      "titulo": "Suíte Automatizada Cypress E2E — Análise Gráfica por Categorias (8/8 Cenários Aprovados)",
+      "coluna": "Sprint 5 — Análise Gráfica BI (Ativ. 2)",
+      "concluida": true
+    }
+  ]
+}

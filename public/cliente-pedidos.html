@@ -59,6 +59,29 @@
     <h3 class="section-title" style="margin-bottom: 15px;">Acompanhamento de Pedidos & Solicitação de Troca</h3>
 
     <!-- Contêiner Hidratado Dinamicamente via cliente-pedidos.js -->
+    <!-- Painel de Notificações ao Cliente (RNF0046) -->
+    <div id="container-notificacoes-cliente" style="display: none; margin-bottom: 20px;">
+      <div style="background: #ecfdf5; border: 1px solid #10b981; border-left: 5px solid #059669; padding: 16px 20px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h4 style="margin: 0 0 6px 0; color: #065f46; display: flex; align-items: center; gap: 8px; font-size: 0.95rem;">
+          <span>📢</span> Notificação de Autorização de Troca (RNF0046)
+        </h4>
+        <div id="lista-notificacoes-conteudo" style="font-size: 0.88rem; color: #047857; line-height: 1.45;"></div>
+      </div>
+    </div>
+
+    <!-- Seção de Cupons de Troca Disponíveis para o Cliente (RF0044) -->
+    <div id="container-cupons-cliente" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px 20px; margin-bottom: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.03);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h4 style="margin: 0; color: #1e293b; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
+          <span>🎟️</span> Meus Cupons de Troca Disponíveis (RF0044)
+        </h4>
+        <span style="font-size: 0.78rem; color: #64748b;">Válidos para novas compras no checkout</span>
+      </div>
+      <div id="lista-cupons-troca" style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <span style="color: #64748b; font-size: 0.85rem;">Carregando cupons...</span>
+      </div>
+    </div>
+
     <section id="container-historico-pedidos" style="background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
       <!-- Tabela renderizada dinamicamente -->
     </section>
@@ -76,6 +99,17 @@
         </p>
 
         <form id="form-solicitar-troca" style="display: flex; flex-direction: column; gap: 12px; font-size: 0.85rem;">
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 14px;">
+            <label style="font-weight: bold; display: block; margin-bottom: 6px; color: #1e293b;">Escopo da Troca (RF0040, RN0043):</label>
+            <div style="display: flex; gap: 18px;">
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: #334155; font-weight: 500;">
+                <input type="radio" name="escopoTroca" id="escopo-item" value="ITEM" checked> Trocar Apenas Este Item
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: #334155; font-weight: 500;">
+                <input type="radio" name="escopoTroca" id="escopo-total" value="TOTAL"> Trocar Compra Inteira
+              </label>
+            </div>
+          </div>
           <div>
             <label style="font-weight: bold; display: block; margin-bottom: 4px;">Motivo da Troca:</label>
             <select id="select-motivo-troca" required style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px;">
@@ -93,7 +127,7 @@
           </div>
 
           <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
-            <button type="button" onclick="fecharModalTroca()" style="background: #94a3b8; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Cancelar</button>
+            <button type="button" id="btn-cancelar-modal-troca" onclick="fecharModalTroca()" style="background: #94a3b8; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Cancelar</button>
             <button type="submit" class="btn-buy" style="background: var(--palette-terracotta);">Enviar Solicitação de Troca</button>
           </div>
         </form>

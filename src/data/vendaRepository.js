@@ -1,151 +1,174 @@
-﻿import supabase from './supabaseClient.js';
+import supabase, { isSupabaseConfigured } from './supabaseClient.js';
+import localStore from './localStore.js';
 
 /**
  * RF0033 / RF0038: Listagem de Pedidos com itens e pagamentos
  */
 export async function listarPedidos(filtros = {}) {
-  try {
-    let query = supabase
-      .from('pedidos')
-      .select('*, clientes(id, codigo, nome, cpf, email), itens_pedido(*), pagamentos_pedido(*)');
+  if (isSupabaseConfigured()) {
+    try {
+      let query = supabase
+        .from('pedidos')
+        .select('*, clientes(id, codigo, nome, cpf, email), itens_pedido(*), pagamentos_pedido(*)');
 
-    if (filtros.clienteId) {
-      query = query.eq('cliente_id', filtros.clienteId);
-    }
-    if (filtros.status) {
-      query = query.eq('status', filtros.status);
-    }
+      if (filtros.clienteId) query = query.eq('cliente_id', filtros.clienteId);
+      if (filtros.status) query = query.eq('status', filtros.status);
 
-    const { data, error } = await query.order('data', { ascending: false });
-    if (error) throw error;
-    return data || [];
-  } catch (err) {
-    console.error('Erro ao listar pedidos:', err.message);
-    return [];
+      const { data, error } = await Promise.race([
+        query.order('data', { ascending: false }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout Supabase')), 300))
+      ]);
+      if (!error && data && data.length > 0) return data;
+    } catch (err) {
+      // Fallback
+    }
   }
+  return localStore.obterPedidos(filtros);
 }
 
 export async function buscarPedidoPorId(id) {
-  try {
-    const { data, error } = await supabase
-      .from('pedidos')
-      .select('*, clientes(id, codigo, nome, cpf, email), itens_pedido(*), pagamentos_pedido(*)')
-      .eq('id', id)
-      .single();
-
-    if (error) throw error;
-    return data;
-  } catch (err) {
-    console.error('Erro ao buscar pedido:', err.message);
-    return null;
+  if (isSupabaseConfigured()) {
+    try {
+      const { data, error } = await Promise.race([
+        supabase
+          .from('pedidos')
+          .select('*, clientes(id, codigo, nome, cpf, email), itens_pedido(*), pagamentos_pedido(*)')
+          .eq('id', id)
+          .single(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout Supabase')), 800))
+      ]);
+      if (!error && data) return data;
+    } catch (err) {
+      // Fallback
+    }
   }
+  return localStore.buscarPedidoPorId(id);
 }
 
 /**
- * RN0038, RN0039, RN0040, RN0041, RN0042: Atualização de Status de Pedido
+ * RN0038, RN0039, RN0040: Atualização de Status de Pedido
+ * Ciclo:
+ * EM PROCESSAMENTO -> APROVADA / REPROVADA (Sistema)
+ * APROVADA -> EM TRANSPORTE (Admin - RF0038, RN0039)
+ * EM TRANSPORTE -> ENTREGUE (Admin - RF0039, RN0040)
  */
 export async function atualizarStatusPedido(id, novoStatus) {
-  try {
-    const { data, error } = await supabase
-      .from('pedidos')
-      .update({ status: novoStatus, updated_at: new Date().toISOString() })
-      .eq('id', id)
-      .select();
-
-    if (error) throw error;
-    return data?.[0];
-  } catch (err) {
-    console.error('Erro ao atualizar status do pedido:', err.message);
-    throw err;
+  if (isSupabaseConfigured()) {
+    try {
+      await supabase
+        .from('pedidos')
+        .update({ status: novoStatus, updated_at: new Date().toISOString() })
+        .eq('id', id);
+    } catch (err) {
+      // Continua local
+    }
   }
+  return localStore.atualizarStatusPedido(id, novoStatus);
 }
 
 /**
- * RF0037, RN0033, RN0035, RN0036: Gestão de Cupons
+ * RF0037, RN0033, RN0035, RN0036, RF0044: Gestão de Cupons
  */
 export async function listarCupons(clienteId = null) {
-  try {
-    let query = supabase.from('cupons').select('*').eq('utilizado', false);
-    if (clienteId) {
-      // Retorna cupons gerais (promocionais) OU cupons de troca específicos do cliente
-      query = query.or("cliente_id.is.null,cliente_id.eq." + clienteId)
+  if (isSupabaseConfigured()) {
+    try {
+      let query = supabase.from('cupons').select('*').eq('utilizado', false);
+      if (clienteId) {
+        query = query.or('cliente_id.is.null,cliente_id.eq.' + clienteId);
+      }
+      const { data, error } = await Promise.race([
+        query.order('valor', { ascending: false }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout Supabase')), 800))
+      ]);
+      if (!error && data && data.length > 0) return data;
+    } catch (err) {
+      // Fallback
     }
-    const { data, error } = await query.order('valor', { ascending: false });
-    if (error) throw error;
-    return data || [];
-  } catch (err) {
-    console.error('Erro ao listar cupons:', err.message);
-    return [];
   }
+  return localStore.obterCupons(clienteId);
 }
 
 export async function validarCupom(codigo) {
-  try {
-    const { data, error } = await supabase
-      .from('cupons')
-      .select('*')
-      .eq('codigo', codigo.trim().toUpperCase())
-      .single();
-
-    if (error || !data) return { valido: false, mensagem: 'Cupom inexistente.' };
-    if (data.utilizado) return { valido: false, mensagem: 'Este cupom já foi utilizado.' };
-    if (data.data_validade && new Date(data.data_validade) < new Date()) {
-      return { valido: false, mensagem: 'Cupom com validade expirada.' };
-    }
-    return { valido: true, cupom: data };
-  } catch (err) {
-    return { valido: false, mensagem: err.message };
+  const cupom = localStore.buscarCupom(codigo);
+  if (!cupom) return { valido: false, mensagem: 'Cupom inexistente.' };
+  if (cupom.utilizado) return { valido: false, mensagem: 'Este cupom já foi utilizado.' };
+  if (cupom.data_validade && new Date(cupom.data_validade) < new Date()) {
+    return { valido: false, mensagem: 'Cupom com validade expirada.' };
   }
+  return { valido: true, cupom };
 }
 
 /**
- * RF0041 - RF0045, RN0041 - RN0046: Gestão de Trocas
+ * RF0040, RF0041, RF0042, RF0043, RF0044, RN0041, RN0042, RN0043, RNF0046: Gestão de Trocas
  */
 export async function listarTrocas() {
-  try {
-    const { data, error } = await supabase
-      .from('solicitacoes_troca')
-      .select('*, clientes(codigo, nome), pedidos(id, data, valor_total, status), itens_troca(*)')
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-    return data || [];
-  } catch (err) {
-    console.error('Erro ao listar trocas:', err.message);
-    return [];
+  if (isSupabaseConfigured()) {
+    try {
+      const { data, error } = await Promise.race([
+        supabase
+          .from('solicitacoes_troca')
+          .select('*, clientes(codigo, nome), pedidos(id, data, valor_total, status), itens_troca(*)')
+          .order('created_at', { ascending: false }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout Supabase')), 800))
+      ]);
+      if (!error && data && data.length > 0) return data;
+    } catch (err) {
+      // Fallback
+    }
   }
+  return localStore.obterTrocas();
+}
+
+/**
+ * RF0040, RN0041, RN0043: Cliente solicita troca de item ou da compra inteira
+ * Apenas para pedidos com status ENTREGUE!
+ */
+export async function solicitarTroca({ pedidoId, clienteId, itens, motivo, descricao, tipo = 'ITEM' }) {
+  return localStore.criarSolicitacaoTroca({ pedidoId, clienteId, itens, motivo, descricao, tipo });
+}
+
+/**
+ * RF0041, RNF0046: Administrador autoriza a troca e sistema gera notificação com postagem reversa
+ */
+export async function autorizarTroca(trocaId) {
+  return localStore.autorizarTroca(trocaId);
+}
+
+/**
+ * RF0043, RN0042, RF0044, RF0054: Confirmar recebimento dos itens, reentrar no estoque e emitir cupom de troca
+ */
+export async function confirmarRecebimentoTroca(trocaId) {
+  return localStore.confirmarRecebimentoTroca(trocaId);
 }
 
 export async function atualizarStatusTroca(trocaId, novoStatus) {
-  try {
-    const { data, error } = await supabase
-      .from('solicitacoes_troca')
-      .update({ status: novoStatus, updated_at: new Date().toISOString() })
-      .eq('id', trocaId)
-      .select();
-
-    if (error) throw error;
-    return data?.[0];
-  } catch (err) {
-    console.error('Erro ao atualizar troca:', err.message);
-    throw err;
+  const st = (novoStatus || '').toUpperCase();
+  if (st === 'TROCA AUTORIZADA' || st === 'AUTORIZADA') {
+    return (await autorizarTroca(trocaId)).troca;
   }
+  if (st === 'TROCADO' || st === 'ITENS RECEBIDOS') {
+    return (await confirmarRecebimentoTroca(trocaId)).troca;
+  }
+  const t = localStore.buscarTrocaPorId(trocaId);
+  if (t) {
+    t.status = novoStatus;
+    localStore.salvar();
+    return t;
+  }
+  throw new Error('Troca ' + trocaId + ' não encontrada');
 }
 
 /**
- * RF0055, RF0056, RN0071 - RN0074: Dados Analíticos para o Gráfico do BI
+ * RNF0046: Notificações do Cliente
+ */
+export async function listarNotificacoes(clienteId = null) {
+  return localStore.obterNotificacoes(clienteId);
+}
+
+/**
+ * BI / Análise
  */
 export async function obterDadosAnaliseBI() {
-  try {
-    const { data: pedidos, error } = await supabase
-      .from('pedidos')
-      .select('id, data, valor_total, status, itens_pedido(titulo_livro, quantidade, preco_unitario, livro_id, livros(categorias(nome)))')
-      .in('status', ['ENTREGUE', 'EM TRANSPORTE', 'APROVADA', 'EM_TRANSPORTE', 'PAGAMENTO REALIZADO']);
-
-    if (error) throw error;
-    return pedidos || [];
-  } catch (err) {
-    console.error('Erro ao obter dados de análise BI:', err.message);
-    return [];
-  }
+  const pedidos = localStore.obterPedidos();
+  return pedidos.filter(p => ['ENTREGUE', 'EM TRANSPORTE', 'APROVADA', 'TROCADO'].includes(p.status));
 }

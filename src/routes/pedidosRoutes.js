@@ -15,11 +15,11 @@ router.get('/', async (req, res) => {
 });
 
 /**
- * RF0033 / RF0038 — Cria o pedido a partir do carrinho, com endereço de entrega,
- * frete e forma de pagamento. Status inicial: EM PROCESSAMENTO.
+ * RF0033 / RF0037 / RF0038 / RN0037 / RN0038:
+ * Cria o pedido com status inicial EM PROCESSAMENTO e em seguida
+ * executa a validação de pagamento automática definindo APROVADA ou REPROVADA.
  */
 router.post('/', async (req, res) => {
-  console.log('>>> [BACKEND] Recebido POST /api/pedidos:', JSON.stringify(req.body));
   try {
     const resultado = await criarPedido(req.body || {});
     res.status(201).json(resultado);

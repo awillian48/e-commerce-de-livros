@@ -2,6 +2,7 @@ import { getSupabase } from '../data/supabaseClient.js';
 import express from 'express';
 import * as repo from '../data/pedidoRepository.js';
 import * as R from '../domain/regrasPedido.js';
+import localStore from '../data/localStore.js';
 
 const router = express.Router();
 
@@ -54,28 +55,25 @@ router.post('/cartao/validar', (req, res) => {
   res.json({ valido: erros.length === 0, erros });
 });
 
-
 /** Limpeza automática pós/pré-testes para manter o banco limpo e sem poluição. */
 router.delete('/limpeza-testes', async (req, res) => {
   try {
     const idCosmeVelho = '60f85ba2-8c61-4a32-b4e1-bb41c20bdd2b';
     const client = getSupabase();
 
-    // 1. Apontar pedidos existentes para o endereço oficial
-    await client.from('pedidos').update({ endereco_entrega_id: idCosmeVelho }).neq('endereco_entrega_id', idCosmeVelho);
+    if (client) {
+      try {
+        await client.from('pedidos').update({ endereco_entrega_id: idCosmeVelho }).neq('endereco_entrega_id', idCosmeVelho);
+        await client.from('enderecos').delete().ilike('frase_identificadora', '%Férias%');
+        await client.from('cartoes').delete().eq('numero', '4111 2222 3333 4444');
+        await client.from('cupons').delete().or('codigo.ilike.TR-TEST-%,codigo.ilike.TR-SUPER-%,codigo.ilike.PROMO-A-%,codigo.ilike.PROMO-B-%,codigo.ilike.TR-2026-%');
+        await client.from('cupons').update({ utilizado: false }).in('codigo', ['PROMO10', 'PROMO20', 'TR-TROCA20', 'TR-TROCA50']);
+      } catch (supaErr) {
+        console.warn('⚠️ Limpeza Supabase ignorada (modo localStore ativo):', supaErr.message);
+      }
+    }
 
-    // 2. Remover endereços temporários criados em testes
-    await client.from('enderecos').delete().ilike('frase_identificadora', '%Férias%');
-
-    // 3. Remover cartões duplicados de teste
-    await client.from('cartoes').delete().eq('numero', '4111 2222 3333 4444');
-
-    // 4. Remover cupons temporários de teste
-    await client.from('cupons').delete().or('codigo.ilike.TR-TEST-%,codigo.ilike.TR-SUPER-%,codigo.ilike.PROMO-A-%,codigo.ilike.PROMO-B-%,codigo.ilike.TR-2026-%');
-
-    // 5. Garantir cupons padrão disponíveis
-    await client.from('cupons').update({ utilizado: false }).in('codigo', ['PROMO10', 'PROMO20', 'TR-TROCA20', 'TR-TROCA50']);
-
+    localStore.resetarParaDemonstracao();
     res.json({ ok: true, mensagem: 'Base de dados resetada e limpa para demonstração com sucesso' });
   } catch (err) {
     res.status(500).json({ ok: false, erro: err.message });

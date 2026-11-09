@@ -42,7 +42,7 @@
     </div>
 
     <!-- Alerta de Estoque / Regras de Negócio (RN0031) -->
-    <div id="alerta-carrinho" style="display: none; padding: 12px 16px; border-radius: 6px; margin-bottom: 18px; font-size: 0.9rem;"></div>
+    <div id="alerta-expiracao-bloqueio" style="display: none; padding: 12px 16px; border-radius: 6px; margin-bottom: 18px; font-size: 0.9rem;"></div>
 
     <section class="section-card" style="background: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 24px;">
       <div id="carrinho-vazio" style="display: none; text-align: center; padding: 40px 20px;">
@@ -50,8 +50,13 @@
         <a href="/index.html" class="btn-buy" style="text-decoration: none; display: inline-block; padding: 12px 28px;">Explorar o Acervo</a>
       </div>
 
-      <div id="carrinho-conteudo">
-        <table class="table-default" style="width: 100%; border-collapse: collapse;">
+      <div id="banner-bloqueio-temporario" style="background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 12px 16px; border-radius: 6px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem;">
+          <div>⏱️ <strong>Bloqueio Temporário:</strong> Itens reservados no estoque por <span id="contador-bloqueio" style="font-weight: 700; color: #15803d;">05:00 min</span> (RN0044 / RNF0045)</div>
+          <button type="button" id="btn-simular-expiracao" style="background: #dc2626; color: white; border: none; padding: 6px 14px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">Simular Expiração de Bloqueio (RNF0042)</button>
+        </div>
+
+        <div id="carrinho-conteudo">
+        <table id="tabela-carrinho" class="table-default" style="width: 100%; border-collapse: collapse;">
           <thead>
             <tr style="border-bottom: 2px solid #e2e8f0; text-align: left;">
               <th style="padding: 12px;">Obra</th>
@@ -78,9 +83,9 @@
             <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;">
               * Frete e condições de pagamento calculados na etapa seguinte (RF0034 / RF0036).
             </p>
-            <a href="/checkout.html" id="btn-ir-checkout" class="btn-buy" style="padding: 14px 28px; text-decoration: none; display: inline-block; font-size: 1rem; font-weight: 700;">
+            <button type="button" id="btn-ir-checkout" data-alias="btn-avancar-checkout" onclick="window.location.href='/checkout.html'" class="btn-buy" style="padding: 14px 28px; border: none; cursor: pointer; font-size: 1rem; font-weight: 700;">
               Iniciar Compra (RF0033) ➔
-            </a>
+            </button>
           </div>
         </div>
       </div>

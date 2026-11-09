@@ -1,0 +1,1163 @@
+{
+  "livros": [
+    {
+      "id": "b1010001-0000-0000-0000-000000000001",
+      "codigo": "LIV-001",
+      "titulo": "Dom Casmurro (Edição Luxo)",
+      "autor": "Machado de Assis",
+      "categoria": "Literatura Brasileira",
+      "categoria_id": "cat-1",
+      "isbn": "9788535910841",
+      "ano": 2021,
+      "edicao": "3ª Edição",
+      "editora": "Antofágica",
+      "numero_paginas": 400,
+      "sinopse": "Um dos maiores clássicos da literatura brasileira narrado por Bentinho sobre a dúvida de Capitu.",
+      "preco_custo": 34,
+      "preco_venda": 45.9,
+      "peso_kg": 0.65,
+      "status": "ATIVO",
+      "capa_url": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "b1010001-0000-0000-0000-000000000002",
+      "codigo": "LIV-002",
+      "titulo": "O Cortiço",
+      "autor": "Aluísio Azevedo",
+      "categoria": "Literatura Brasileira",
+      "categoria_id": "cat-1",
+      "isbn": "9788508040377",
+      "ano": 2020,
+      "edicao": "2ª Edição",
+      "editora": "Ática",
+      "numero_paginas": 304,
+      "sinopse": "Marco do naturalismo brasileiro retratando a vida em uma habitação coletiva no Rio.",
+      "preco_custo": 26,
+      "preco_venda": 38,
+      "peso_kg": 0.45,
+      "status": "ATIVO",
+      "capa_url": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "b1010001-0000-0000-0000-000000000003",
+      "codigo": "LIV-003",
+      "titulo": "Clean Code: A Handbook of Agile Software Craftsmanship",
+      "autor": "Robert C. Martin",
+      "categoria": "Engenharia de Software",
+      "categoria_id": "cat-2",
+      "isbn": "9780132350884",
+      "ano": 2009,
+      "edicao": "1ª Edição",
+      "editora": "Alta Books",
+      "numero_paginas": 464,
+      "sinopse": "Guia definitivo de boas práticas, refatoração e código limpo para desenvolvedores.",
+      "preco_custo": 62,
+      "preco_venda": 89.9,
+      "peso_kg": 0.8,
+      "status": "ATIVO",
+      "capa_url": "https://images.unsplash.com/photo-1532012164546-f432f2e3777a?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "b1010001-0000-0000-0000-000000000004",
+      "codigo": "LIV-004",
+      "titulo": "A Hora da Estrela (Capa Dura)",
+      "autor": "Clarice Lispector",
+      "categoria": "Literatura Brasileira",
+      "categoria_id": "cat-1",
+      "isbn": "9788535928129",
+      "ano": 2020,
+      "edicao": "Edição Especial",
+      "editora": "Rocco",
+      "numero_paginas": 96,
+      "sinopse": "A comovente história da alagoana Macabéa narrada pelo escritor Rodrigo S.M.",
+      "preco_custo": 29,
+      "preco_venda": 42.5,
+      "peso_kg": 0.35,
+      "status": "ATIVO",
+      "capa_url": "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "b1010001-0000-0000-0000-000000000005",
+      "codigo": "LIV-005",
+      "titulo": "Grande Sertão: Veredas (Edição Especial)",
+      "autor": "João Guimarães Rosa",
+      "categoria": "Obras Raras",
+      "categoria_id": "cat-4",
+      "isbn": "9788535932133",
+      "ano": 2019,
+      "edicao": "Capa Dura",
+      "editora": "Companhia das Letras",
+      "numero_paginas": 600,
+      "sinopse": "A monumental narrativa de Riobaldo sobre o sertão, o amor e o pacto.",
+      "preco_custo": 190,
+      "preco_venda": 310,
+      "peso_kg": 1.1,
+      "status": "ATIVO",
+      "capa_url": "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "b1010001-0000-0000-0000-000000000006",
+      "codigo": "LIV-006",
+      "titulo": "Crítica da Razão Pura",
+      "autor": "Immanuel Kant",
+      "categoria": "Filosofia",
+      "categoria_id": "cat-3",
+      "isbn": "9788532651112",
+      "ano": 2018,
+      "edicao": "4ª Edição",
+      "editora": "Vozes",
+      "numero_paginas": 680,
+      "sinopse": "Uma das obras filosóficas mais influentes da história sobre os limites do conhecimento humano.",
+      "preco_custo": 75,
+      "preco_venda": 110,
+      "peso_kg": 0.95,
+      "status": "ATIVO",
+      "capa_url": "https://images.unsplash.com/photo-1495640388908-05fa85288e61?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "b1010001-0000-0000-0000-000000000007",
+      "codigo": "LIV-007",
+      "titulo": "Clean Architecture: A Craftsman Guide to Software Structure",
+      "autor": "Robert C. Martin",
+      "categoria": "Engenharia de Software",
+      "categoria_id": "cat-2",
+      "isbn": "9780134494166",
+      "ano": 2017,
+      "edicao": "1ª Edição",
+      "editora": "Alta Books",
+      "numero_paginas": 432,
+      "sinopse": "Padrões essenciais de arquitetura desacoplada, separação de preocupações e testes.",
+      "preco_custo": 95,
+      "preco_venda": 149,
+      "peso_kg": 0.75,
+      "status": "ATIVO",
+      "capa_url": "https://images.unsplash.com/photo-1532012164546-f432f2e3777a?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "b1010001-0000-0000-0000-000000000008",
+      "codigo": "LIV-008",
+      "titulo": "Refactoring: Improving the Design of Existing Code",
+      "autor": "Martin Fowler",
+      "categoria": "Engenharia de Software",
+      "categoria_id": "cat-2",
+      "isbn": "9780134757599",
+      "ano": 2018,
+      "edicao": "2ª Edição",
+      "editora": "Addison-Wesley",
+      "numero_paginas": 448,
+      "sinopse": "Catálogo indispensável de técnicas comprovadas para transformar código legado.",
+      "preco_custo": 115,
+      "preco_venda": 175.5,
+      "peso_kg": 0.85,
+      "status": "ATIVO",
+      "capa_url": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "b1010001-0000-0000-0000-000000000009",
+      "codigo": "LIV-009",
+      "titulo": "Memórias Póstumas de Brás Cubas",
+      "autor": "Machado de Assis",
+      "categoria": "Literatura Brasileira",
+      "categoria_id": "cat-1",
+      "isbn": "9788535914849",
+      "ano": 2019,
+      "edicao": "Edição Especial",
+      "editora": "Antofágica",
+      "numero_paginas": 368,
+      "sinopse": "Obra prima do realismo com o defunto autor narrando suas desilusões com fina ironia.",
+      "preco_custo": 50,
+      "preco_venda": 78.9,
+      "peso_kg": 0.55,
+      "status": "ATIVO",
+      "capa_url": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "b1010001-0000-0000-0000-000000000010",
+      "codigo": "LIV-010",
+      "titulo": "Primeira Edição Fac-similar: Os Lusíadas (1572)",
+      "autor": "Luís de Camões",
+      "categoria": "Obras Raras",
+      "categoria_id": "cat-4",
+      "isbn": "9789722718900",
+      "ano": 2015,
+      "edicao": "Fac-similar",
+      "editora": "Imprensa Nacional",
+      "numero_paginas": 520,
+      "sinopse": "Reprodução integral e histórica em encadernação de luxo da célebre edição de 1572.",
+      "preco_custo": 280,
+      "preco_venda": 450,
+      "peso_kg": 1.4,
+      "status": "ATIVO",
+      "capa_url": "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "b1010001-0000-0000-0000-000000000011",
+      "codigo": "LIV-011",
+      "titulo": "Genealogia da Moral",
+      "autor": "Friedrich Nietzsche",
+      "categoria": "Filosofia",
+      "categoria_id": "cat-3",
+      "isbn": "9788572323864",
+      "ano": 2019,
+      "edicao": "3ª Edição",
+      "editora": "Companhia das Letras",
+      "numero_paginas": 176,
+      "sinopse": "Três dissertações provocativas sobre a origem dos conceitos morais de bem e mal.",
+      "preco_custo": 55,
+      "preco_venda": 85,
+      "peso_kg": 0.35,
+      "status": "ATIVO",
+      "capa_url": "https://images.unsplash.com/photo-1495640388908-05fa85288e61?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "b1010001-0000-0000-0000-000000000012",
+      "codigo": "LIV-012",
+      "titulo": "O Alienista & Contos Fluminenses",
+      "autor": "Machado de Assis",
+      "categoria": "Literatura Brasileira",
+      "categoria_id": "cat-1",
+      "isbn": "9788572329989",
+      "ano": 2021,
+      "edicao": "1ª Edição",
+      "editora": "Penguin Clássicos",
+      "numero_paginas": 240,
+      "sinopse": "A clássica sátira de Simão Bacamarte e a Casa Verde em Itaguaí.",
+      "preco_custo": 35,
+      "preco_venda": 54,
+      "peso_kg": 0.4,
+      "status": "ATIVO",
+      "capa_url": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400"
+    }
+  ],
+  "estoque": {
+    "b1010001-0000-0000-0000-000000000001": {
+      "quantidade": 28,
+      "quantidade_bloqueada": 0,
+      "status": "DISPONÍVEL"
+    },
+    "b1010001-0000-0000-0000-000000000002": {
+      "quantidade": 4,
+      "quantidade_bloqueada": 0,
+      "status": "BAIXO_ESTOQUE"
+    },
+    "b1010001-0000-0000-0000-000000000003": {
+      "quantidade": 15,
+      "quantidade_bloqueada": 0,
+      "status": "DISPONÍVEL"
+    },
+    "b1010001-0000-0000-0000-000000000004": {
+      "quantidade": 0,
+      "quantidade_bloqueada": 0,
+      "status": "ESGOTADO"
+    },
+    "b1010001-0000-0000-0000-000000000005": {
+      "quantidade": 6,
+      "quantidade_bloqueada": 0,
+      "status": "DISPONÍVEL"
+    },
+    "b1010001-0000-0000-0000-000000000006": {
+      "quantidade": 15,
+      "quantidade_bloqueada": 0,
+      "status": "DISPONÍVEL"
+    },
+    "b1010001-0000-0000-0000-000000000007": {
+      "quantidade": 15,
+      "quantidade_bloqueada": 0,
+      "status": "DISPONÍVEL"
+    },
+    "b1010001-0000-0000-0000-000000000008": {
+      "quantidade": 15,
+      "quantidade_bloqueada": 0,
+      "status": "DISPONÍVEL"
+    },
+    "b1010001-0000-0000-0000-000000000009": {
+      "quantidade": 15,
+      "quantidade_bloqueada": 0,
+      "status": "DISPONÍVEL"
+    },
+    "b1010001-0000-0000-0000-000000000010": {
+      "quantidade": 3,
+      "quantidade_bloqueada": 0,
+      "status": "BAIXO_ESTOQUE"
+    },
+    "b1010001-0000-0000-0000-000000000011": {
+      "quantidade": 15,
+      "quantidade_bloqueada": 0,
+      "status": "DISPONÍVEL"
+    },
+    "b1010001-0000-0000-0000-000000000012": {
+      "quantidade": 15,
+      "quantidade_bloqueada": 0,
+      "status": "DISPONÍVEL"
+    }
+  },
+  "cupons": [
+    {
+      "id": "cup-1",
+      "codigo": "PROMO10",
+      "tipo": "PROMOCIONAL",
+      "valor": 10,
+      "utilizado": false,
+      "data_validade": "2026-12-31",
+      "cliente_id": null
+    },
+    {
+      "id": "cup-2",
+      "codigo": "PROMO20",
+      "tipo": "PROMOCIONAL",
+      "valor": 20,
+      "utilizado": false,
+      "data_validade": "2026-12-31",
+      "cliente_id": null
+    },
+    {
+      "id": "cup-3",
+      "codigo": "TR-2026-88",
+      "tipo": "TROCA",
+      "valor": 20,
+      "utilizado": false,
+      "data_validade": "2026-12-31",
+      "cliente_id": "CLI-001"
+    },
+    {
+      "id": "cup-4",
+      "codigo": "TR-2026-99",
+      "tipo": "TROCA",
+      "valor": 15.5,
+      "utilizado": false,
+      "data_validade": "2026-12-31",
+      "cliente_id": "CLI-001"
+    },
+    {
+      "id": "cup-5",
+      "codigo": "TR-TROCA20",
+      "tipo": "TROCA",
+      "valor": 20,
+      "utilizado": false,
+      "data_validade": "2026-12-31",
+      "cliente_id": null
+    },
+    {
+      "id": "cup-6",
+      "codigo": "TR-TROCA50",
+      "tipo": "TROCA",
+      "valor": 50,
+      "utilizado": false,
+      "data_validade": "2026-12-31",
+      "cliente_id": null
+    }
+  ],
+  "pedidos": [
+    {
+      "id": "PED-2026-011",
+      "cliente_id": "CLI-001",
+      "data": "2026-01-15",
+      "valor_subtotal": 91.8,
+      "valor_frete": 10,
+      "valor_desconto": 0,
+      "valor_total": 101.8,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-011-1",
+          "pedido_id": "PED-2026-011",
+          "livro_id": "b1010001-0000-0000-0000-000000000001",
+          "titulo_livro": "Dom Casmurro (Edição Luxo)",
+          "autor": "Machado de Assis",
+          "categoria": "Literatura Brasileira",
+          "quantidade": 2,
+          "preco_unitario": 45.9,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-011-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 101.8,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-012",
+      "cliente_id": "CLI-002",
+      "data": "2026-01-28",
+      "valor_subtotal": 450,
+      "valor_frete": 15,
+      "valor_desconto": 0,
+      "valor_total": 465,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-002",
+        "codigo": "CLI-002",
+        "nome": "Clarice Lispector",
+        "cpf": "987.654.321-99",
+        "email": "clarice@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-012-1",
+          "pedido_id": "PED-2026-012",
+          "livro_id": "b1010001-0000-0000-0000-000000000010",
+          "titulo_livro": "Primeira Edição Fac-similar: Os Lusíadas (1572)",
+          "autor": "Luís de Camões",
+          "categoria": "Obras Raras",
+          "quantidade": 1,
+          "preco_unitario": 450,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-012-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 465,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-013",
+      "cliente_id": "CLI-001",
+      "data": "2026-01-30",
+      "valor_subtotal": 85,
+      "valor_frete": 10,
+      "valor_desconto": 0,
+      "valor_total": 95,
+      "status": "REPROVADA",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-013-1",
+          "pedido_id": "PED-2026-013",
+          "livro_id": "b1010001-0000-0000-0000-000000000011",
+          "titulo_livro": "Genealogia da Moral",
+          "autor": "Friedrich Nietzsche",
+          "categoria": "Filosofia",
+          "quantidade": 1,
+          "preco_unitario": 85,
+          "status_item": "REPROVADA"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-013-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 95,
+          "status": "REPROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-021",
+      "cliente_id": "CLI-001",
+      "data": "2026-02-10",
+      "valor_subtotal": 54,
+      "valor_frete": 10,
+      "valor_desconto": 0,
+      "valor_total": 64,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-021-1",
+          "pedido_id": "PED-2026-021",
+          "livro_id": "b1010001-0000-0000-0000-000000000012",
+          "titulo_livro": "O Alienista & Contos Fluminenses",
+          "autor": "Machado de Assis",
+          "categoria": "Literatura Brasileira",
+          "quantidade": 1,
+          "preco_unitario": 54,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-021-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 64,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-022",
+      "cliente_id": "CLI-002",
+      "data": "2026-02-18",
+      "valor_subtotal": 110,
+      "valor_frete": 12,
+      "valor_desconto": 0,
+      "valor_total": 122,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-002",
+        "codigo": "CLI-002",
+        "nome": "Clarice Lispector",
+        "cpf": "987.654.321-99",
+        "email": "clarice@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-022-1",
+          "pedido_id": "PED-2026-022",
+          "livro_id": "b1010001-0000-0000-0000-000000000006",
+          "titulo_livro": "Crítica da Razão Pura",
+          "autor": "Immanuel Kant",
+          "categoria": "Filosofia",
+          "quantidade": 1,
+          "preco_unitario": 110,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-022-1",
+          "forma_pagamento": "PIX",
+          "valor": 122,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-023",
+      "cliente_id": "CLI-001",
+      "data": "2026-02-25",
+      "valor_subtotal": 89.9,
+      "valor_frete": 10,
+      "valor_desconto": 0,
+      "valor_total": 99.9,
+      "status": "APROVADA",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-023-1",
+          "pedido_id": "PED-2026-023",
+          "livro_id": "b1010001-0000-0000-0000-000000000003",
+          "titulo_livro": "Clean Code",
+          "autor": "Robert C. Martin",
+          "categoria": "Engenharia de Software",
+          "quantidade": 1,
+          "preco_unitario": 89.9,
+          "status_item": "APROVADA"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-023-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 99.9,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-031",
+      "cliente_id": "CLI-001",
+      "data": "2026-03-05",
+      "valor_subtotal": 149,
+      "valor_frete": 10,
+      "valor_desconto": 0,
+      "valor_total": 159,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-031-1",
+          "pedido_id": "PED-2026-031",
+          "livro_id": "b1010001-0000-0000-0000-000000000007",
+          "titulo_livro": "Clean Architecture",
+          "autor": "Robert C. Martin",
+          "categoria": "Engenharia de Software",
+          "quantidade": 1,
+          "preco_unitario": 149,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-031-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 159,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-032",
+      "cliente_id": "CLI-002",
+      "data": "2026-03-22",
+      "valor_subtotal": 175.5,
+      "valor_frete": 10,
+      "valor_desconto": 0,
+      "valor_total": 185.5,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-002",
+        "codigo": "CLI-002",
+        "nome": "Clarice Lispector",
+        "cpf": "987.654.321-99",
+        "email": "clarice@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-032-1",
+          "pedido_id": "PED-2026-032",
+          "livro_id": "b1010001-0000-0000-0000-000000000008",
+          "titulo_livro": "Refactoring: Improving Code",
+          "autor": "Martin Fowler",
+          "categoria": "Engenharia de Software",
+          "quantidade": 1,
+          "preco_unitario": 175.5,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-032-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 185.5,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-033",
+      "cliente_id": "CLI-001",
+      "data": "2026-03-25",
+      "valor_subtotal": 78.9,
+      "valor_frete": 10,
+      "valor_desconto": 0,
+      "valor_total": 88.9,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-033-1",
+          "pedido_id": "PED-2026-033",
+          "livro_id": "b1010001-0000-0000-0000-000000000009",
+          "titulo_livro": "Memórias Póstumas de Brás Cubas",
+          "autor": "Machado de Assis",
+          "categoria": "Literatura Brasileira",
+          "quantidade": 1,
+          "preco_unitario": 78.9,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-033-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 88.9,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-081",
+      "cliente_id": "CLI-001",
+      "data": "2026-08-05",
+      "valor_subtotal": 149,
+      "valor_frete": 10,
+      "valor_desconto": 0,
+      "valor_total": 159,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-081-1",
+          "pedido_id": "PED-2026-081",
+          "livro_id": "b1010001-0000-0000-0000-000000000007",
+          "titulo_livro": "Clean Architecture",
+          "autor": "Robert C. Martin",
+          "categoria": "Engenharia de Software",
+          "quantidade": 1,
+          "preco_unitario": 149,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-081-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 159,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-082",
+      "cliente_id": "CLI-002",
+      "data": "2026-08-15",
+      "valor_subtotal": 220,
+      "valor_frete": 15,
+      "valor_desconto": 0,
+      "valor_total": 235,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-002",
+        "codigo": "CLI-002",
+        "nome": "Clarice Lispector",
+        "cpf": "987.654.321-99",
+        "email": "clarice@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-082-1",
+          "pedido_id": "PED-2026-082",
+          "livro_id": "b1010001-0000-0000-0000-000000000006",
+          "titulo_livro": "Crítica da Razão Pura",
+          "autor": "Immanuel Kant",
+          "categoria": "Filosofia",
+          "quantidade": 2,
+          "preco_unitario": 110,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-082-1",
+          "forma_pagamento": "PIX",
+          "valor": 235,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-083",
+      "cliente_id": "CLI-001",
+      "data": "2026-08-20",
+      "valor_subtotal": 42.5,
+      "valor_frete": 10,
+      "valor_desconto": 0,
+      "valor_total": 52.5,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-083-1",
+          "pedido_id": "PED-2026-083",
+          "livro_id": "b1010001-0000-0000-0000-000000000004",
+          "titulo_livro": "A Hora da Estrela",
+          "autor": "Clarice Lispector",
+          "categoria": "Literatura Brasileira",
+          "quantidade": 1,
+          "preco_unitario": 42.5,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-083-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 52.5,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-084",
+      "cliente_id": "CLI-002",
+      "data": "2026-08-28",
+      "valor_subtotal": 310,
+      "valor_frete": 20,
+      "valor_desconto": 0,
+      "valor_total": 330,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-002",
+        "codigo": "CLI-002",
+        "nome": "Clarice Lispector",
+        "cpf": "987.654.321-99",
+        "email": "clarice@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-084-1",
+          "pedido_id": "PED-2026-084",
+          "livro_id": "b1010001-0000-0000-0000-000000000005",
+          "titulo_livro": "Grande Sertão: Veredas",
+          "autor": "João Guimarães Rosa",
+          "categoria": "Obras Raras",
+          "quantidade": 1,
+          "preco_unitario": 310,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-084-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 330,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-091",
+      "cliente_id": "CLI-001",
+      "data": "2026-09-01",
+      "valor_subtotal": 91.8,
+      "valor_frete": 10,
+      "valor_desconto": 0,
+      "valor_total": 101.8,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-091-1",
+          "pedido_id": "PED-2026-091",
+          "livro_id": "b1010001-0000-0000-0000-000000000001",
+          "titulo_livro": "Dom Casmurro (Edição Luxo)",
+          "autor": "Machado de Assis",
+          "categoria": "Literatura Brasileira",
+          "quantidade": 2,
+          "preco_unitario": 45.9,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-091-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 101.8,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-092",
+      "cliente_id": "CLI-002",
+      "data": "2026-09-04",
+      "valor_subtotal": 310,
+      "valor_frete": 15,
+      "valor_desconto": 0,
+      "valor_total": 325,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-002",
+        "codigo": "CLI-002",
+        "nome": "Clarice Lispector",
+        "cpf": "987.654.321-99",
+        "email": "clarice@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-092-1",
+          "pedido_id": "PED-2026-092",
+          "livro_id": "b1010001-0000-0000-0000-000000000005",
+          "titulo_livro": "Grande Sertão: Veredas",
+          "autor": "João Guimarães Rosa",
+          "categoria": "Obras Raras",
+          "quantidade": 1,
+          "preco_unitario": 310,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-092-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 325,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-093",
+      "cliente_id": "CLI-001",
+      "data": "2026-09-07",
+      "valor_subtotal": 265.4,
+      "valor_frete": 12,
+      "valor_desconto": 0,
+      "valor_total": 277.4,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-093-1",
+          "pedido_id": "PED-2026-093",
+          "livro_id": "b1010001-0000-0000-0000-000000000003",
+          "titulo_livro": "Clean Code",
+          "autor": "Robert C. Martin",
+          "categoria": "Engenharia de Software",
+          "quantidade": 1,
+          "preco_unitario": 89.9,
+          "status_item": "ENTREGUE"
+        },
+        {
+          "id": "it-093-2",
+          "pedido_id": "PED-2026-093",
+          "livro_id": "b1010001-0000-0000-0000-000000000008",
+          "titulo_livro": "Refactoring: Improving Code",
+          "autor": "Martin Fowler",
+          "categoria": "Engenharia de Software",
+          "quantidade": 1,
+          "preco_unitario": 175.5,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-093-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 277.4,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-094",
+      "cliente_id": "CLI-001",
+      "data": "2026-09-12",
+      "valor_subtotal": 89.9,
+      "valor_frete": 10,
+      "valor_desconto": 0,
+      "valor_total": 99.9,
+      "status": "EM TRANSPORTE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-094-1",
+          "pedido_id": "PED-2026-094",
+          "livro_id": "b1010001-0000-0000-0000-000000000001",
+          "titulo_livro": "Dom Casmurro (Edição Luxo)",
+          "autor": "Machado de Assis",
+          "categoria": "Literatura Brasileira",
+          "quantidade": 2,
+          "preco_unitario": 44.95,
+          "status_item": "EM TRANSPORTE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-094-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 99.9,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-095",
+      "cliente_id": "CLI-002",
+      "data": "2026-09-18",
+      "valor_subtotal": 85,
+      "valor_frete": 10,
+      "valor_desconto": 0,
+      "valor_total": 95,
+      "status": "APROVADA",
+      "clientes": {
+        "id": "CLI-002",
+        "codigo": "CLI-002",
+        "nome": "Clarice Lispector",
+        "cpf": "987.654.321-99",
+        "email": "clarice@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-095-1",
+          "pedido_id": "PED-2026-095",
+          "livro_id": "b1010001-0000-0000-0000-000000000011",
+          "titulo_livro": "Genealogia da Moral",
+          "autor": "Friedrich Nietzsche",
+          "categoria": "Filosofia",
+          "quantidade": 1,
+          "preco_unitario": 85,
+          "status_item": "APROVADA"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-095-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 95,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-101",
+      "cliente_id": "CLI-001",
+      "data": "2026-10-05",
+      "valor_subtotal": 45.9,
+      "valor_frete": 10,
+      "valor_desconto": 0,
+      "valor_total": 55.9,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-101-1",
+          "pedido_id": "PED-2026-101",
+          "livro_id": "b1010001-0000-0000-0000-000000000001",
+          "titulo_livro": "Dom Casmurro (Edição Luxo)",
+          "autor": "Machado de Assis",
+          "categoria": "Literatura Brasileira",
+          "quantidade": 1,
+          "preco_unitario": 45.9,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-101-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 55.9,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-102",
+      "cliente_id": "CLI-002",
+      "data": "2026-10-14",
+      "valor_subtotal": 85,
+      "valor_frete": 10,
+      "valor_desconto": 0,
+      "valor_total": 95,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-002",
+        "codigo": "CLI-002",
+        "nome": "Clarice Lispector",
+        "cpf": "987.654.321-99",
+        "email": "clarice@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-102-1",
+          "pedido_id": "PED-2026-102",
+          "livro_id": "b1010001-0000-0000-0000-000000000011",
+          "titulo_livro": "Genealogia da Moral",
+          "autor": "Friedrich Nietzsche",
+          "categoria": "Filosofia",
+          "quantidade": 1,
+          "preco_unitario": 85,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-102-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 95,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-103",
+      "cliente_id": "CLI-001",
+      "data": "2026-10-20",
+      "valor_subtotal": 89.9,
+      "valor_frete": 10,
+      "valor_desconto": 0,
+      "valor_total": 99.9,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-103-1",
+          "pedido_id": "PED-2026-103",
+          "livro_id": "b1010001-0000-0000-0000-000000000003",
+          "titulo_livro": "Clean Code",
+          "autor": "Robert C. Martin",
+          "categoria": "Engenharia de Software",
+          "quantidade": 1,
+          "preco_unitario": 89.9,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-103-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 99.9,
+          "status": "APROVADO"
+        }
+      ]
+    }
+  ],
+  "trocas": [],
+  "notificacoes": []
+}

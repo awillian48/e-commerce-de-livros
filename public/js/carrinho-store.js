@@ -5,6 +5,9 @@
 (function(window) {
   const CHAVE_STORAGE = 'alexandria:carrinho';
   const CHAVE_CLIENTE = 'alexandria:cliente_codigo';
+  const CHAVE_TIMESTAMP = 'alexandria:carrinho_timestamp';
+  const CHAVE_EXPIRADO = 'alexandria:carrinho_expirado';
+  const PRAZO_BLOQUEIO_SEGUNDOS = 300; // 5 minutos parametrizado (RN0044, RNF0045)
 
   const Carrinho = {
     CHAVE_CLIENTE,
@@ -37,6 +40,8 @@
 
     salvarItens(itens) {
       try {
+        localStorage.setItem(CHAVE_TIMESTAMP, String(Date.now()));
+        localStorage.removeItem(CHAVE_EXPIRADO);
         localStorage.setItem(CHAVE_STORAGE, JSON.stringify(itens));
         this.atualizarBadge();
         window.dispatchEvent(new CustomEvent('carrinho:atualizado', { detail: { itens } }));
@@ -132,6 +137,42 @@
       itens = itens.filter(it => it.livroId !== livroId && it.codigo !== livroId);
       this.salvarItens(itens);
       return { sucesso: true, itens };
+    },
+
+    estaBloqueioExpirado() {
+      try {
+        if (localStorage.getItem(CHAVE_EXPIRADO) === 'true') return true;
+        const ts = Number(localStorage.getItem(CHAVE_TIMESTAMP) || 0);
+        if (!ts) return false;
+        return (Date.now() - ts) > (PRAZO_BLOQUEIO_SEGUNDOS * 1000);
+      } catch (e) {
+        return false;
+      }
+    },
+
+    tempoRestanteSegundos() {
+      try {
+        if (this.estaBloqueioExpirado()) return 0;
+        const ts = Number(localStorage.getItem(CHAVE_TIMESTAMP) || Date.now());
+        const decorrido = Math.floor((Date.now() - ts) / 1000);
+        return Math.max(0, PRAZO_BLOQUEIO_SEGUNDOS - decorrido);
+      } catch (e) {
+        return PRAZO_BLOQUEIO_SEGUNDOS;
+      }
+    },
+
+    // RNF0042, RN0044, RNF0045: Expira o bloqueio temporario
+    expirarBloqueio() {
+      try {
+        localStorage.setItem(CHAVE_EXPIRADO, 'true');
+        const itensAtuais = this.obterItens();
+        localStorage.setItem('alexandria:itens_expirados', JSON.stringify(itensAtuais));
+        localStorage.removeItem(CHAVE_STORAGE);
+        this.atualizarBadge();
+        window.dispatchEvent(new CustomEvent('carrinho:expirado', { detail: { expirado: true, itens: itensAtuais } }));
+      } catch (err) {
+        console.error('Erro ao expirar bloqueio:', err);
+      }
     },
 
     limpar() {

@@ -1,10 +1,61 @@
+
+let timerBloqueioInterval = null;
+
+function iniciarContadorBloqueio() {
+  if (timerBloqueioInterval) clearInterval(timerBloqueioInterval);
+  const contadorEl = document.getElementById('contador-bloqueio');
+  if (!contadorEl || !window.Carrinho) return;
+
+  const atualizar = () => {
+    if (window.Carrinho.estaBloqueioExpirado()) {
+      contadorEl.textContent = 'EXPIRADO (00:00)';
+      contadorEl.style.color = '#dc2626';
+      aplicarEstadoExpirado();
+      return;
+    }
+    const seg = window.Carrinho.tempoRestanteSegundos();
+    const min = Math.floor(seg / 60);
+    const s = seg % 60;
+    contadorEl.textContent = String(min).padStart(2, '0') + ':' + String(s).padStart(2, '0') + ' min';
+  };
+
+  atualizar();
+  timerBloqueioInterval = setInterval(atualizar, 1000);
+}
+
+function aplicarEstadoExpirado() {
+  const btnCheckout = document.getElementById('btn-ir-checkout') || document.getElementById('btn-avancar-checkout');
+  if (btnCheckout) {
+    btnCheckout.classList.add('disabled');
+    btnCheckout.style.pointerEvents = 'none';
+    btnCheckout.style.opacity = '0.45';
+    btnCheckout.setAttribute('disabled', 'disabled');
+    btnCheckout.disabled = true;
+    btnCheckout.textContent = 'Compra Desabilitada (Bloqueio Expirado - RNF0042)';
+  }
+  exibirAlertaCarrinho('O bloqueio temporário dos itens no carrinho expirou. Os itens foram liberados para o estoque e a opção de comprar foi desabilitada (RNF0042, RN0044).', 'erro');
+}
+
 /**
  * Lógica da Página de Carrinho de Compras
  * Atende: RF0031, RF0032, RN0031 (bloqueio de indisponíveis ou qtd > estoque) e RF0033
  */
 document.addEventListener('DOMContentLoaded', () => {
   renderizarCarrinho();
+  iniciarContadorBloqueio();
   validarEstoqueComBackend();
+  const btnSimular = document.getElementById('btn-simular-expiracao');
+  if (btnSimular) {
+    btnSimular.addEventListener('click', () => {
+      window.Carrinho.expirarBloqueio();
+      aplicarEstadoExpirado();
+      renderizarCarrinho();
+    });
+  }
+  window.addEventListener('carrinho:expirado', () => {
+    aplicarEstadoExpirado();
+  });
+
 
   const btnLimpar = document.getElementById('btn-limpar-carrinho');
   if (btnLimpar) {
@@ -26,6 +77,10 @@ function renderizarCarrinho() {
   if (!tbody || !window.Carrinho) return;
 
   const itens = window.Carrinho.obterItens();
+  if (window.Carrinho.estaBloqueioExpirado()) {
+    aplicarEstadoExpirado();
+  }
+
 
   if (itens.length === 0) {
     if (vazioEl) vazioEl.style.display = 'block';
@@ -162,7 +217,7 @@ async function validarEstoqueComBackend() {
 }
 
 function exibirAlertaCarrinho(msg, tipo = 'erro') {
-  const el = document.getElementById('alerta-carrinho');
+  const el = (document.getElementById('alerta-carrinho') || document.getElementById('alerta-expiracao-bloqueio'));
   if (!el) return;
   el.textContent = msg;
   el.style.display = 'block';
@@ -178,6 +233,6 @@ function exibirAlertaCarrinho(msg, tipo = 'erro') {
 }
 
 function ocultarAlertaCarrinho() {
-  const el = document.getElementById('alerta-carrinho');
+  const el = (document.getElementById('alerta-carrinho') || document.getElementById('alerta-expiracao-bloqueio'));
   if (el) el.style.display = 'none';
 }

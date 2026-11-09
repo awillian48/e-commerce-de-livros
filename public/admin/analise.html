@@ -3,38 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Livraria Alexandria — Business Intelligence & Hub Analítico</title>
+  <title>Livraria Alexandria — Análise Gráfica do Histórico de Vendas (RF0055)</title>
   <link rel="stylesheet" href="/css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/js/modal-sistema.js"></script>
   <style>
     .bi-card {
       background: #ffffff;
       border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 20px 24px;
+      padding: 18px 22px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .bi-card:hover {
       box-shadow: 0 6px 16px rgba(0,0,0,0.06);
-    }
-    .kpi-trend {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 9999px;
-      margin-top: 6px;
-    }
-    .trend-up {
-      background: #ecfdf5;
-      color: #065f46;
-    }
-    .trend-neutral {
-      background: #f1f5f9;
-      color: #475569;
     }
     .chart-container-box {
       background: #ffffff;
@@ -54,7 +37,7 @@
     .chart-header h4 {
       font-family: var(--font-heading);
       color: var(--palette-navy-dark);
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       margin: 0;
     }
     .chart-badge {
@@ -65,18 +48,6 @@
       padding: 4px 10px;
       border-radius: 6px;
       border: 1px solid #ccfbf1;
-    }
-    .insight-pill {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      padding: 12px 16px;
-      background: #f8fafc;
-      border-left: 4px solid var(--palette-teal-dark);
-      border-radius: 0 8px 8px 0;
-      margin-bottom: 10px;
-      font-size: 0.85rem;
-      color: #334155;
     }
     .table-bi {
       width: 100%;
@@ -102,9 +73,26 @@
     .table-bi tr:hover td {
       background: #f8fafc;
     }
+    .checkbox-cat-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      padding: 4px 10px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+    }
+    .checkbox-cat-label:hover {
+      background: #f1f5f9;
+    }
   </style>
-  <script src="/js/modal-sistema.js"></script>
 </head>
+<body style="background-color: var(--palette-cream); color: var(--text-body);">
+  
   <!-- Header Unificado do Admin -->
   <header style="background: var(--palette-navy-dark); color: white; padding: 14px 5%; display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.12);">
     <div style="display: flex; align-items: center; gap: 15px;">
@@ -124,240 +112,223 @@
     </nav>
   </header>
 
-  <main class="container" style="max-width: 1180px; padding-top: 24px;">
-    <!-- Breadcrumb e Título Executivo -->
+  <main class="container" style="max-width: 1220px; padding-top: 24px; padding-bottom: 60px;">
+    
+    <!-- Título Executivo e Rastreabilidade DRS -->
     <div style="margin-bottom: 20px;">
       <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">
-        Administração &gt; Inteligência de Mercado &gt; Painel Executivo de Vendas
+        Administração &gt; Inteligência de Negócio &gt; RF0055 Análise Histórica de Vendas
       </div>
       <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px;">
         <div>
           <h2 style="font-family: var(--font-heading); color: var(--palette-navy-dark); font-size: 1.6rem; margin: 0;">
-            Painel Executivo de Vendas e BI
+            Análise Gráfica do Histórico de Vendas por Categoria
           </h2>
           <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
-            Análise consolidada de faturamento, mix de categorias, comportamento de clientes e formas de pagamento.
+            Comparação temporal entre categorias de produtos a partir de busca por período (RF0055, RNF0043, RNF0011).
           </p>
         </div>
-        <div style="display: flex; gap: 8px;">
-          <button type="button" id="btn-exportar-csv" class="btn-clean" style="padding: 8px 14px; font-size: 0.8rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; color: #334155; font-weight: 500;">
-            Exportar Dados (CSV)
-          </button>
-          <button type="button" onclick="window.print()" class="btn-clean" style="padding: 8px 14px; font-size: 0.8rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; color: #334155; font-weight: 500;">
-            Imprimir Relatório
-          </button>
+        
+        <!-- Status de Conformidade e Tempo de Resposta -->
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <span id="badge-criterio-entregue" style="font-size: 0.75rem; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 5px 10px; border-radius: 6px; font-weight: 600;">
+            ✓ Somente Compras ENTREGUE (Item 3.d)
+          </span>
+          <span id="badge-tempo-resposta" style="font-size: 0.75rem; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; padding: 5px 10px; border-radius: 6px; font-weight: 700;">
+            ⚡ Tempo de resposta: calculando... (RNF0011)
+          </span>
         </div>
       </div>
     </div>
 
-    <!-- Barra de Filtros Inteligente -->
-    <section style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 18px 22px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
-      <form onsubmit="return false;" style="display: grid; grid-template-columns: 180px 180px 160px 160px auto; gap: 14px; align-items: flex-end;">
-        
-        <div>
-          <label style="display: block; font-weight: 600; font-size: 0.8rem; margin-bottom: 5px; color: #475569;">Período Pré-definido:</label>
-          <select id="select-preset-periodo" class="input-clean" style="width: 100%; padding: 8px 10px; font-size: 0.85rem;">
-            <option value="ANO_ATUAL">Ano Completo 2026</option>
-            <option value="MES_ATUAL" selected>Mês Atual (Agosto/Setembro)</option>
-            <option value="7_DIAS">Últimos 7 Dias</option>
-            <option value="30_DIAS">Últimos 30 Dias</option>
-            <option value="TRIMESTRE_1">1º Trimestre (Jan - Mar)</option>
-            <option value="CUSTOM">Personalizado</option>
-          </select>
+    <!-- Painel de Bloqueio por Perfil (Cenário 7 do Roteiro) -->
+    <div id="painel-acesso-negado" style="display: none; background: #fef2f2; border: 2px solid #ef4444; border-radius: 10px; padding: 24px; margin-bottom: 24px; text-align: center;">
+      <div style="font-size: 2.2rem; color: #dc2626; margin-bottom: 8px;">🚫</div>
+      <h3 style="color: #991b1b; margin: 0 0 8px 0; font-family: var(--font-heading);">Acesso Negado (403 Forbidden)</h3>
+      <p style="color: #7f1d1d; font-size: 0.95rem; max-width: 650px; margin: 0 auto 16px auto;">
+        O acesso ao gráfico de análise do histórico de vendas por categoria é restrito exclusivamente ao perfil <strong>Administrador</strong> (conforme Critério 3.b do DRS e Cenário 7 do roteiro de demonstração).
+      </p>
+      <button type="button" onclick="restaurarPerfilAdmin()" class="btn-clean" style="background: #dc2626; color: white; border: none; padding: 8px 18px; border-radius: 6px; font-weight: 600; cursor: pointer;">
+        Alternar para Perfil Administrador
+      </button>
+    </div>
+
+    <!-- Conteúdo Analítico (visível apenas para perfil Administrador) -->
+    <div id="conteudo-analitico-admin">
+
+      <!-- Seção de Filtros Obrigatórios da Atividade 2 -->
+      <section style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 18px 22px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+        <form id="form-filtro-analise" onsubmit="return false;">
+          
+          <div style="display: grid; grid-template-columns: 180px 180px 180px auto; gap: 14px; align-items: flex-end; margin-bottom: 16px;">
+            <!-- Data Início (RF0055) -->
+            <div>
+              <label for="filtro-data-inicio" style="display: block; font-weight: 600; font-size: 0.8rem; margin-bottom: 5px; color: #475569;">
+                Data de Início (RF0055):
+              </label>
+              <input type="date" id="filtro-data-inicio" class="input-clean" value="2026-01-01" style="width: 100%; padding: 8px 10px; font-size: 0.85rem;">
+            </div>
+
+            <!-- Data Fim (RF0055) -->
+            <div>
+              <label for="filtro-data-fim" style="display: block; font-weight: 600; font-size: 0.8rem; margin-bottom: 5px; color: #475569;">
+                Data de Fim (RF0055):
+              </label>
+              <input type="date" id="filtro-data-fim" class="input-clean" value="2026-12-31" style="width: 100%; padding: 8px 10px; font-size: 0.85rem;">
+            </div>
+
+            <!-- Perfil Atual do Usuário (Para teste de autorização - Cenário 7) -->
+            <div>
+              <label for="select-perfil-acesso" style="display: block; font-weight: 600; font-size: 0.8rem; margin-bottom: 5px; color: #475569;">
+                Perfil de Acesso (Critério 3.b):
+              </label>
+              <select id="select-perfil-acesso" class="input-clean" style="width: 100%; padding: 8px 10px; font-size: 0.85rem; font-weight: 600;">
+                <option value="ADMIN" selected>Administrador (Permitido)</option>
+                <option value="CLIENTE">Cliente (Acesso Negado)</option>
+              </select>
+            </div>
+
+            <!-- Botão de Consulta -->
+            <div>
+              <button type="button" id="btn-aplicar-filtro" class="btn-buy" style="background: var(--palette-teal-dark); width: 100%; padding: 9px 18px; font-size: 0.88rem; font-weight: 700; border-radius: 6px; cursor: pointer;">
+                Consultar Histórico (RF0055)
+              </button>
+            </div>
+          </div>
+
+          <!-- Seleção das Categorias de Produtos a serem comparadas (RF0055, Critério 3.a) -->
+          <div style="border-top: 1px solid #f1f5f9; padding-top: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-weight: 700; font-size: 0.82rem; color: #1e293b; text-transform: uppercase; letter-spacing: 0.5px;">
+                Categorias a Comparar no Gráfico (Selecione 1 ou mais):
+              </span>
+              <div style="display: flex; gap: 8px;">
+                <button type="button" onclick="marcarTodasCategorias(true)" class="btn-clean" style="font-size: 0.75rem; padding: 2px 8px; cursor: pointer; color: #0284c7;">Marcar Todas</button>
+                <button type="button" onclick="marcarTodasCategorias(false)" class="btn-clean" style="font-size: 0.75rem; padding: 2px 8px; cursor: pointer; color: #64748b;">Desmarcar Todas</button>
+              </div>
+            </div>
+
+            <div id="container-checkboxes-categorias" style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <label class="checkbox-cat-label">
+                <input type="checkbox" class="check-categoria" value="Literatura Brasileira" checked id="cat-lit-brasil">
+                <span style="color: #2a9d8f;">●</span> Literatura Brasileira
+              </label>
+
+              <label class="checkbox-cat-label">
+                <input type="checkbox" class="check-categoria" value="Engenharia de Software" checked id="cat-eng-soft">
+                <span style="color: #0284c7;">●</span> Engenharia de Software
+              </label>
+
+              <label class="checkbox-cat-label">
+                <input type="checkbox" class="check-categoria" value="Obras Raras" checked id="cat-obras-raras">
+                <span style="color: #b45309;">●</span> Obras Raras
+              </label>
+
+              <label class="checkbox-cat-label">
+                <input type="checkbox" class="check-categoria" value="Filosofia" checked id="cat-filosofia">
+                <span style="color: #7c3aed;">●</span> Filosofia
+              </label>
+            </div>
+          </div>
+
+        </form>
+      </section>
+
+      <!-- Cartões de Resumo Executivo das Vendas ENTREGUE -->
+      <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
+        <div class="bi-card">
+          <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase;">
+            Total Faturado (ENTREGUE)
+          </span>
+          <div id="kpi-faturamento-total" style="font-size: 1.7rem; font-weight: 800; color: var(--palette-navy-dark); margin-top: 6px;">
+            R$ 0,00
+          </div>
+          <small style="color: #059669; font-weight: 600;">Medida: Valor em Reais (R$)</small>
         </div>
 
-        <div>
-          <label style="display: block; font-weight: 600; font-size: 0.8rem; margin-bottom: 5px; color: #475569;">Categoria de Livros:</label>
-          <select id="filtro-categoria" class="input-clean" style="width: 100%; padding: 8px 10px; font-size: 0.85rem;">
-            <option value="TODAS">Todas as Categorias</option>
-            <option value="Literatura Brasileira">Literatura Brasileira</option>
-            <option value="Obras Raras">Obras Raras & Coleção</option>
-            <option value="Filosofia">Filosofia & Ensaio</option>
-            <option value="Engenharia de Software">Engenharia de Software</option>
-          </select>
+        <div class="bi-card">
+          <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase;">
+            Compras Entregues no Período
+          </span>
+          <div id="kpi-pedidos-entregues" style="font-size: 1.7rem; font-weight: 800; color: var(--palette-teal-dark); margin-top: 6px;">
+            0
+          </div>
+          <small id="kpi-pedidos-ignorados" style="color: #64748b;">0 compras não-entregues ignoradas</small>
         </div>
 
-        <div>
-          <label style="display: block; font-weight: 600; font-size: 0.8rem; margin-bottom: 5px; color: #475569;">Data Inicial:</label>
-          <input type="date" id="filtro-data-inicio" class="input-clean" style="width: 100%; padding: 7px 10px; font-size: 0.85rem;">
+        <div class="bi-card">
+          <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase;">
+            Categorias Comparadas
+          </span>
+          <div id="kpi-qtd-categorias" style="font-size: 1.7rem; font-weight: 800; color: #0284c7; margin-top: 6px;">
+            0
+          </div>
+          <small style="color: #0284c7; font-weight: 600;">Linhas simultâneas no gráfico</small>
         </div>
 
-        <div>
-          <label style="display: block; font-weight: 600; font-size: 0.8rem; margin-bottom: 5px; color: #475569;">Data Final:</label>
-          <input type="date" id="filtro-data-fim" class="input-clean" style="width: 100%; padding: 7px 10px; font-size: 0.85rem;">
+        <div class="bi-card">
+          <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase;">
+            Mês Líder de Vendas
+          </span>
+          <div id="kpi-mes-lider" style="font-size: 1.7rem; font-weight: 800; color: #b45309; margin-top: 6px;">
+            --/----
+          </div>
+          <small id="kpi-mes-lider-valor" style="color: #b45309; font-weight: 600;">R$ 0,00</small>
+        </div>
+      </section>
+
+      <!-- Gráfico de Linhas Oficial (RNF0043) -->
+      <section class="chart-container-box" style="margin-bottom: 24px;">
+        <div class="chart-header">
+          <div>
+            <h4>Gráfico de Linhas — Histórico de Vendas por Categoria (RNF0043)</h4>
+            <small style="color: #64748b; font-size: 0.78rem;">
+              Eixo X: Períodos agrupados por mês (mês/ano) | Eixo Y: Valor total de vendas em reais (R$)
+            </small>
+          </div>
+          <span class="chart-badge" id="badge-chart-periodo">2026</span>
         </div>
 
-        <div>
-          <button type="button" id="btn-aplicar-filtro" class="btn-buy" style="background: var(--palette-teal-dark); width: 100%; padding: 9px 16px; font-size: 0.85rem; font-weight: 600; border-radius: 6px;">
-            Atualizar Painel
+        <div style="height: 380px; position: relative;">
+          <canvas id="grafico-linhas-historico"></canvas>
+        </div>
+
+        <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: #64748b;">
+          <span>RNF0045: Legenda inferior identificando cada categoria e cor correspondente.</span>
+          <span>RNF0046: Passe o mouse sobre os pontos para exibir valores exatos em tooltip.</span>
+        </div>
+      </section>
+
+      <!-- Tabela Comparativa Analítica Mensal -->
+      <section class="chart-container-box">
+        <div class="chart-header">
+          <div>
+            <h4>Tabela Comparativa Analítica (Valores em Reais R$)</h4>
+            <small style="color: #64748b; font-size: 0.78rem;">
+              Validação numérica mês a mês das compras com status ENTREGUE
+            </small>
+          </div>
+          <button type="button" id="btn-exportar-csv" class="btn-clean" style="padding: 6px 12px; font-size: 0.78rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer;">
+            Exportar CSV
           </button>
         </div>
-      </form>
-    </section>
 
-    <!-- Grade de KPIs Executivos (5 Cartões) -->
-    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
-      
-      <div class="bi-card">
-        <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
-          Faturamento Bruto
-        </span>
-        <div id="kpi-faturamento" style="font-size: 1.65rem; font-weight: 700; color: var(--palette-navy-dark); margin-top: 6px;">
-          R$ 0,00
+        <div style="overflow-x: auto;">
+          <table class="table-bi" id="tabela-comparativa-analise">
+            <thead id="tabela-analise-head">
+              <!-- Cabeçalho dinâmico baseado nas categorias selecionadas -->
+            </thead>
+            <tbody id="tabela-analise-body">
+              <!-- Linhas mensais dinâmicas -->
+            </tbody>
+            <tfoot id="tabela-analise-foot" style="font-weight: 800; background: #f8fafc; border-top: 2px solid #cbd5e1;">
+              <!-- Linha com soma geral -->
+            </tfoot>
+          </table>
         </div>
-        <div class="kpi-trend trend-up">
-          <span>+14.2% vs. período anterior</span>
-        </div>
-      </div>
+      </section>
 
-      <div class="bi-card">
-        <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
-          Total de Pedidos
-        </span>
-        <div id="kpi-pedidos" style="font-size: 1.65rem; font-weight: 700; color: var(--palette-teal-dark); margin-top: 6px;">
-          0
-        </div>
-        <div id="kpi-pedidos-media" class="kpi-trend trend-neutral">
-          <span>0 pedidos/dia</span>
-        </div>
-      </div>
-
-      <div class="bi-card">
-        <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
-          Ticket Médio
-        </span>
-        <div id="kpi-ticket-medio" style="font-size: 1.65rem; font-weight: 700; color: var(--palette-terracotta); margin-top: 6px;">
-          R$ 0,00
-        </div>
-        <div class="kpi-trend trend-up">
-          <span>Meta: R$ 120,00</span>
-        </div>
-      </div>
-
-      <div class="bi-card">
-        <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
-          Clientes Compradores
-        </span>
-        <div id="kpi-clientes-compradores" style="font-size: 1.65rem; font-weight: 700; color: #0369a1; margin-top: 6px;">
-          0
-        </div>
-        <div class="kpi-trend trend-neutral">
-          <span>68% recompra</span>
-        </div>
-      </div>
-
-      <div class="bi-card">
-        <span style="font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
-          SLA de Entregas
-        </span>
-        <div id="kpi-sla-entregas" style="font-size: 1.65rem; font-weight: 700; color: #047857; margin-top: 6px;">
-          98.2%
-        </div>
-        <div class="kpi-trend trend-up">
-          <span>Dentro do prazo</span>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- Linha 1 de Gráficos: Faturamento Temporal + Donut de Categorias -->
-    <section style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 24px;">
-      
-      <!-- Gráfico Principal de Área/Linha: Evolução Temporal -->
-      <div class="chart-container-box">
-        <div class="chart-header">
-          <div>
-            <h4>Evolução de Faturamento Diário e Volume de Vendas</h4>
-            <small style="color: #64748b; font-size: 0.75rem;">Receita acumulada em Reais (R$) agrupada por data de pedido</small>
-          </div>
-          <span class="chart-badge">Série Temporal</span>
-        </div>
-        <div style="height: 320px; position: relative;">
-          <canvas id="grafico-faturamento-canvas"></canvas>
-        </div>
-      </div>
-
-      <!-- Gráfico Donut: Mix de Vendas por Categoria -->
-      <div class="chart-container-box">
-        <div class="chart-header">
-          <div>
-            <h4>Mix de Vendas por Categoria</h4>
-            <small style="color: #64748b; font-size: 0.75rem;">Participação percentual sobre a receita total</small>
-          </div>
-          <span class="chart-badge">Composição</span>
-        </div>
-        <div style="height: 250px; position: relative;">
-          <canvas id="grafico-categorias-canvas"></canvas>
-        </div>
-        <div id="legenda-categorias" style="margin-top: 14px; font-size: 0.8rem; display: flex; flex-direction: column; gap: 6px;">
-          <!-- Preenchido dinamicamente via JS -->
-        </div>
-      </div>
-
-    </section>
-
-    <!-- Linha 2 de Gráficos: Formas de Pagamento/Bandeiras + Insights Executivos -->
-    <section style="display: grid; grid-template-columns: 1.2fr 1.8fr; gap: 20px; margin-bottom: 24px;">
-      
-      <!-- Gráfico de Barras: Bandeiras e Meios de Pagamento (RN0025) -->
-      <div class="chart-container-box">
-        <div class="chart-header">
-          <div>
-            <h4>Meios de Pagamento & Bandeiras Homologadas</h4>
-            <small style="color: #64748b; font-size: 0.75rem;">Conforme RN0025 (Visa, Mastercard, Elo, Amex e Pix)</small>
-          </div>
-          <span class="chart-badge">Transacional</span>
-        </div>
-        <div style="height: 250px; position: relative;">
-          <canvas id="grafico-pagamentos-canvas"></canvas>
-        </div>
-      </div>
-
-      <!-- Diagnóstico e Insights Estratégicos Automatizados -->
-      <div class="chart-container-box">
-        <div class="chart-header">
-          <div>
-            <h4>Diagnóstico & Sumário Executivo do Período</h4>
-            <small style="color: #64748b; font-size: 0.75rem;">Análise sintética gerada pelo motor analítico</small>
-          </div>
-          <span class="chart-badge">Insights BI</span>
-        </div>
-        <div id="box-insights-executivos" style="display: flex; flex-direction: column; gap: 8px;">
-          <!-- Preenchido dinamicamente via JS -->
-        </div>
-      </div>
-
-    </section>
-
-    <!-- Tabela de Obras Líderes de Venda -->
-    <section class="chart-container-box" style="margin-bottom: 40px;">
-      <div class="chart-header">
-        <div>
-          <h4>Obras Líderes de Faturamento no Período Selecionado</h4>
-          <small style="color: #64748b; font-size: 0.75rem;">Ranking de títulos por receita total e unidades comercializadas</small>
-        </div>
-        <span class="chart-badge">Top Produtos</span>
-      </div>
-
-      <div style="overflow-x: auto;">
-        <table class="table-bi">
-          <thead>
-            <tr>
-              <th>Posição</th>
-              <th>Título da Obra / Autor</th>
-              <th>Categoria</th>
-              <th style="text-align: right;">Unidades</th>
-              <th style="text-align: right;">Preço Médio</th>
-              <th style="text-align: right;">Receita Total</th>
-              <th style="text-align: center;">Status Estoque</th>
-            </tr>
-          </thead>
-          <tbody id="tabela-top-livros-body">
-            <!-- Linhas geradas dinamicamente via JS -->
-          </tbody>
-        </table>
-      </div>
-    </section>
+    </div>
 
   </main>
 

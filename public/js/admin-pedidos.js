@@ -1,6 +1,6 @@
-﻿/**
+/**
  * Livraria Alexandria - Gestão de Pedidos (Admin)
- * Integração direta com o Banco de Dados no Supabase via API REST
+ * Requisitos: RF0038, RF0039, RN0039, RN0040
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -11,7 +11,7 @@ async function carregarPedidosDoBanco() {
   const tbody = document.getElementById('tabela-pedidos-body');
   if (!tbody) return;
 
-  tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #64748b; padding: 24px;">Carregando pedidos do banco de dados...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #64748b; padding: 24px;">Carregando pedidos...</td></tr>';
 
   try {
     const res = await fetch('/api/pedidos');
@@ -26,7 +26,10 @@ async function carregarPedidosDoBanco() {
     tbody.innerHTML = '';
     pedidos.forEach(p => {
       const tr = document.createElement('tr');
-      const clienteNome = p.clientes?.nome || 'Cliente Anônimo';
+      tr.dataset.pedidoId = p.id;
+      tr.dataset.status = p.status;
+
+      const clienteNome = p.clientes?.nome || 'Cliente';
       const clienteCpf = p.clientes?.cpf || 'N/A';
       const dataFormatada = p.data ? p.data.split('-').reverse().join('/') : 'N/A';
       const valorFormatado = Number(p.valor_total).toFixed(2).replace('.', ',');
@@ -38,76 +41,76 @@ async function carregarPedidosDoBanco() {
 
       const st = (p.status || '').toUpperCase();
       if (st === 'EM PROCESSAMENTO' || st === 'PROCESSANDO') {
-        statusBg = '#e0f2fe';
-        statusColor = '#0369a1';
-        statusBorder = '#bae6fd';
-        acaoBotao = <button type="button" class="btn-tbl btn-tbl-primary" onclick="alterarStatus('', 'APROVADA')" style="background: #0284c7; padding: 5px 10px; border-radius: 4px; color: white; border: none; cursor: pointer; font-size: 0.78rem;">Aprovar Pagamento</button>;
+        statusBg = '#e0f2fe'; statusColor = '#0369a1'; statusBorder = '#bae6fd';
+        acaoBotao = `<button type="button" class="btn-tbl btn-tbl-primary btn-aprovar-pagamento" onclick="alterarStatus('${p.id}', 'APROVADA')" style="background: #0284c7; padding: 5px 10px; border-radius: 4px; color: white; border: none; cursor: pointer; font-size: 0.78rem;">Aprovar Pagamento</button>`;
       } else if (st === 'APROVADA' || st === 'PAGAMENTO REALIZADO') {
-        statusBg = '#ecfdf5';
-        statusColor = '#047857';
-        statusBorder = '#a7f3d0';
-        acaoBotao = <button type="button" class="btn-tbl btn-tbl-primary" onclick="alterarStatus('', 'EM TRANSPORTE')" style="background: #c2410c; padding: 5px 10px; border-radius: 4px; color: white; border: none; cursor: pointer; font-size: 0.78rem;">Despachar (EM TRANSPORTE)</button>;
+        statusBg = '#ecfdf5'; statusColor = '#047857'; statusBorder = '#a7f3d0';
+        acaoBotao = `<button type="button" class="btn-tbl btn-tbl-primary btn-despachar-pedido" onclick="alterarStatus('${p.id}', 'EM TRANSPORTE')" style="background: #c2410c; padding: 5px 10px; border-radius: 4px; color: white; border: none; cursor: pointer; font-size: 0.78rem;">Despachar (EM TRANSPORTE)</button>`;
       } else if (st === 'EM TRANSPORTE' || st === 'EM_TRANSPORTE') {
-        statusBg = '#fffbeb';
-        statusColor = '#b45309';
-        statusBorder = '#fde68a';
-        acaoBotao = <button type="button" class="btn-tbl btn-tbl-primary" onclick="alterarStatus('', 'ENTREGUE')" style="background: #16a34a; padding: 5px 10px; border-radius: 4px; color: white; border: none; cursor: pointer; font-size: 0.78rem;">Confirmar Entrega</button>;
+        statusBg = '#fffbeb'; statusColor = '#b45309'; statusBorder = '#fde68a';
+        acaoBotao = `<button type="button" class="btn-tbl btn-tbl-primary btn-confirmar-entrega" onclick="alterarStatus('${p.id}', 'ENTREGUE')" style="background: #16a34a; padding: 5px 10px; border-radius: 4px; color: white; border: none; cursor: pointer; font-size: 0.78rem;">Confirmar Entrega (ENTREGUE)</button>`;
       } else if (st === 'ENTREGUE') {
-        statusBg = '#f1f5f9';
-        statusColor = '#334155';
-        statusBorder = '#cbd5e1';
-        acaoBotao = <span style="color: #64748b; font-size: 0.8rem;">Concluído</span>;
+        statusBg = '#f1f5f9'; statusColor = '#334155'; statusBorder = '#cbd5e1';
+        acaoBotao = '<span style="color: #166534; font-size: 0.8rem; font-weight: bold;">✓ Entregue ao Cliente</span>';
       } else if (st === 'EM TROCA') {
-        statusBg = '#fef3c7';
-        statusColor = '#b45309';
-        statusBorder = '#fde68a';
-        acaoBotao = <a href="/admin/trocas.html" style="color: #d97706; font-size: 0.8rem; font-weight: 600;">Ver em Trocas</a>;
+        statusBg = '#fef3c7'; statusColor = '#b45309'; statusBorder = '#fde68a';
+        acaoBotao = '<a href="/admin/trocas.html" class="link-ver-trocas" style="color: #d97706; font-size: 0.8rem; font-weight: 700; text-decoration: underline;">Ver em Trocas ➔</a>';
+      } else if (st === 'TROCA AUTORIZADA') {
+        statusBg = '#fef3c7'; statusColor = '#b45309'; statusBorder = '#fde68a';
+        acaoBotao = '<a href="/admin/trocas.html" style="color: #d97706; font-size: 0.8rem; font-weight: 700;">Aguardando Itens</a>';
+      } else if (st === 'TROCADO') {
+        statusBg = '#f1f5f9'; statusColor = '#334155'; statusBorder = '#cbd5e1';
+        acaoBotao = '<span style="color: #059669; font-size: 0.8rem; font-weight: bold;">✓ Trocado</span>';
+      } else if (st === 'REPROVADA') {
+        statusBg = '#fee2e2'; statusColor = '#991b1b'; statusBorder = '#fca5a5';
+        acaoBotao = '<span style="color: #dc2626; font-size: 0.8rem; font-weight: bold;">✕ Reprovado</span>';
       }
 
-      tr.innerHTML = 
+      tr.innerHTML = `
         <td style="font-weight: bold; color: var(--palette-navy-dark);">
           <span style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 3px 8px; border-radius: 4px; font-family: monospace; font-size: 0.85rem;">
-            #
+            #${p.id}
           </span>
         </td>
         <td>
-          <strong style="color: var(--palette-navy-dark); font-size: 0.95rem;"></strong><br>
-          <small style="color: #64748b;">CPF: </small>
+          <strong style="color: var(--palette-navy-dark); font-size: 0.95rem;">${clienteNome}</strong><br>
+          <small style="color: #64748b;">CPF: ${clienteCpf}</small>
         </td>
-        <td style="color: #334155; font-size: 0.88rem;"></td>
-        <td style="font-weight: bold; color: var(--palette-navy-dark); font-size: 0.95rem;">R$ </td>
+        <td style="color: #334155; font-size: 0.88rem;">${dataFormatada}</td>
+        <td style="font-weight: bold; color: var(--palette-navy-dark); font-size: 0.95rem;">R$ ${valorFormatado}</td>
         <td>
-          <span class="pill-status" style="background: ; color: ; border: 1px solid ; padding: 3px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">
-            ● 
+          <span class="pill-status" style="background: ${statusBg}; color: ${statusColor}; border: 1px solid ${statusBorder}; padding: 3px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">
+            ● ${p.status}
           </span>
         </td>
         <td style="text-align: right; padding-right: 18px;">
           <div class="action-toolbar">
-            
+            ${acaoBotao}
           </div>
         </td>
-      ;
+      `;
       tbody.appendChild(tr);
     });
 
   } catch (err) {
     console.error('Erro ao listar pedidos:', err);
-    tbody.innerHTML = <tr><td colspan="6" style="text-align: center; color: #ef4444; padding: 24px;">Erro ao conectar com o banco: </td></tr>;
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #ef4444; padding: 24px;">Erro ao carregar pedidos: ${err.message}</td></tr>`;
   }
 }
 
 async function alterarStatus(pedidoId, novoStatus) {
   try {
-    const res = await fetch(/api/pedidos//status, {
+    const res = await fetch(`/api/pedidos/${encodeURIComponent(pedidoId)}/status`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: novoStatus })
     });
     if (!res.ok) throw new Error('Falha ao atualizar status no servidor');
-    carregarPedidosDoBanco();
+    await carregarPedidosDoBanco();
   } catch (err) {
     alert('Erro ao atualizar status: ' + err.message);
   }
 }
 
 window.alterarStatus = alterarStatus;
+window.carregarPedidosDoBanco = carregarPedidosDoBanco;

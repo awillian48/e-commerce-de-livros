@@ -30,6 +30,21 @@
         "pais": "Brasil",
         "observacoes": "Próximo à linha do bonde",
         "finalidade": "ENTREGA"
+      },
+      {
+        "id": "end-1794152383786",
+        "frase_identificadora": "Residência de Férias 0974",
+        "tipo_residencia": "CASA",
+        "tipo_logradouro": "RUA",
+        "logradouro": "Rua das Acácias Floridas",
+        "numero": "742",
+        "bairro": "Jardim Primavera",
+        "cep": "04538133",
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "pais": "Brasil",
+        "observacoes": "",
+        "no_perfil": true
       }
     ],
     "cartoes": [
@@ -40,6 +55,14 @@
         "bandeira": "VISA",
         "cvv": "123",
         "preferencial": true
+      },
+      {
+        "id": "card-2",
+        "numero": "5555 4444 3333 2222",
+        "nomeImpresso": "MACHADO DE ASSIS",
+        "bandeira": "MASTERCARD",
+        "cvv": "456",
+        "preferencial": false
       }
     ],
     "transacoes": [

@@ -1,4 +1,4 @@
-﻿import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 import WebSocket from 'ws';
 
@@ -11,6 +11,7 @@ const supabaseUrl = (process.env.SUPABASE_URL?.trim()) || DEFAULT_SUPABASE_URL;
 const supabaseKey = (process.env.SUPABASE_KEY?.trim()) || DEFAULT_SUPABASE_KEY;
 
 let supabaseInstance = null;
+let supabaseOnline = false;
 
 if (supabaseUrl && supabaseKey && supabaseUrl.startsWith('http')) {
   try {
@@ -22,20 +23,37 @@ if (supabaseUrl && supabaseKey && supabaseUrl.startsWith('http')) {
         transport: WebSocket
       }
     });
-    console.log('✅ Conexão com Supabase inicializada com sucesso!');
+
+    // Probe assíncrono de conectividade para ativar/desativar circuit-breaker (RNF0011 < 1s)
+    fetch(`${supabaseUrl}/rest/v1/`, {
+      headers: { apikey: supabaseKey },
+      signal: AbortSignal.timeout(1500)
+    })
+      .then((res) => {
+        supabaseOnline = res.ok || res.status === 401 || res.status === 404;
+        if (supabaseOnline) {
+          console.log('✅ Conexão com Supabase validada e online!');
+        } else {
+          console.warn(`⚠️ Supabase respondeu HTTP ${res.status}. Operando com motor localStore de alta velocidade.`);
+        }
+      })
+      .catch(() => {
+        supabaseOnline = false;
+        console.warn('⚠️ Host Supabase inacessível/pausado. Operando 100% via localStore resiliente (< 5ms).');
+      });
   } catch (err) {
     console.error('❌ Falha ao inicializar cliente Supabase:', err.message);
   }
 } else {
-  console.log('⚠️  Supabase URL/Key não configurados no .env. Operando em modo de persistência local (JSON fallback).');
+  console.log('⚠️ Supabase URL/Key não configurados. Operando em modo de persistência local (JSON fallback).');
 }
 
 export function isSupabaseConfigured() {
-  return supabaseInstance !== null;
+  return supabaseInstance !== null && supabaseOnline;
 }
 
 export function getSupabase() {
-  return supabaseInstance;
+  return supabaseOnline ? supabaseInstance : null;
 }
 
 export default supabaseInstance;

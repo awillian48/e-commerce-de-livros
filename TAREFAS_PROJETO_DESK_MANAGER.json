@@ -1,0 +1,892 @@
+{
+  "projeto": {
+    "nome": "E-Commerce de Livros Clássicos — Livraria Alexandria (LES 2026)",
+    "descricao": "Sistema completo de comércio eletrônico especializado em obras clássicas da literatura universal, concebido e desenvolvido para a disciplina Laboratório de Engenharia de Software (LES 2026 - FATEC) sob orientação do Prof. Nelson. Desenvolvedor único: Anderson Barros. O sistema implementa arquitetura em camadas (C4 Model), banco relacional Supabase/PostgreSQL, CRUD com regras avançadas de clientes (CDU02), motor transacional de checkout com múltiplos cartões e cupons (CDU03), ciclo completo de trocas e logística reversa com código PAC-REV e reentrada em estoque (CDU04), e suíte automatizada E2E no Cypress com 11 cenários formais 100% aprovados.",
+    "gerente": "Anderson Barros",
+    "operador_responsavel": "Anderson Barros",
+    "tipo_fim": "P",
+    "previsto_horas": 160,
+    "realizado_horas": 158,
+    "data_inicio": "10-08-2026",
+    "data_prevista_conclusao": "10-12-2026",
+    "concluido": "N",
+    "colunas_kanban": [
+      {
+        "ordem": 1,
+        "nome": "Backlog (Sprint 5)",
+        "cor": "#64748B",
+        "concluir_tarefa": "N",
+        "descricao": "Tarefas futuras de BI, Analytics e Fornecedores planejadas para a Entrega 4"
+      },
+      {
+        "ordem": 2,
+        "nome": "Arquitetura & Concepção (Sprint 1)",
+        "cor": "#0284C7",
+        "concluir_tarefa": "S",
+        "descricao": "Fundações técnicas, modelagem C4, DDL Supabase e carga de acervo canônico"
+      },
+      {
+        "ordem": 3,
+        "nome": "CRUD de Clientes - CDU02 (Sprint 2)",
+        "cor": "#0237FF",
+        "concluir_tarefa": "S",
+        "descricao": "Módulo de clientes, CPF único, 10 campos de endereço, cartões, senha e soft delete"
+      },
+      {
+        "ordem": 4,
+        "nome": "Vendas & Checkout - CDU03 (Sprint 3)",
+        "cor": "#7C3AED",
+        "concluir_tarefa": "S",
+        "descricao": "Carrinho, validação impeditiva de estoque, frete, multi-cartões R$ 10 e cupons"
+      },
+      {
+        "ordem": 5,
+        "nome": "Trocas & Logística Reversa - CDU04 (Sprint 4)",
+        "cor": "#00C48C",
+        "concluir_tarefa": "S",
+        "descricao": "Máquina de estados de pedidos, trocas, reversa PAC-REV, reentrada e 11 testes Cypress"
+      }
+    ]
+  },
+  "estatisticas": {
+    "total_tarefas": 37,
+    "tarefas_concluidas": 33,
+    "tarefas_backlog": 4,
+    "horas_previstas_total": 368,
+    "testes_cypress_e2e": "11/11 Aprovados (100% de sucesso)"
+  },
+  "tarefas": [
+    {
+      "id": "arq-01-arquitetura-e-modelagem-c4",
+      "titulo": "Arquitetura do Sistema e Modelagem C4",
+      "coluna_status": "Arquitetura & Concepção (Sprint 1)",
+      "sprint": "Sprint 1: Arquitetura & Concepção",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 16,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "arquitetura",
+        "sprint-1",
+        "node",
+        "express"
+      ],
+      "descricao": "Estruturar a arquitetura base da Livraria Alexandria adotando arquitetura em camadas (MVC/Service/Repository) com Node.js (ESM), Express.js e banco de dados relacional.",
+      "checklist": [
+        "Definição de modelo de componentes e containers (C4 Model).",
+        "Estrutura modular de rotas (`src/routes/`), repositórios (`src/data/`) e regras de domínio (`src/domain/`).",
+        "Configuração de pipeline de CI/CD para deploy contínuo no Render."
+      ]
+    },
+    {
+      "id": "arq-02-modelagem-relacional-postgresql",
+      "titulo": "Modelagem Relacional e DDL no Supabase",
+      "coluna_status": "Arquitetura & Concepção (Sprint 1)",
+      "sprint": "Sprint 1: Arquitetura & Concepção",
+      "prioridade": "Critical",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 12,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "banco-de-dados",
+        "supabase",
+        "postgresql",
+        "ddl"
+      ],
+      "descricao": "Modelar o schema relacional PostgreSQL no Supabase com tabelas normalizadas e restrições de integridade referencial.",
+      "checklist": [
+        "Criação das tabelas: `livros`, `clientes`, `enderecos`, `cartoes_cliente`, `pedidos`, `itens_pedido`, `cupons` e `logs_transacoes`.",
+        "Chaves primárias UUID/Serial e chaves estrangeiras com `ON DELETE RESTRICT` para integridade contábil.",
+        "Fallback local e espelho SQLite resiliente para garantir disponibilidade em testes."
+      ]
+    },
+    {
+      "id": "des-01-design-system-e-prototipo",
+      "titulo": "Design System e Protótipo de Alta Fidelidade",
+      "coluna_status": "Arquitetura & Concepção (Sprint 1)",
+      "sprint": "Sprint 1: Arquitetura & Concepção",
+      "prioridade": "Medium",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 12,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "ui-ux",
+        "design-system",
+        "css",
+        "prototipo"
+      ],
+      "descricao": "Desenvolver a identidade visual refinada da Livraria Alexandria inspirada em livrarias clássicas, tipografia serifada e responsividade completa.",
+      "checklist": [
+        "Paleta oficial de cores: Borgonha Clássico (`#8B0000`), Dourado Antigo (`#DAA520`) e Pergaminho (`#FDFBF7`).",
+        "Telas desenhadas e prototipadas: Vitrine, Detalhes, Carrinho, Checkout, Modais e Painel do Cliente."
+      ]
+    },
+    {
+      "id": "dta-01-script-seed-acervo-livros",
+      "titulo": "Script de Seed e Carga de Dados do Acervo",
+      "coluna_status": "Arquitetura & Concepção (Sprint 1)",
+      "sprint": "Sprint 1: Arquitetura & Concepção",
+      "prioridade": "Medium",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 12,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "seed",
+        "dados",
+        "popular-banco"
+      ],
+      "descricao": "Construir script de população de banco para inicializar acervo com obras de Dom Casmurro, Memórias Póstumas de Brás Cubas, O Cortiço, A Relíquia e outros clássicos.",
+      "checklist": [
+        "Script `popular-banco-completo.js` populando livros, preços unitários e estoque físico inicial.",
+        "Carga de cupons promocionais e de troca para validação das regras de negócio."
+      ]
+    },
+    {
+      "id": "cli-01-cadastro-cliente-cpf-unico",
+      "titulo": "Cadastro de Clientes e Validação de CPF Único (RF0021, RF0024)",
+      "coluna_status": "CRUD de Clientes - CDU02 (Sprint 2)",
+      "sprint": "Sprint 2: CRUD de Clientes (CDU02)",
+      "prioridade": "Critical",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "clientes",
+        "rf0021",
+        "cpf",
+        "sprint-2"
+      ],
+      "descricao": "Implementar o formulário completo de cadastro de clientes com validação rigorosa de CPF válido e garantia de unicidade no banco de dados.",
+      "checklist": [
+        "Validação algorítmica dos dígitos verificadores do CPF.",
+        "Bloqueio impeditivo caso o CPF já esteja cadastrado na base (retornando status 422).",
+        "Armazenamento de dados pessoais obrigatórios (Nome, Gênero, Data Nasc, Telefone, E-mail)."
+      ]
+    },
+    {
+      "id": "cli-02-composicao-obrigatoria-enderecos",
+      "titulo": "Composição Obrigatória de Endereços com 10 Campos (RN0023)",
+      "coluna_status": "CRUD de Clientes - CDU02 (Sprint 2)",
+      "sprint": "Sprint 2: CRUD de Clientes (CDU02)",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "clientes",
+        "rn0023",
+        "enderecos",
+        "cep"
+      ],
+      "descricao": "Implementar a regra RN0023 exigindo a composição de 10 campos obrigatórios para cada endereço cadastrado no perfil do cliente.",
+      "checklist": [
+        "Campos obrigatórios: Frase Identificadora, Tipo Residência, Tipo Logradouro, Logradouro, Número, Bairro, CEP (8 dígitos), Cidade, UF válida e País.",
+        "Suporte à classificação: Residencial, Entrega e Cobrança."
+      ]
+    },
+    {
+      "id": "cli-03-gestao-cartoes-preferencial",
+      "titulo": "Gestão de Cartões e Cartão Preferencial (RF0027, RN0024, RN0025)",
+      "coluna_status": "CRUD de Clientes - CDU02 (Sprint 2)",
+      "sprint": "Sprint 2: CRUD de Clientes (CDU02)",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "clientes",
+        "cartoes",
+        "rn0024",
+        "rn0025"
+      ],
+      "descricao": "Cadastrar múltiplos cartões no perfil do cliente com identificação do preferencial e validação de bandeiras homologadas.",
+      "checklist": [
+        "Validação de bandeiras autorizadas: VISA, MASTERCARD, ELO, AMERICAN EXPRESS (RN0025).",
+        "Máscara e validação de 13 a 19 dígitos e código de segurança CVV (RN0024).",
+        "Marcação unívoca do cartão preferencial na carteira do cliente."
+      ]
+    },
+    {
+      "id": "cli-04-validacao-senha-forte",
+      "titulo": "Validação de Complexidade de Senha Forte (RNF0031, RNF0032)",
+      "coluna_status": "CRUD de Clientes - CDU02 (Sprint 2)",
+      "sprint": "Sprint 2: CRUD de Clientes (CDU02)",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "seguranca",
+        "rnf0031",
+        "rnf0032",
+        "senha"
+      ],
+      "descricao": "Garantir que toda senha cadastrada atenda aos requisitos não funcionais de segurança da informação da FATEC.",
+      "checklist": [
+        "RNF0031: Mínimo de 8 caracteres, contendo letras maiúsculas, minúsculas e caractere especial.",
+        "RNF0032: Confirmação de senha obrigatória com digitação dupla estritamente coincidente.",
+        "Indicador visual de força de senha no formulário."
+      ]
+    },
+    {
+      "id": "cli-05-criptografia-senha-bcrypt",
+      "titulo": "Armazenamento Criptografado com Hash Seguro (RNF0033)",
+      "coluna_status": "CRUD de Clientes - CDU02 (Sprint 2)",
+      "sprint": "Sprint 2: CRUD de Clientes (CDU02)",
+      "prioridade": "Critical",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "seguranca",
+        "rnf0033",
+        "bcrypt",
+        "hash"
+      ],
+      "descricao": "Proteger as senhas de clientes no banco Supabase utilizando algoritmo de hash com salt.",
+      "checklist": [
+        "Senhas nunca salvas em texto puro.",
+        "Aplicação de algoritmo BCrypt com fator de custo calibrado.",
+        "Comparação segura de senhas no login."
+      ]
+    },
+    {
+      "id": "cli-06-consulta-alteracao-inativacao",
+      "titulo": "Consulta, Alteração e Inativação Lógica de Clientes (RF0022, RF0024, RF0025)",
+      "coluna_status": "CRUD de Clientes - CDU02 (Sprint 2)",
+      "sprint": "Sprint 2: CRUD de Clientes (CDU02)",
+      "prioridade": "Medium",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "clientes",
+        "rf0022",
+        "rf0025",
+        "crud"
+      ],
+      "descricao": "Completar o ciclo de vida do cliente com busca por filtros, atualização de cadastro e desativação lógica preservando histórico.",
+      "checklist": [
+        "Consulta de cliente por CPF com carregamento dos endereços e cartões.",
+        "Atualização de dados cadastrais com validação prévia.",
+        "Inativação lógica (`status = 'INATIVO'`) sem deleção física no banco."
+      ]
+    },
+    {
+      "id": "cli-07-testes-cypress-crud-cliente",
+      "titulo": "Suíte Automatizada E2E do Módulo de Clientes",
+      "coluna_status": "CRUD de Clientes - CDU02 (Sprint 2)",
+      "sprint": "Sprint 2: CRUD de Clientes (CDU02)",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 12,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "cypress",
+        "e2e",
+        "testes",
+        "crud-cliente"
+      ],
+      "descricao": "Implementar testes automatizados Cypress cobrindo cadastro com dados válidos, bloqueio de CPF duplicado e regras de senha.",
+      "checklist": [
+        "Arquivo `cypress/e2e/crud_cliente.cy.js` executando com sucesso.",
+        "Cobertura de cenários felizes e caminhos de exceção."
+      ]
+    },
+    {
+      "id": "ped-01-gestao-itens-carrinho",
+      "titulo": "Gestão Completa de Itens no Carrinho (RF0031, RF0032)",
+      "coluna_status": "Vendas & Checkout - CDU03 (Sprint 3)",
+      "sprint": "Sprint 3: Vendas & Checkout (CDU03)",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "vendas",
+        "carrinho",
+        "rf0031",
+        "rf0032"
+      ],
+      "descricao": "Permitir adicionar múltiplos livros, alterar quantidade na vitrine e no carrinho, e remover itens com recálculo instantâneo de totais.",
+      "checklist": [
+        "Adição de múltiplos produtos com persistência em LocalStorage sincronizado.",
+        "Edição de quantidade com botões de incremento/decremento e input manual.",
+        "Recálculo dinâmico de subtotais e atualização do badge do carrinho no cabeçalho."
+      ]
+    },
+    {
+      "id": "ped-02-validacao-impeditiva-estoque",
+      "titulo": "Validação Impeditiva de Estoque Físico (RN0031)",
+      "coluna_status": "Vendas & Checkout - CDU03 (Sprint 3)",
+      "sprint": "Sprint 3: Vendas & Checkout (CDU03)",
+      "prioridade": "Critical",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "vendas",
+        "estoque",
+        "rn0031",
+        "validacao"
+      ],
+      "descricao": "Impedir a adição ou alteração de quantidade no carrinho superior ao estoque físico disponível no banco.",
+      "checklist": [
+        "Limitação do input numérico ao valor máximo em estoque.",
+        "Alerta impeditivo caso o usuário tente forçar adição além da capacidade.",
+        "Validação redundante no backend (`POST /api/carrinho/validar`)."
+      ]
+    },
+    {
+      "id": "ped-03-transicao-carrinho-checkout",
+      "titulo": "Início da Realização de Compra (RF0033)",
+      "coluna_status": "Vendas & Checkout - CDU03 (Sprint 3)",
+      "sprint": "Sprint 3: Vendas & Checkout (CDU03)",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "vendas",
+        "checkout",
+        "rf0033"
+      ],
+      "descricao": "Iniciar o processo de compra a partir do carrinho, transportando o estado do pedido para a página de checkout.",
+      "checklist": [
+        "Botão \"Finalizar Compra\" valida existência de itens e redireciona para `/checkout.html`.",
+        "Carregamento automático do resumo de itens, quantidades e subtotais no checkout."
+      ]
+    },
+    {
+      "id": "ped-04-calculo-frete-regional-peso",
+      "titulo": "Cálculo de Frete Regional por Peso e UF (RF0034)",
+      "coluna_status": "Vendas & Checkout - CDU03 (Sprint 3)",
+      "sprint": "Sprint 3: Vendas & Checkout (CDU03)",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "vendas",
+        "frete",
+        "rf0034",
+        "regras-negocio"
+      ],
+      "descricao": "Implementar a fórmula de frete regional no módulo de domínio `calcularFrete(itens, uf)`.",
+      "checklist": [
+        "Tarifa base por região: Sudeste (R$ 10,00), Sul (R$ 14,00), Centro-Oeste (R$ 16,00), Nordeste (R$ 20,00) e Norte (R$ 25,00).",
+        "Acréscimo variável de R$ 3,00 por kg do peso total dos itens.",
+        "Exibição transparente do critério de frete ao cliente."
+      ]
+    },
+    {
+      "id": "ped-05-selecao-e-novo-endereco-checkout",
+      "titulo": "Seleção e Cadastro de Endereço no Checkout (RF0035, RN0023)",
+      "coluna_status": "Vendas & Checkout - CDU03 (Sprint 3)",
+      "sprint": "Sprint 3: Vendas & Checkout (CDU03)",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "vendas",
+        "checkout",
+        "enderecos",
+        "rf0035"
+      ],
+      "descricao": "Permitir ao cliente selecionar um endereço previamente salvo ou cadastrar um novo endereço diretamente no fluxo de fechamento.",
+      "checklist": [
+        "Listagem dos endereços de entrega vinculados ao perfil do cliente.",
+        "Opção \"Adicionar novo endereço\" com salvamento no perfil e recálculo imediato do frete."
+      ]
+    },
+    {
+      "id": "ped-06-modal-centralizado-cartao-foco",
+      "titulo": "Modal Centralizado de Cartão de Crédito e Foco (RN0024, RN0025)",
+      "coluna_status": "Vendas & Checkout - CDU03 (Sprint 3)",
+      "sprint": "Sprint 3: Vendas & Checkout (CDU03)",
+      "prioridade": "Medium",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "ui-ux",
+        "modal",
+        "cartao",
+        "foco"
+      ],
+      "descricao": "Garantir experiência visual de excelência no modal de cadastro de novo cartão, posicionado centralizadamente no viewport.",
+      "checklist": [
+        "Posicionamento fixo central (`top: 50%; left: 50%; transform: translate(-50%, -50%)`).",
+        "Backdrop escuro com scroll lock e scroll automático para centralização de campos em foco.",
+        "Validação das 4 bandeiras homologadas (VISA, Mastercard, Elo, Amex)."
+      ]
+    },
+    {
+      "id": "ped-07-pagamento-multiplos-cartoes-minimo-10",
+      "titulo": "Pagamento com Múltiplos Cartões e Mínimo R$ 10,00 (RF0036, RN0034)",
+      "coluna_status": "Vendas & Checkout - CDU03 (Sprint 3)",
+      "sprint": "Sprint 3: Vendas & Checkout (CDU03)",
+      "prioridade": "Critical",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 12,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "vendas",
+        "pagamento",
+        "rn0034",
+        "multiplos-cartoes"
+      ],
+      "descricao": "Permitir a divisão do pagamento em múltiplos cartões de crédito exigindo valor mínimo de R$ 10,00 por cartão.",
+      "checklist": [
+        "Rateio de valores entre Cartão 1 e Cartão 2.",
+        "Rejeição impeditiva de valores inferiores a R$ 10,00 (ex.: R$ 9,99 rejeitado).",
+        "Soma dos cartões exatamente igual ao total a pagar."
+      ]
+    },
+    {
+      "id": "ped-08-limite-cupom-promocional",
+      "titulo": "Limite Estrito de 1 Cupom Promocional por Compra (RF0037, RN0033)",
+      "coluna_status": "Vendas & Checkout - CDU03 (Sprint 3)",
+      "sprint": "Sprint 3: Vendas & Checkout (CDU03)",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "vendas",
+        "cupons",
+        "rn0033",
+        "promocional"
+      ],
+      "descricao": "Garantir a regra RN0033 que impede a aplicação simultânea de mais de um cupom promocional no mesmo pedido.",
+      "checklist": [
+        "Ao tentar adicionar um segundo cupom promocional, o sistema bloqueia e exibe aviso impeditivo.",
+        "Aplicação correta de abatimento financeiro do cupom no subtotal."
+      ]
+    },
+    {
+      "id": "ped-09-excecao-cupom-cartao-menor-10",
+      "titulo": "Exceção de Cupom com Cartão Menor que R$ 10,00 (RN0035)",
+      "coluna_status": "Vendas & Checkout - CDU03 (Sprint 3)",
+      "sprint": "Sprint 3: Vendas & Checkout (CDU03)",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "vendas",
+        "cupons",
+        "rn0035",
+        "regra-negocio"
+      ],
+      "descricao": "Permitir que um cartão assuma valor inferior a R$ 10,00 caso esteja cobrindo o saldo residual de cupons.",
+      "checklist": [
+        "Se cupom cobre a quase totalidade e resta saldo menor que R$ 10 (ex.: R$ 4,00), o cartão é autorizado.",
+        "Validação em `regrasPedido.js` via constante `excecaoRN0035`."
+      ]
+    },
+    {
+      "id": "ped-10-cupons-troca-bloqueio-troco",
+      "titulo": "Cupons de Troca, Bloqueio Redundante e Troco (RN0036)",
+      "coluna_status": "Vendas & Checkout - CDU03 (Sprint 3)",
+      "sprint": "Sprint 3: Vendas & Checkout (CDU03)",
+      "prioridade": "Critical",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "vendas",
+        "cupons-troca",
+        "rn0036",
+        "troco"
+      ],
+      "descricao": "Permitir múltiplos cupons de troca, bloqueando cupons desnecessários e gerando novo cupom de troca caso haja valor excedente.",
+      "checklist": [
+        "Múltiplos cupons de troca permitidos na mesma compra.",
+        "Bloqueio de cupons desnecessários cujos valores excedam a compra antes de sua inclusão.",
+        "Emissão de novo cupom de troca com o saldo do troco."
+      ]
+    },
+    {
+      "id": "ped-11-fechamento-pedido-em-processamento",
+      "titulo": "Fechamento do Pedido com Status 'EM PROCESSAMENTO' (RF0038)",
+      "coluna_status": "Vendas & Checkout - CDU03 (Sprint 3)",
+      "sprint": "Sprint 3: Vendas & Checkout (CDU03)",
+      "prioridade": "Critical",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "vendas",
+        "pedidos",
+        "rf0038",
+        "baixa-estoque"
+      ],
+      "descricao": "Concluir a transação de compra, gerando o número do pedido com status inicial 'EM PROCESSAMENTO' e debitando o estoque.",
+      "checklist": [
+        "Criação de registro em `pedidos` com status `EM PROCESSAMENTO`.",
+        "Gravação dos itens em `itens_pedido` e débito transacional em `livros.estoque`.",
+        "Esvaziamento do carrinho e exibição da tela de confirmação de compra."
+      ]
+    },
+    {
+      "id": "ped-12-auditoria-logs-tempo-resposta",
+      "titulo": "Auditoria de Transações e Tempo de Resposta (RNF0011, RNF0012)",
+      "coluna_status": "Vendas & Checkout - CDU03 (Sprint 3)",
+      "sprint": "Sprint 3: Vendas & Checkout (CDU03)",
+      "prioridade": "Medium",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "auditoria",
+        "rnf0011",
+        "rnf0012",
+        "performance"
+      ],
+      "descricao": "Atender aos requisitos não funcionais de auditoria de operações de escrita e latência de consulta.",
+      "checklist": [
+        "RNF0011: Tempo de resposta em consultas na vitrine em menos de 1 segundo (medido em 340 ms).",
+        "RNF0012: Registro de log em banco contendo data, hora, usuário, operação e dados alterados."
+      ]
+    },
+    {
+      "id": "ped-13-suite-cypress-8-testes-hud",
+      "titulo": "Suíte Cypress E2E com 8 Cenários, Slow Motion e HUD Visual",
+      "coluna_status": "Vendas & Checkout - CDU03 (Sprint 3)",
+      "sprint": "Sprint 3: Vendas & Checkout (CDU03)",
+      "prioridade": "Critical",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 12,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "cypress",
+        "e2e",
+        "slow-motion",
+        "hud"
+      ],
+      "descricao": "Implementar a suíte definitiva `cypress/e2e/criacao_pedido.cy.js` cobrindo 100% dos requisitos de vendas com visualização guiada para a banca.",
+      "checklist": [
+        "8 cenários de testes automatizados aprovados (0 falhas em 2m 37s).",
+        "HUD visual no topo destacando as etapas e tempo em slow motion.",
+        "Rota `DELETE /api/checkout/limpeza-testes` garantindo repetibilidade limpa."
+      ]
+    },
+    {
+      "id": "ped-14-plano-de-testes-oficial",
+      "titulo": "Elaboração do Plano de Testes Oficial (Word .docx)",
+      "coluna_status": "Vendas & Checkout - CDU03 (Sprint 3)",
+      "sprint": "Sprint 3: Vendas & Checkout (CDU03)",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "plano-testes",
+        "documentacao",
+        "pert",
+        "rastreabilidade"
+      ],
+      "descricao": "Elaborar o documento formal de Plano de Testes da Sprint 3 no template oficial exigido pelo professor.",
+      "checklist": [
+        "Arquivo `PlanoTestes_AndersonBarros.docx` com todas as 32 tabelas preenchidas.",
+        "Matriz de rastreabilidade completa (27 requisitos) e cronograma PERT (20,4 horas).",
+        "10 Casos de Teste (CT001 a CT010) com subtabelas de técnicas (equivalência, valor limite, tabela de decisão)."
+      ]
+    },
+    {
+      "id": "log-01-despacho-transporte-rastreio",
+      "titulo": "Despacho, Transporte e Confirmação de Entrega (RF0039, RF0040)",
+      "coluna_status": "Trocas & Logística Reversa - CDU04 (Sprint 4)",
+      "sprint": "Sprint 4: Trocas & Logística Reversa (CDU04)",
+      "prioridade": "Medium",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "logistica",
+        "rf0039",
+        "rf0040",
+        "rastreio"
+      ],
+      "descricao": "Implementar as transições de status pós-compra no painel administrativo: despachado, em transporte e entregue.",
+      "checklist": [
+        "Mudança de status `EM PROCESSAMENTO` -> `DESPACHADO` -> `EM TRANSPORTE` -> `ENTREGUE`.",
+        "Código de rastreamento e registro de data/hora de entrega efetiva."
+      ]
+    },
+    {
+      "id": "trc-01-modelagem-tabela-trocas-supabase",
+      "titulo": "Modelagem de Dados e DDL de Trocas no Supabase (CDU04)",
+      "coluna_status": "Trocas & Logística Reversa - CDU04 (Sprint 4)",
+      "sprint": "Sprint 4: Trocas & Logística Reversa (CDU04)",
+      "prioridade": "Critical",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "trocas",
+        "sprint-4",
+        "cdu04",
+        "banco-de-dados"
+      ],
+      "descricao": "Criar as tabelas `solicitacoes_troca` e `itens_troca` no Supabase para dar suporte ao ciclo de vida de logística reversa.",
+      "checklist": [
+        "Tabela `solicitacoes_troca` com campos: `id`, `pedido_id`, `cliente_id`, `status`, `motivo`, `codigo_postagem`, `created_at`.",
+        "Status suportados: `EM TROCA`, `TROCA AUTORIZADA`, `PRODUTO RECEBIDO`, `TROCA APROVADA`, `TROCA RECUSADA`.",
+        "Chaves estrangeiras e integridade referencial vinculadas ao pedido entregue."
+      ]
+    },
+    {
+      "id": "trc-02-interface-cliente-solicitacao-troca",
+      "titulo": "Interface do Cliente para Solicitação de Troca (RF0041)",
+      "coluna_status": "Trocas & Logística Reversa - CDU04 (Sprint 4)",
+      "sprint": "Sprint 4: Trocas & Logística Reversa (CDU04)",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "trocas",
+        "frontend",
+        "rf0041",
+        "cliente"
+      ],
+      "descricao": "Implementar na tela de 'Meus Pedidos' a opção de solicitar troca de livros para pedidos que já estejam com status 'ENTREGUE'.",
+      "checklist": [
+        "Exibir botão 'Solicitar Troca' apenas para pedidos com status 'ENTREGUE'.",
+        "Modal permitindo selecionar quais itens do pedido serão trocados e a quantidade.",
+        "Campo obrigatório para seleção do motivo da troca (Defeito, Arrependimento, Outro)."
+      ]
+    },
+    {
+      "id": "trc-03-fluxo-admin-autorizacao-postagem",
+      "titulo": "Fluxo Administrativo de Autorização e Código de Postagem (RF0042)",
+      "coluna_status": "Trocas & Logística Reversa - CDU04 (Sprint 4)",
+      "sprint": "Sprint 4: Trocas & Logística Reversa (CDU04)",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "trocas",
+        "admin",
+        "rf0042",
+        "logistica-reversa"
+      ],
+      "descricao": "Disponibilizar no painel administrativo a gestão de pedidos de troca com geração de código de postagem para logística reversa.",
+      "checklist": [
+        "Administrador visualiza solicitações pendentes e aprova ou recusa a solicitação.",
+        "Ao aprovar, o sistema gera código de postagem fictício (ex.: `POST-2026-XXXX`) e atualiza o status para `TROCA AUTORIZADA`.",
+        "Envio de notificação ao cliente com instruções de postagem."
+      ]
+    },
+    {
+      "id": "trc-04-conferencia-fisica-recebimento-estoque",
+      "titulo": "Conferência Física e Recebimento de Produtos (RF0043)",
+      "coluna_status": "Trocas & Logística Reversa - CDU04 (Sprint 4)",
+      "sprint": "Sprint 4: Trocas & Logística Reversa (CDU04)",
+      "prioridade": "Medium",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "trocas",
+        "admin",
+        "rf0043",
+        "estoque"
+      ],
+      "descricao": "Registrar o recebimento físico do livro devolvido no armazém e laudo técnico de inspeção.",
+      "checklist": [
+        "Registro da data de recebimento do pacote no centro de distribuição.",
+        "Transição do status para `PRODUTO RECEBIDO`.",
+        "Checklist de vistoria: integridade do livro, capa, páginas e presença de avarias."
+      ]
+    },
+    {
+      "id": "trc-05-reincorporacao-ao-estoque-ou-descarte",
+      "titulo": "Reincorporação ao Estoque ou Descarte de Avarias (RF0044)",
+      "coluna_status": "Trocas & Logística Reversa - CDU04 (Sprint 4)",
+      "sprint": "Sprint 4: Trocas & Logística Reversa (CDU04)",
+      "prioridade": "Medium",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "trocas",
+        "estoque",
+        "rf0044"
+      ],
+      "descricao": "Decidir sobre o destino físico do item recebido na troca (retorno ao saldo comercial ou descarte/avaria).",
+      "checklist": [
+        "Se o produto estiver em estado perfeito, reincorporar quantidade ao estoque ativo de vendas.",
+        "Se houver defeito/avaria irreversível, destinar ao estoque de avarias sem alimentar o saldo vendível."
+      ]
+    },
+    {
+      "id": "trc-06-emissao-credito-cupom-troca-cliente",
+      "titulo": "Emissão e Crédito Automático de Cupom de Troca (RF0045)",
+      "coluna_status": "Trocas & Logística Reversa - CDU04 (Sprint 4)",
+      "sprint": "Sprint 4: Trocas & Logística Reversa (CDU04)",
+      "prioridade": "Critical",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 8,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "trocas",
+        "cupons",
+        "rf0045",
+        "credito"
+      ],
+      "descricao": "Ao finalizar a aprovação da troca, emitir automaticamente um cupom de troca de valor equivalente ao item devolvido vinculado ao cliente.",
+      "checklist": [
+        "Geração do cupom com código único prefixado `TR-` (ex.: `TR-TROCA-8472`).",
+        "Vinculação unívoca ao CPF/ID do cliente para uso exclusivo no próximo checkout.",
+        "Atualização do status final para `TROCA APROVADA`."
+      ]
+    },
+    {
+      "id": "trc-07-testes-cypress-ciclo-trocas",
+      "titulo": "Suíte Cypress E2E para o Fluxo Completo de Trocas",
+      "coluna_status": "Trocas & Logística Reversa - CDU04 (Sprint 4)",
+      "sprint": "Sprint 4: Trocas & Logística Reversa (CDU04)",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 16,
+      "p_concluido": 100,
+      "status": "Concluído",
+      "labels": [
+        "cypress",
+        "e2e",
+        "trocas",
+        "testes"
+      ],
+      "descricao": "Desenvolver testes automatizados no Cypress validando solicitação de troca, autorização admin, emissão do cupom e recompra com o cupom gerado.",
+      "checklist": [
+        "Arquivo `cypress/e2e/trocas_pedidos.cy.js` implementado e aprovado.",
+        "Teste do ciclo completo de ponta a ponta (solicitação -> cupom -> novo pedido)."
+      ]
+    },
+    {
+      "id": "adm-01-cadastro-gestao-fornecedores",
+      "titulo": "Módulo de Cadastro e Gestão de Fornecedores (CDU01, RF0081-RF0085)",
+      "coluna_status": "Backlog (Sprint 5)",
+      "sprint": "Sprint 5: Backlog (BI & Fornecedores)",
+      "prioridade": "Medium",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 16,
+      "p_concluido": 0,
+      "status": "Backlog",
+      "labels": [
+        "fornecedores",
+        "cdu01",
+        "backlog",
+        "sprint-5"
+      ],
+      "descricao": "Implementar o CRUD completo de Fornecedores conforme especificação do caso de uso CDU01.",
+      "checklist": [
+        "Cadastro com CNPJ único, Razão Social, Nome Fantasia, Inscrição Estadual e CNAE.",
+        "Associação de produtos fornecidos e controle de entradas de estoque."
+      ]
+    },
+    {
+      "id": "bi-01-hub-grafico-linhas-temporal-vendas",
+      "titulo": "Hub de BI com Gráfico Temporal de Vendas (RF0055, RN0071)",
+      "coluna_status": "Backlog (Sprint 5)",
+      "sprint": "Sprint 5: Backlog (BI & Fornecedores)",
+      "prioridade": "High",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 16,
+      "p_concluido": 0,
+      "status": "Backlog",
+      "labels": [
+        "bi",
+        "analytics",
+        "rf0055",
+        "chartjs"
+      ],
+      "descricao": "Desenvolver dashboard interativo de vendas com gráficos Chart.js exibindo evolução temporal de faturamento e volume.",
+      "checklist": [
+        "Gráfico de linhas com valores agregados por dia, semana ou mês.",
+        "Comparativo de períodos e cálculo de médias de faturamento."
+      ]
+    },
+    {
+      "id": "bi-02-filtros-analiticos-multidimensionais",
+      "titulo": "Filtros Analíticos por Categoria, Autor e Região (RF0056)",
+      "coluna_status": "Backlog (Sprint 5)",
+      "sprint": "Sprint 5: Backlog (BI & Fornecedores)",
+      "prioridade": "Medium",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 16,
+      "p_concluido": 0,
+      "status": "Backlog",
+      "labels": [
+        "bi",
+        "filtros",
+        "rf0056",
+        "drill-down"
+      ],
+      "descricao": "Permitir drill-down analítico nas vendas filtrando por categorias literárias, autores e regiões geográficas de entrega.",
+      "checklist": [
+        "Filtro por categoria (Realismo, Romantismo, Naturalismo, etc.).",
+        "Filtro por estado/região de entrega correlacionando com custos de frete."
+      ]
+    },
+    {
+      "id": "bi-03-exportacao-relatorios-pdf-excel",
+      "titulo": "Exportação de Relatórios Gerenciais de Vendas (RF0058)",
+      "coluna_status": "Backlog (Sprint 5)",
+      "sprint": "Sprint 5: Backlog (BI & Fornecedores)",
+      "prioridade": "Low",
+      "responsavel": "Anderson Barros",
+      "horas_previstas": 16,
+      "p_concluido": 0,
+      "status": "Backlog",
+      "labels": [
+        "relatorios",
+        "exportacao",
+        "pdf",
+        "excel"
+      ],
+      "descricao": "Possibilitar aos gestores a emissão e download de relatórios consolidados em formatos PDF e planilha eletrônica.",
+      "checklist": [
+        "Geração de PDF estruturado com KPIs e tabela de pedidos.",
+        "Exportação de dados brutos tabulares em formato CSV / Excel."
+      ]
+    }
+  ]
+}
