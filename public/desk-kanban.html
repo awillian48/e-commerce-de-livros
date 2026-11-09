@@ -584,7 +584,7 @@
     <nav class="header-nav">
       <div class="nav-item">Dashboard</div>
       <div class="nav-item active">Quadro Kanban (#86)</div>
-      <div class="nav-item">Lista de Tarefas (50)</div>
+      <div class="nav-item">Lista de Tarefas (58)</div>
       <div class="nav-item">Gantt & Cronograma</div>
       <div class="nav-item">Gestão de Horas</div>
       <div class="nav-item">Relatórios & Analytics</div>
@@ -613,11 +613,11 @@
       <div class="project-kpis">
         <div class="kpi-card">
           <span class="kpi-label">Total Granulado</span>
-          <span class="kpi-value blue">50 Tarefas</span>
+          <span class="kpi-value blue">58 Tarefas</span>
         </div>
         <div class="kpi-card">
           <span class="kpi-label">Backlog / To Do</span>
-          <span class="kpi-value">8 / 9 Cards</span>
+          <span class="kpi-value">12 / 13 Cards</span>
         </div>
         <div class="kpi-card">
           <span class="kpi-label">Em Execução</span>
@@ -638,7 +638,7 @@
       <div class="controls-left">
         <div class="search-box">
           <span>🔍</span>
-          <input type="text" value="Fluxo Kanban: Backlog (8) → To Do (9) → Em Desenvolvimento (8) → Em Testes (11) → Finalizado (14)" readonly>
+          <input type="text" value="Fluxo Kanban: Backlog (12) → To Do (13) → Em Desenvolvimento (8) → Em Testes (11) → Finalizado (14)" readonly>
         </div>
         <button class="btn-ai">✨ Busca Semântica IA</button>
         <select class="filter-select"><option>Visão: Fluxo de Engenharia (5 Estágios)</option></select>
@@ -666,7 +666,7 @@
       <span class="strip-item">Produção Render: <b>https://e-commerce-de-livros.onrender.com</b></span>
     </div>
     <div>
-      <span>Regra de Workflow Desk Manager: <b>Concluir='S'</b> habilitado exclusivamente na coluna <b>Finalizado</b> (14/50 tarefas concluídas)</span>
+      <span>Regra de Workflow Desk Manager: <b>Concluir='S'</b> habilitado exclusivamente na coluna <b>Finalizado</b> (14/58 tarefas concluídas • Atividade 3 RNF0044 planejada)</span>
     </div>
   </footer>
 
@@ -683,13 +683,17 @@
         countClass: '',
         done: false,
         tasks: [
+          { id: '#1020', tag: 'ATIV.3 IA', tagCls: 'tag-purple', title: 'Integração IA Generativa (Google Gemini)', desc: 'RNF0044.1: Conector LLM e justificativa da escolha.', pct: '0%', hrs: '8h' },
+          { id: '#1021', tag: 'ATIV.3 IA', tagCls: 'tag-purple', title: 'Captação Híbrida de Preferências Cliente', desc: 'Critério 3.e: Preferências explícitas e implícitas.', pct: '0%', hrs: '6h' },
+          { id: '#1022', tag: 'ATIV.3 IA', tagCls: 'tag-purple', title: 'Recomendação Personalizada por Histórico', desc: 'RNF0044.1: Sugestões distintas (CLI-001 vs CLI-002).', pct: '0%', hrs: '8h' },
+          { id: '#1023', tag: 'ATIV.3 IA', tagCls: 'tag-purple', title: 'Treinamento e Ajuste Fino Contínuo (RLHF)', desc: 'RNF0044.3: Matriz de vendas + feedback e .jsonl.', pct: '0%', hrs: '10h' },
           { id: '#957', tag: 'CDU01', tagCls: 'tag-slate', title: 'Cadastro de Fornecedores e CNPJ Único', desc: 'RF0081: Validação de dígitos verificadores de CNPJ.', pct: '0%', hrs: '8h' },
           { id: '#958', tag: 'CDU01', tagCls: 'tag-slate', title: 'Consulta Multi-Critério de Fornecedores', desc: 'RF0082: Filtros por Razão Social, CNPJ e UF.', pct: '0%', hrs: '6h' },
           { id: '#959', tag: 'CDU01', tagCls: 'tag-slate', title: 'Edição e Vínculo de Catálogo Editorial', desc: 'RF0083: Associação entre fornecedor e livros.', pct: '0%', hrs: '6h' },
           { id: '#960', tag: 'CDU01', tagCls: 'tag-slate', title: 'Inativação Lógica de Fornecedores', desc: 'RF0084: Preservação do histórico de entradas.', pct: '0%', hrs: '6h' },
           { id: '#961', tag: 'RF0058', tagCls: 'tag-purple', title: 'Exportação Gerencial de Vendas em PDF', desc: 'Relatório consolidado com assinatura de auditoria.', pct: '0%', hrs: '8h' },
           { id: '#962', tag: 'RF0058', tagCls: 'tag-purple', title: 'Exportação Analítica em CSV / XLSX', desc: 'Download tabular das séries históricas por mês.', pct: '0%', hrs: '6h' },
-          { id: '#963', tag: 'IA GEN', tagCls: 'tag-purple', title: 'Motor de Recomendação por Perfil', desc: 'Sugestão de clássicos pelo histórico ENTREGUE.', pct: '0%', hrs: '10h' },
+          { id: '#963', tag: 'RNF0044', tagCls: 'tag-purple', title: 'Sugestão de Conteúdos e Trilhas no Chat', desc: 'RNF0044.2: Curadoria temática e comparativos.', pct: '0%', hrs: '8h' },
           { id: '#964', tag: 'PREDITIVO', tagCls: 'tag-purple', title: 'Projeção de Demanda por Sazonalidade', desc: 'Média móvel trimestral para reposição de estoque.', pct: '0%', hrs: '10h' }
         ]
       },
@@ -704,6 +708,10 @@
         countClass: '',
         done: false,
         tasks: [
+          { id: '#1024', tag: 'RNF0044.2', tagCls: 'tag-purple', title: 'Chatbot: Busca Assistida de Livros', desc: 'RNF0044.2: Busca natural por tema, autor e preço.', pct: '0%', hrs: '6h' },
+          { id: '#1025', tag: 'RNF0044.2', tagCls: 'tag-purple', title: 'Chatbot: Resposta a Dúvidas sobre Obras', desc: 'RNF0044.2: Enredo, detalhes editoriais e estoque.', pct: '0%', hrs: '6h' },
+          { id: '#1026', tag: 'RNF0044.3', tagCls: 'tag-purple', title: 'Avaliação de Respostas (Útil / Não Útil)', desc: 'Critério 3.d: Botões de feedback e recalibração IA.', pct: '0%', hrs: '6h' },
+          { id: '#1027', tag: 'E2E ATIV.3', tagCls: 'tag-amber', title: 'Suíte Cypress Atividade 3 (8 Cenários IA)', desc: 'Cenários 7.1–7.8: Testes E2E do Chatbot e RLHF.', pct: '0%', hrs: '8h' },
           { id: '#965', tag: 'RNF0045', tagCls: 'tag-cyan', title: 'Parametrização do Timer no Painel Admin', desc: 'Configuração dinâmica do prazo de bloqueio.', pct: '0%', hrs: '6h' },
           { id: '#979', tag: 'RNF0046', tagCls: 'tag-cyan', title: 'Disparo de E-mail/Webhook na Troca', desc: 'Envio assíncrono do código reverso PAC-REV.', pct: '0%', hrs: '6h' },
           { id: '#980', tag: 'RF0054', tagCls: 'tag-cyan', title: 'Painel de Auditoria de Avarias Físicas', desc: 'Laudo técnico para itens devolvidos com avaria.', pct: '0%', hrs: '8h' },

@@ -16,11 +16,139 @@
  * 11) Uso do cupom de troca gerado em uma nova compra.
  */
 
+// ============================================================================
+// CONTROLE DE VELOCIDADE E FOCO VISUAL PARA DEMONSTRAÇÃO (SLOW MOTION + HUD)
+// ============================================================================
+const PAUSA_DEMO = 1500;       // Pausa após cliques, selects, checks e navegação (1.5s)
+const PAUSA_DIGITACAO = 1100;  // Pausa após digitação de cada campo (1.1s)
+const PAUSA_LIMPEZA = 350;     // Pausa após clear()
+const PAUSA_FIM_CENARIO = 1800; // Pausa ao final de cada cenário para leitura do resultado
+
+// Digitação visível caractere por caractere (90ms entre teclas)
+Cypress.Keyboard.defaults({
+  keystrokeDelay: 90
+});
+
+let cenarioAtualTitulo = 'Atividade 1';
+
+function atualizarHUD(mensagem) {
+  try {
+    const doc = Cypress.$(cy.state('window').document);
+    let hud = doc.find('#cypress-demo-hud');
+    if (!hud.length) {
+      hud = Cypress.$(
+        '<div id="cypress-demo-hud" style="position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 9999999; background: #0f172a; color: #f8fafc; padding: 8px 22px; border-radius: 9999px; font-size: 0.86rem; font-weight: 600; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5), 0 0 0 2px #d97706; pointer-events: none; transition: all 0.2s ease; display: flex; align-items: center; gap: 10px; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;">' +
+          '<span style="display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #22c55e;"></span>' +
+          '<span id="hud-texto"></span>' +
+        '</div>'
+      );
+      doc.find('body').append(hud);
+    }
+    hud.find('#hud-texto').text(`${cenarioAtualTitulo}  |  ${mensagem || 'Executando...'}`);
+  } catch (e) {}
+}
+
+function focarNoElemento($el, acao = 'Focando') {
+  if (!$el) return;
+  const domEl = $el[0] || $el;
+  if (!domEl) return;
+
+  try {
+    const isDentroDeModal =
+      domEl.closest &&
+      domEl.closest('.modal-overlay, #modal-solicitar-troca, #modal-novo-cartao-checkout, #sistema-modal-dialogo, .modal-box');
+
+    if (isDentroDeModal) {
+      const modalBox = domEl.closest('.modal-box, #sistema-modal-dialogo > div');
+      if (modalBox && modalBox.scrollHeight > modalBox.clientHeight && typeof domEl.scrollIntoView === 'function') {
+        domEl.scrollIntoView({ block: 'nearest', inline: 'center' });
+      }
+    } else if (typeof domEl.scrollIntoView === 'function') {
+      domEl.scrollIntoView({ block: 'center', inline: 'center' });
+    }
+
+    const rotulo =
+      domEl.getAttribute('id') ||
+      domEl.getAttribute('name') ||
+      domEl.getAttribute('placeholder') ||
+      domEl.textContent?.trim().slice(0, 28) ||
+      domEl.tagName;
+    atualizarHUD(`${acao}: ${rotulo}`);
+
+    if (domEl.style) {
+      domEl.style.transition = 'box-shadow 0.2s ease, border-color 0.2s ease';
+      domEl.style.boxShadow = '0 0 0 4px rgba(217, 119, 6, 0.85), 0 0 25px rgba(217, 119, 6, 0.45)';
+      domEl.style.borderColor = '#d97706';
+      domEl.style.outline = 'none';
+      if (['INPUT', 'SELECT', 'TEXTAREA'].includes(domEl.tagName)) {
+        domEl.style.backgroundColor = '#fffbeb';
+      }
+      setTimeout(() => {
+        try {
+          domEl.style.boxShadow = '';
+          domEl.style.borderColor = '';
+          domEl.style.backgroundColor = '';
+        } catch (e) {}
+      }, PAUSA_DEMO + 400);
+    }
+  } catch (e) {}
+}
+
+if (PAUSA_DEMO > 0) {
+  Cypress.Commands.overwrite('visit', (originalFn, ...args) => {
+    atualizarHUD(`Abrindo tela: ${args[0]}`);
+    return originalFn(...args).then((val) => {
+      atualizarHUD(`Tela carregada: ${args[0]}`);
+      return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
+    });
+  });
+
+  Cypress.Commands.overwrite('click', (originalFn, subject, ...args) => {
+    focarNoElemento(subject, 'Clicando');
+    return originalFn(subject, ...args).then((val) => {
+      return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
+    });
+  });
+
+  Cypress.Commands.overwrite('type', (originalFn, subject, text, options) => {
+    focarNoElemento(subject, `Digitando "${text}"`);
+    return originalFn(subject, text, options).then((val) => {
+      return Cypress.Promise.delay(PAUSA_DIGITACAO).then(() => val);
+    });
+  });
+
+  Cypress.Commands.overwrite('clear', (originalFn, subject, ...args) => {
+    focarNoElemento(subject, 'Limpando campo');
+    return originalFn(subject, ...args).then((val) => {
+      return Cypress.Promise.delay(PAUSA_LIMPEZA).then(() => val);
+    });
+  });
+
+  Cypress.Commands.overwrite('select', (originalFn, subject, ...args) => {
+    focarNoElemento(subject, 'Selecionando opção');
+    return originalFn(subject, ...args).then((val) => {
+      return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
+    });
+  });
+
+  Cypress.Commands.overwrite('check', (originalFn, subject, ...args) => {
+    focarNoElemento(subject, 'Marcando');
+    return originalFn(subject, ...args).then((val) => {
+      return Cypress.Promise.delay(PAUSA_DEMO).then(() => val);
+    });
+  });
+}
+
 describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () => {
 
-  beforeEach(() => {
+  beforeEach(function () {
+    cenarioAtualTitulo = this.currentTest?.title?.split('(')[0]?.trim() || 'Atividade 1';
     cy.on('window:confirm', () => true);
     cy.on('window:alert', () => true);
+  });
+
+  afterEach(() => {
+    cy.wait(PAUSA_FIM_CENARIO);
   });
 
   const criarItensCarrinhoPadrao = () => [
@@ -47,16 +175,11 @@ describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () =>
       }
     });
 
-    // Aguarda o frete ser calculado automaticamente
     cy.get('#valor-frete', { timeout: 10000 }).should('not.contain', 'R$ 0,00');
-
-    // Valida seleção do endereço salvo
     cy.get('#container-enderecos-salvos input[type="radio"]', { timeout: 8000 }).first().should('be.checked');
 
-    // Finaliza a compra
     cy.get('#btn-finalizar-compra', { timeout: 10000 }).should('be.enabled').click();
 
-    // Valida tela de confirmação
     cy.get('#confirmacao-pedido', { timeout: 15000 }).should('be.visible');
     cy.get('#pedido-numero').should('contain', 'PED-');
     cy.get('#pedido-status').invoke('text').should('match', /APROVADA|EM PROCESSAMENTO/);
@@ -96,7 +219,6 @@ describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () =>
 
     cy.get('#valor-frete', { timeout: 15000 }).should('not.contain', 'R$ 0,00');
 
-    // Seleciona Cartão 2
     cy.get('#select-cartao-2 option', { timeout: 15000 }).should('have.length.at.least', 3);
     cy.get('#select-cartao-2').select(2);
 
@@ -107,17 +229,16 @@ describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () =>
     cy.get('#container-erros-pagamento').should('be.visible');
     cy.get('#erros-pagamento').should('contain', 'RN0034');
     cy.get('#btn-finalizar-compra').should('be.disabled');
+    cy.wait(1200);
 
     // Corrige para valor válido respeitando o mínimo (R$ 30,00 no Cartão 2)
     cy.get('#input-valor-cartao2').clear().type('30.00').trigger('input').trigger('change').trigger('blur');
 
-    // Preenche o valor restante no Cartão 1
     cy.get('#resumo-total').invoke('text').then((totalTexto) => {
       const totalNum = parseFloat(totalTexto.replace(/[^\d,]/g, '').replace(',', '.'));
       const val1 = (totalNum - 30.00).toFixed(2);
       cy.get('#input-valor-cartao1').clear().type(val1).trigger('input').trigger('change').trigger('blur');
 
-      // Botão deve ser liberado
       cy.get('#container-erros-pagamento').should('not.be.visible');
       cy.get('#btn-finalizar-compra').should('be.enabled').click();
 
@@ -146,12 +267,10 @@ describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () =>
 
     cy.get('#valor-frete', { timeout: 10000 }).should('not.contain', 'R$ 0,00');
 
-    // Aplica o cupom de R$ 50,00
     cy.get('#input-codigo-cupom').clear().type(cupomCodigo);
     cy.get('#btn-aplicar-cupom').click();
     cy.get('#lista-cupons-aplicados', { timeout: 8000 }).should('contain', cupomCodigo);
 
-    // O resíduo a pagar no cartão fica inferior a R$ 10,00 e o botão deve estar habilitado conforme RN0035
     cy.get('#btn-finalizar-compra', { timeout: 10000 }).should('be.enabled').click();
     cy.get('#confirmacao-pedido', { timeout: 15000 }).should('be.visible');
   });
@@ -177,12 +296,10 @@ describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () =>
     cy.get('#input-codigo-cupom').clear().type(cupomAlto);
     cy.get('#btn-aplicar-cupom').click();
 
-    // Valida exibição da linha de troco/crédito
     cy.get('#linha-troco', { timeout: 8000 }).should('be.visible');
 
     cy.get('#btn-finalizar-compra', { timeout: 10000 }).should('be.enabled').click();
 
-    // Valida geração e exibição do novo cupom de troca
     cy.get('#confirmacao-pedido', { timeout: 15000 }).should('be.visible');
     cy.get('#container-cupom-troca').should('be.visible');
     cy.get('#cupom-troca-gerado').should('contain', 'TR-');
@@ -221,7 +338,12 @@ describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () =>
         expect(resp.body.pedido.status).to.eq('REPROVADA');
         expect(resp.body.aprovado).to.eq(false);
 
-        // Verifica que o estoque se manteve intacto (RF0053, RN0028)
+        // Exibe visualmente o pedido REPROVADO no Painel do Administrador e o Estoque intacto
+        cy.visit('/admin/pedidos.html');
+        cy.get('#tabela-pedidos-body', { timeout: 8000 }).should('contain', 'REPROVADA');
+        cy.wait(1200);
+
+        cy.visit('/admin/estoque.html');
         cy.request('GET', '/api/livros/LIV-001').then((respLivroDepois) => {
           expect(respLivroDepois.body.estoque).to.deep.equal(estoqueAntes);
         });
@@ -236,12 +358,10 @@ describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () =>
     cy.visit('/carrinho.html', {
       onBeforeLoad(win) {
         win.localStorage.setItem('alexandria:carrinho', JSON.stringify(criarItensCarrinhoPadrao()));
-        // Simula timestamp expirado
         win.localStorage.setItem('alexandria:carrinho_timestamp', String(Date.now() - 350000));
       }
     });
 
-    // Clica no botão de simular expiração ou aciona expiração do carrinho
     cy.window().then((win) => {
       if (win.Carrinho) win.Carrinho.expirarBloqueio();
     });
@@ -257,21 +377,21 @@ describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () =>
     cy.visit('/admin/pedidos.html');
     cy.get('#tabela-pedidos-body', { timeout: 8000 }).should('be.visible');
 
-    // Despacha pedido
+    // Despacha pedido (APROVADA -> EM TRANSPORTE)
     cy.get('body').then($body => {
       const btnDespachar = $body.find('.btn-despachar-pedido').first();
       if (btnDespachar.length > 0) {
         cy.wrap(btnDespachar).click();
-        cy.wait(600);
+        cy.wait(1000);
       }
     });
 
-    // Confirma entrega
+    // Confirma entrega (EM TRANSPORTE -> ENTREGUE)
     cy.get('body').then($body => {
       const btnConfirmar = $body.find('.btn-confirmar-entrega').first();
       if (btnConfirmar.length > 0) {
         cy.wrap(btnConfirmar).click();
-        cy.wait(600);
+        cy.wait(1000);
       }
     });
 
@@ -282,7 +402,6 @@ describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () =>
   // CENÁRIO 8: Tentativa de solicitar troca de pedido não ENTREGUE (bloqueada)
   // --------------------------------------------------------------------------
   it('8. Tentativa de solicitar troca de pedido que não está ENTREGUE é bloqueada (RN0041, RN0043)', () => {
-    // 1. Validação visual no portal do cliente
     cy.visit('/cliente-pedidos.html', {
       onBeforeLoad(win) {
         win.localStorage.setItem('alexandria:cliente_codigo', 'CLI-001');
@@ -292,13 +411,12 @@ describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () =>
     cy.get('#container-historico-pedidos', { timeout: 8000 }).should('be.visible');
     cy.get('.btn-solicitar-troca-bloqueada').first().should('be.visible').and('contain', 'Bloqueada');
 
-    // 2. Validação da API: bloqueia troca para pedidos não entregues
     cy.request({
       method: 'POST',
       url: '/api/trocas/solicitar',
       failOnStatusCode: false,
       body: {
-        pedidoId: 'PED-2026-095', // Pedido em status APROVADA
+        pedidoId: 'PED-2026-095',
         clienteId: 'CLI-001',
         motivo: 'Tentativa de troca em pedido não entregue'
       }
@@ -339,7 +457,6 @@ describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () =>
   it('10. Fluxo completo da troca: solicitação, autorização, notificação, confirmação, cupom e reentrada no estoque (RF0041 a RF0044, RF0054, RN0042, RNF0046)', () => {
     let trocaCriadaId = null;
 
-    // Garante que o pedido de teste PED-2026-091 esteja no status ENTREGUE (RN0041)
     cy.request('PUT', '/api/pedidos/PED-2026-091/status', { status: 'ENTREGUE' }).then(() => {
       // 1. Solicita troca para o pedido entregue PED-2026-091
       cy.request({
@@ -357,6 +474,11 @@ describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () =>
         expect(resp.body.troca.status).to.eq('EM TROCA');
         trocaCriadaId = resp.body.troca.id;
 
+        // Visualiza no Painel de Trocas do Administrador (EM TROCA)
+        cy.visit('/admin/trocas.html');
+        cy.contains('EM TROCA').should('be.visible');
+        cy.wait(1200);
+
         // 2. Administrador autoriza a troca (RF0041, RNF0046)
         cy.request({
           method: 'PUT',
@@ -367,6 +489,11 @@ describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () =>
           expect(respAut.body.codigoPostagem).to.contain('PAC-REV-');
           expect(respAut.body.notificacao).to.not.be.null;
 
+          // Visualiza status TROCA AUTORIZADA no Admin
+          cy.visit('/admin/trocas.html');
+          cy.contains('TROCA AUTORIZADA').should('be.visible');
+          cy.wait(1200);
+
           // 3. Administrador confirma o recebimento dos itens (RF0043, RN0042)
           cy.request({
             method: 'PUT',
@@ -376,6 +503,17 @@ describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () =>
             expect(respConf.body.troca.status).to.eq('TROCADO');
             expect(respConf.body.cupomGerado.codigo).to.contain('TR-');
             expect(respConf.body.itensReentrados).to.be.gte(1);
+
+            // Visualiza status TROCADO no Admin e notificação/cupom no Portal do Cliente
+            cy.visit('/admin/trocas.html');
+            cy.contains('TROCADO').should('be.visible');
+            cy.wait(1200);
+
+            cy.visit('/cliente-pedidos.html', {
+              onBeforeLoad(win) {
+                win.localStorage.setItem('alexandria:cliente_codigo', 'CLI-001');
+              }
+            });
           });
         });
       });
@@ -407,13 +545,11 @@ describe('Atividade 1: Caso de Uso de Venda Ponta a Ponta (DRS LES 2026)', () =>
 
     cy.get('#valor-frete', { timeout: 10000 }).should('not.contain', 'R$ 0,00');
 
-    // Aplica o cupom de troca gerado
     cy.get('#input-codigo-cupom').clear().type(cupomTrocaCodigo);
     cy.get('#btn-aplicar-cupom').click();
 
     cy.get('#lista-cupons-aplicados', { timeout: 8000 }).should('contain', cupomTrocaCodigo);
 
-    // Finaliza a compra
     cy.get('#btn-finalizar-compra', { timeout: 10000 }).should('be.enabled').click();
     cy.get('#confirmacao-pedido', { timeout: 15000 }).should('be.visible');
   });

@@ -1,6 +1,8 @@
 import express from 'express';
 import { listarPedidos, buscarPedidoPorId, atualizarStatusPedido } from '../data/vendaRepository.js';
 import { criarPedido } from '../data/pedidoRepository.js';
+import { listarLivros } from '../data/livroRepository.js';
+import { treinarModeloIA } from '../services/recomendacaoIAService.js';
 import { responderErro } from './checkoutRoutes.js';
 
 const router = express.Router();
@@ -15,13 +17,21 @@ router.get('/', async (req, res) => {
 });
 
 /**
- * RF0033 / RF0037 / RF0038 / RN0037 / RN0038:
+ * RF0033 / RF0037 / RF0038 / RN0037 / RN0038 / RNF0044:
  * Cria o pedido com status inicial EM PROCESSAMENTO e em seguida
  * executa a validação de pagamento automática definindo APROVADA ou REPROVADA.
+ * Caso APROVADA, incorpora automaticamente os dados da nova venda ao modelo de IA (RNF0044 item 3).
  */
 router.post('/', async (req, res) => {
   try {
     const resultado = await criarPedido(req.body || {});
+    if (resultado?.aprovado) {
+      Promise.all([listarLivros(), listarPedidos()])
+        .then(([livros, pedidos]) => {
+          treinarModeloIA(livros, pedidos, `Nova Venda Aprovada (${resultado.pedido?.id || 'Pedido'})`);
+        })
+        .catch(() => {});
+    }
     res.status(201).json(resultado);
   } catch (err) {
     responderErro(res, err);
@@ -43,6 +53,13 @@ router.put('/:id/status', async (req, res) => {
     const { status } = req.body;
     if (!status) return res.status(400).json({ erro: 'Novo status é obrigatório' });
     const atualizado = await atualizarStatusPedido(req.params.id, status);
+    if (status === 'ENTREGUE' || status === 'APROVADA') {
+      Promise.all([listarLivros(), listarPedidos()])
+        .then(([livros, pedidos]) => {
+          treinarModeloIA(livros, pedidos, `Atualização de Venda ${req.params.id} -> ${status}`);
+        })
+        .catch(() => {});
+    }
     res.json({ sucesso: true, pedido: atualizado });
   } catch (err) {
     res.status(500).json({ erro: 'Erro ao alterar status do pedido', mensagem: err.message });

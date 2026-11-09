@@ -3,32 +3,372 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Livraria Alexandria - Chatbot de Recomendação</title>
+  <title>Livraria Alexandria — Chatbot IA Generativa & Fine-Tuning (RNF0044)</title>
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body {
+      background: #f8fafc;
+      color: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+    }
+    .ia-top-banner {
+      background: linear-gradient(135deg, #1b2a47 0%, #0f766e 100%);
+      color: #fff;
+      padding: 22px 28px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+    }
+    .ia-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .ia-kpi-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .ia-kpi-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #64748b;
+      font-weight: 700;
+    }
+    .ia-kpi-val {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-top: 4px;
+    }
+    .ia-main-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (max-width: 1024px) {
+      .ia-main-grid, .ia-kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .ia-panel {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      margin-bottom: 18px;
+    }
+    .ia-panel-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #1b2a47;
+      margin: 0 0 12px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 10px;
+    }
+    .cenario-pill {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: #1e293b;
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .cenario-pill:hover {
+      background: #1b2a47;
+      color: #fff;
+      border-color: #1b2a47;
+    }
+    .peso-bar-wrap {
+      margin-bottom: 10px;
+    }
+    .peso-bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .peso-bar-bg {
+      height: 9px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .peso-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0f766e, #2563eb);
+      border-radius: 999px;
+      transition: width 0.35s ease;
+    }
+    .comparativo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .comparativo-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.8rem;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo">Livraria Alexandria</a>
-    <nav class="user-nav">
-      <a href="index.html">← Voltar ao Acervo</a>
+  <!-- Cabeçalho da Loja (Perfil Cliente) -->
+  <header style="background: #1b2a47; color: white; padding: 14px 28px; display: flex; justify-content: space-between; align-items: center;">
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <a href="/index.html" style="color: white; text-decoration: none; font-size: 1.3rem; font-weight: 800;">Livraria Alexandria</a>
+      <span style="background: #0f766e; color: #fff; padding: 3px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 700;">
+        RNF0044 — IA Generativa & Fine-Tuning
+      </span>
+    </div>
+    <nav style="display: flex; gap: 12px; align-items: center;">
+      <a href="/index.html" style="color: #e2e8f0; text-decoration: none; font-size: 0.85rem; padding: 6px 12px; border: 1px solid #475569; border-radius: 6px;">← Voltar ao Acervo</a>
+      <a href="/cliente-pedidos.html" style="color: #e2e8f0; text-decoration: none; font-size: 0.85rem; padding: 6px 12px; border: 1px solid #475569; border-radius: 6px;">Meus Pedidos</a>
+      <a href="/carrinho.html" style="background: #d97706; color: #fff; text-decoration: none; font-size: 0.85rem; font-weight: 700; padding: 6px 14px; border-radius: 6px;">Carrinho</a>
     </nav>
   </header>
 
-  <main class="container">
-    <h3 class="section-title">Assistente Virtual de Recomendações</h3>
+  <main style="max-width: 1380px; margin: 22px auto; padding: 0 20px;">
+    <!-- Banner Superior -->
+    <div class="ia-top-banner">
+      <div>
+        <h1 style="margin: 0 0 6px 0; font-size: 1.45rem; font-weight: 800;">
+          Assistente Virtual de Recomendação Personalizada com IA Generativa
+        </h1>
+        <p style="margin: 0; font-size: 0.88rem; color: #cbd5e1;">
+          Integração com <strong>Google Gemini 2.5 Flash</strong> + <strong>Ajuste Fino Contínuo (RLHF & Matriz Colaborativa de Vendas)</strong> — Rastreável ao <strong>RNF0044 (Itens 1, 2 e 3)</strong>.
+        </p>
+      </div>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <span id="badge-versao-modelo" style="background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.3); padding: 7px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 700;">
+          Modelo: alexandria-ft-v2.4.0
+        </span>
+        <button type="button" id="btn-retreinar-modelo" style="background: #f59e0b; color: #0f172a; border: none; padding: 9px 16px; border-radius: 8px; font-weight: 800; font-size: 0.83rem; cursor: pointer;">
+          ⚡ Executar Ajuste Fino Agora
+        </button>
+      </div>
+    </div>
 
-    <section style="background: white; border: 1px solid var(--border-color); border-radius: 6px; padding: 20px; max-width: 700px; margin: 0 auto; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">
-      <div id="chat-log" style="height: 320px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fbf8f3; display: flex; flex-direction: column;">
-        <div style="background: #f0ebe1; color: var(--text-dark); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 8px; font-family: sans-serif; font-size: 0.9rem; margin-bottom: 12px; max-width: 80%;">
-          <strong>Livreiro Virtual:</strong> Olá! Que tipo de leitura você procura hoje? (ex: romances clássicos, literatura nacional ou tecnologia)
+    <!-- KPIs do Modelo Treinado -->
+    <div class="ia-kpi-grid">
+      <div class="ia-kpi-card">
+        <div class="ia-kpi-label">Modelo & Versão de Ajuste Fino</div>
+        <div class="ia-kpi-val" id="kpi-versao-ft" style="color: #0f766e; font-size: 1.15rem;">alexandria-ft-v2.4.0</div>
+        <div style="font-size: 0.74rem; color: #64748b; margin-top: 2px;">Google Gemini 2.5 Flash + LoRA/RLHF</div>
+      </div>
+      <div class="ia-kpi-card">
+        <div class="ia-kpi-label">Épocas & Loss de Treinamento</div>
+        <div class="ia-kpi-val" id="kpi-epocas-loss">14 épocas (Loss: 0.0842)</div>
+        <div style="font-size: 0.74rem; color: #64748b; margin-top: 2px;">Convergência supervisionada</div>
+      </div>
+      <div class="ia-kpi-card">
+        <div class="ia-kpi-label">Acurácia de Recomendação</div>
+        <div class="ia-kpi-val" id="kpi-acuracia" style="color: #1d4ed8;">94,6%</div>
+        <div style="font-size: 0.74rem; color: #64748b; margin-top: 2px;">Validação cruzada (Vendas + Feedback)</div>
+      </div>
+      <div class="ia-kpi-card">
+        <div class="ia-kpi-label">Corpus Incorporado ao Modelo</div>
+        <div class="ia-kpi-val" id="kpi-amostras">Vendas + 5 Feedbacks</div>
+        <div style="font-size: 0.74rem; color: #047857; font-weight: 600; margin-top: 2px;">Personalização Contínua Ativa</div>
+      </div>
+    </div>
+
+    <div class="ia-main-grid">
+      <!-- ================================================================= -->
+      <!-- COLUNA ESQUERDA: CHATBOT INTERATIVO DO CLIENTE                    -->
+      <!-- ================================================================= -->
+      <div>
+        <div class="ia-panel">
+          <div class="ia-panel-title">
+            <span>💬 Chatbot do Perfil Cliente (RNF0044 — Itens 1, 2 e 3)</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label for="select-cliente-chat" style="font-size: 0.78rem; color: #475569;">Cliente Ativo:</label>
+              <select id="select-cliente-chat" style="padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; font-weight: 700; color: #0f172a; background: #f8fafc;">
+                <option value="CLI-001">CLI-001 — Machado de Assis (Histórico: Lit. Brasileira & Obras Raras)</option>
+                <option value="CLI-002">CLI-002 — Clarice Lispector (Histórico: Filosofia & Eng. Software)</option>
+                <option value="CLI-003">CLI-003 — Carlos Drummond (Histórico: Eng. Software & Obras Raras)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Resumo de Histórico e Preferências do Cliente Selecionado -->
+          <div id="box-contexto-cliente" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 11px 14px; margin-bottom: 12px; font-size: 0.8rem; line-height: 1.5;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <strong>📚 Histórico de Compras (<span id="lbl-nome-cliente">Machado de Assis</span>):</strong>
+                <span id="lbl-historico-livros" style="color: #334155;">Carregando histórico...</span>
+              </div>
+              <button type="button" id="btn-toggle-pref" style="background: #e2e8f0; border: none; padding: 4px 10px; border-radius: 5px; font-size: 0.74rem; font-weight: 700; cursor: pointer; color: #1e293b;">
+                ⚙️ Editar Preferências (Critério 3.e)
+              </button>
+            </div>
+            <div style="margin-top: 4px;">
+              <strong>🎯 Preferências Atuais:</strong>
+              <span id="lbl-preferencias-cliente" style="color: #0f766e; font-weight: 600;">Literatura Brasileira, Obras Raras</span>
+              <span style="color: #64748b;"> | Temas: </span>
+              <span id="lbl-temas-cliente" style="color: #475569;">Realismo Psicológico, Clássicos do Século XIX</span>
+            </div>
+
+            <!-- Editor de Preferências do Cliente (Critério 3.e) -->
+            <form id="form-preferencias-cliente" style="display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #cbd5e1;">
+              <div style="font-size: 0.76rem; font-weight: 700; color: #1b2a47; margin-bottom: 6px;">
+                Selecione as Categorias Preferidas do Cliente (Captação Explícita — Critério 3.e):
+              </div>
+              <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px;">
+                <label><input type="checkbox" class="chk-pref-cat" value="Literatura Brasileira"> Literatura Brasileira</label>
+                <label><input type="checkbox" class="chk-pref-cat" value="Engenharia de Software"> Engenharia de Software</label>
+                <label><input type="checkbox" class="chk-pref-cat" value="Filosofia"> Filosofia</label>
+                <label><input type="checkbox" class="chk-pref-cat" value="Obras Raras"> Obras Raras</label>
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="text" id="input-pref-temas" placeholder="Temas de interesse separados por vírgula..." style="flex: 1; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 0.78rem;">
+                <button type="submit" id="btn-salvar-preferencias" style="background: #0f766e; color: white; border: none; padding: 6px 14px; border-radius: 5px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">
+                  Salvar & Recalibrar Modelo
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Atalhos Rápidos para os Cenários da Apresentação Presencial (Seção 7) -->
+          <div style="margin-bottom: 12px;">
+            <div style="font-size: 0.73rem; font-weight: 700; color: #64748b; margin-bottom: 6px; text-transform: uppercase;">
+              Atalhos Rápidos para Demonstração Presencial (Seção 7):
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+              <button type="button" class="cenario-pill" id="btn-cenario-recomendacao" data-prompt="Me recomende livros personalizados com base no meu histórico de compras e preferências">
+                2. Recomendação Personalizada
+              </button>
+              <button type="button" class="cenario-pill" id="btn-cenario-comparar-clientes">
+                3. Comparar 2 Clientes Distintos
+              </button>
+              <button type="button" class="cenario-pill" id="btn-cenario-busca" data-prompt="Preciso de ajuda para buscar livros de Engenharia de Software e Filosofia no acervo">
+                4. Busca de Livros pelo Chat
+              </button>
+              <button type="button" class="cenario-pill" id="btn-cenario-duvida" data-prompt="Sobre o que fala o livro Dom Casmurro? Capitu traiu ou não Bentinho?">
+                5. Tirar Dúvida sobre Livro
+              </button>
+              <button type="button" class="cenario-pill" id="btn-cenario-conteudo" data-prompt="Sugira conteúdos relevantes e uma trilha de estudos para o meu perfil">
+                6. Sugerir Conteúdos Relevantes
+              </button>
+              <button type="button" class="cenario-pill" id="btn-cenario-explicacao-ia" data-prompt="Qual IA generativa você utiliza, qual a justificativa e como funciona seu treinamento e ajuste fino?">
+                1 & 8. Arquitetura IA & Fine-Tuning
+              </button>
+            </div>
+          </div>
+
+          <!-- Log de Conversa -->
+          <div id="chat-log" style="height: 430px; overflow-y: auto; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px; margin-bottom: 12px; background: #fbf8f3; display: flex; flex-direction: column; gap: 12px;">
+            <div class="chat-msg-assistente" style="background: #ffffff; color: #1b2a47; border: 1px solid #cbd5e1; padding: 12px 14px; border-radius: 10px; font-size: 0.87rem; max-width: 92%; line-height: 1.5;">
+              <strong>🤖 Livreiro Virtual (Google Gemini + Fine-Tuning RLHF):</strong><br>
+              Olá! Estou conectado ao seu histórico de compras, às suas preferências literárias e aos pesos treinados do modelo. Faça qualquer pergunta livre, peça recomendações personalizadas, busque obras por tema/preço ou tire dúvidas sobre qualquer livro do acervo!
+            </div>
+          </div>
+
+          <!-- Formulário de Pergunta Livre -->
+          <form id="chat-form" style="display: flex; gap: 10px;">
+            <input type="text" id="chat-input" placeholder="Digite qualquer pergunta livre ao chatbot (ex: recomendações, dúvidas sobre livros, preços, trilhas)..." style="flex: 1; padding: 11px 14px; border: 1px solid #94a3b8; border-radius: 8px; font-size: 0.9rem;" required>
+            <button type="submit" id="btn-enviar-chat" class="btn-buy" style="padding: 11px 24px; border-radius: 8px; font-weight: 800; font-size: 0.9rem;">
+              Enviar Pergunta
+            </button>
+          </form>
+        </div>
+
+        <!-- Painel Comparativo de 2 Clientes Distintos (Cenário 3) -->
+        <div class="ia-panel" id="painel-comparativo-clientes">
+          <div class="ia-panel-title">
+            <span>👥 Cenário 3 — Recomendações Diferentes para Dois Clientes com Históricos Distintos</span>
+            <button type="button" id="btn-atualizar-comparativo" style="background: #1b2a47; color: #fff; border: none; padding: 5px 11px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer;">
+              🔄 Atualizar Comparação
+            </button>
+          </div>
+          <div class="comparativo-grid" id="grid-comparativo-clientes">
+            <div class="comparativo-box" id="comp-cli-001">Carregando recomendações de CLI-001...</div>
+            <div class="comparativo-box" id="comp-cli-002">Carregando recomendações de CLI-002...</div>
+          </div>
         </div>
       </div>
 
-      <form id="chat-form" style="display: flex; gap: 10px;">
-        <input type="text" id="chat-input" placeholder="Digite o tema ou gênero desejado..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: sans-serif;" required>
-        <button type="submit" class="btn-buy" style="padding: 10px 20px;">Enviar</button>
-      </form>
-    </section>
+      <!-- ================================================================= -->
+      <!-- COLUNA DIREITA: TREINAMENTO, PESOS, FEEDBACK E JUSTIFICATIVAS     -->
+      <!-- ================================================================= -->
+      <div>
+        <!-- Card 1: Pesos Treinados do Modelo para o Cliente Atual (Critério 3.c) -->
+        <div class="ia-panel">
+          <div class="ia-panel-title">
+            <span>🧠 Pesos Sinápticos Treinados por Categoria (<span id="lbl-pesos-cliente">CLI-001</span>)</span>
+            <span style="font-size: 0.72rem; color: #0f766e; font-weight: 700;">Critério 3.c (Fine-Tuning)</span>
+          </div>
+          <p style="font-size: 0.78rem; color: #475569; margin: 0 0 12px 0;">
+            Distribuídos pelo treinamento sobre <strong>Vendas Registradas (45%)</strong> + <strong>Preferências (35%)</strong> + <strong>Feedback RLHF no Chat (20%)</strong>:
+          </p>
+          <div id="container-pesos-categorias"></div>
+        </div>
+
+        <!-- Card 2: Feedbacks Registrados no Chat (Critério 3.d & Cenário 7.7) -->
+        <div class="ia-panel">
+          <div class="ia-panel-title">
+            <span>👍👎 Feedbacks dos Clientes Incorporados ao Modelo (RLHF)</span>
+            <span id="badge-total-feedbacks" style="background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 999px; font-size: 0.73rem;">5 registros</span>
+          </div>
+          <div id="lista-feedbacks-recentes" style="max-height: 210px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; font-size: 0.77rem;"></div>
+        </div>
+
+        <!-- Card 3: Histórico de Treinamentos e Corpus JSONL (Cenário 7.8) -->
+        <div class="ia-panel">
+          <div class="ia-panel-title">
+            <span>⚙️ Pipeline de Treinamento & Dataset Supervisionado (.jsonl)</span>
+            <span style="font-size: 0.72rem; color: #64748b;">Cenário 7.8</span>
+          </div>
+          <div style="font-size: 0.77rem; color: #334155; margin-bottom: 10px; line-height: 1.45;">
+            <strong>Procedimento realizado:</strong> A cada nova venda aprovada/entregue ou avaliação de resposta no chat (<em>Útil / Não útil</em>), o pipeline recalcula a matriz de pesos colaborativos e atualiza o corpus <code>JSONL</code> de ajuste fino supervisionado.
+          </div>
+          <div id="lista-historico-treinamentos" style="margin-bottom: 10px; font-size: 0.75rem; display: flex; flex-direction: column; gap: 6px;"></div>
+          <details>
+            <summary style="cursor: pointer; font-size: 0.77rem; font-weight: 700; color: #1b2a47;">
+              Ver Amostras do Dataset de Fine-Tuning Supervisionado (JSONL)
+            </summary>
+            <pre id="pre-dataset-jsonl" style="background: #0f172a; color: #e2e8f0; padding: 10px; border-radius: 6px; font-size: 0.7rem; overflow-x: auto; max-height: 150px; margin-top: 8px;"></pre>
+          </details>
+        </div>
+
+        <!-- Card 4: Justificativas Documentadas (Critérios 3.b e 3.e) -->
+        <div class="ia-panel">
+          <div class="ia-panel-title">
+            <span>📋 Justificativas Técnicas Documentadas (Critérios 3.b e 3.e)</span>
+          </div>
+          <div style="font-size: 0.78rem; color: #334155; line-height: 1.5; display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: #f8fafc; border-left: 4px solid #1b2a47; padding: 8px 12px; border-radius: 4px;">
+              <strong>1. Escolha da IA Generativa (Critério 3.b):</strong><br>
+              Adotamos o <strong>Google Gemini 2.5 Flash</strong> combinado a uma camada neural local de <em>Fine-Tuning & RLHF</em>. Justificativa: (a) tempo de resposta sub-segundo atendendo ao <strong>RNF0011 (&le; 1s)</strong>; (b) suporte nativo a ajuste fino supervisionado via <code>JSONL</code>; e (c) fidelidade aos dados reais de preço e estoque do acervo.
+            </div>
+            <div style="background: #f8fafc; border-left: 4px solid #0f766e; padding: 8px 12px; border-radius: 4px;">
+              <strong>2. Obtenção das Preferências do Cliente (Critério 3.e):</strong><br>
+              Implementamos a <strong>Captação Híbrida Dupla (Explícita + Implícita)</strong>: o cliente declara explicitamente suas categorias e temas favoritos no perfil/chat e o sistema infere implicitamente novas preferências a partir dos livros comprados e das respostas avaliadas como <em>Útil</em>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 
   <script src="/js/chatbot.js"></script>

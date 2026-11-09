@@ -9,6 +9,7 @@ import analiseRoutes from './routes/analiseRoutes.js';
 import checkoutRoutes from './routes/checkoutRoutes.js';
 import logsRoutes from './routes/logsRoutes.js';
 import notificacoesRoutes from './routes/notificacoesRoutes.js';
+import chatbotRoutes from './routes/chatbotRoutes.js';
 
 const app = express();
 
@@ -25,6 +26,8 @@ app.use('/api/analise', analiseRoutes);
 app.use('/api/checkout', checkoutRoutes);
 app.use('/api/logs', logsRoutes);
 app.use('/api/notificacoes', notificacoesRoutes);
+app.use('/api/chatbot', chatbotRoutes);
+app.use('/api/ia', chatbotRoutes);
 
 // Mapeamento absoluto do diretório estático público
 const publicPath = path.resolve('public');
