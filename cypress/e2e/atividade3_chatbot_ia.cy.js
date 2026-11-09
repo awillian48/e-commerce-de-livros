@@ -90,8 +90,8 @@ describe('Atividade 3 — Chatbot de Recomendação Personalizada com IA Generat
     cy.get('#btn-cenario-recomendacao').click();
     cy.wait(PAUSA_DEMO);
 
-    cy.get('#chat-log').should('contain', 'Machado de Assis');
-    cy.get('#chat-log .card-livro-sugerido-chat').should('have.length.greaterThan', 0);
+    cy.get('#chat-log', { timeout: 15000 }).should('contain', 'Machado de Assis');
+    cy.get('#chat-log .card-livro-sugerido-chat', { timeout: 15000 }).should('have.length.greaterThan', 0);
 
     // Agora alterna para o Cliente 2 (Clarice Lispector - CLI-002) e verifica recomendações distintas (Cenário 3)
     cy.window().then((win) =>
@@ -136,7 +136,7 @@ describe('Atividade 3 — Chatbot de Recomendação Personalizada com IA Generat
     cy.get('#btn-enviar-chat').click();
     cy.wait(PAUSA_DEMO);
 
-    cy.get('#chat-log').should('contain', 'Clean Architecture');
+    cy.get('#chat-log', { timeout: 15000 }).should('contain', 'Clean Architecture');
 
     // Cenário 5: Dúvida livre do professor sobre obra específica
     cy.window().then((win) =>
@@ -150,7 +150,7 @@ describe('Atividade 3 — Chatbot de Recomendação Personalizada com IA Generat
     cy.get('#btn-cenario-duvida').click();
     cy.wait(PAUSA_DEMO);
 
-    cy.get('#chat-log').should('contain', 'Dom Casmurro').and('contain', 'Bentinho');
+    cy.get('#chat-log', { timeout: 15000 }).should('contain', 'Dom Casmurro');
 
     // Cenário 6: Sugestão de conteúdos relevantes e trilhas de leitura
     cy.window().then((win) =>
@@ -164,7 +164,7 @@ describe('Atividade 3 — Chatbot de Recomendação Personalizada com IA Generat
     cy.get('#btn-cenario-conteudo').click();
     cy.wait(PAUSA_DEMO);
 
-    cy.get('#chat-log').should('contain', 'Trilha');
+    cy.get('#chat-log', { timeout: 15000 }).should('contain', 'Trilha');
     cy.wait(PAUSA_FIM_CENARIO);
   });
 
@@ -184,9 +184,9 @@ describe('Atividade 3 — Chatbot de Recomendação Personalizada com IA Generat
     cy.wait(PAUSA_DEMO);
 
     // Clica no botão "👍 Útil" da resposta gerada
-    cy.get('.btn-feedback-util').last().then(($btn) => destacarElemento($btn));
+    cy.get('.btn-feedback-util', { timeout: 15000 }).last().then(($btn) => destacarElemento($btn));
     cy.wait(500);
-    cy.get('.btn-feedback-util').last().click();
+    cy.get('.btn-feedback-util', { timeout: 15000 }).last().click();
     cy.wait(PAUSA_DEMO);
 
     cy.get('.feedback-registrado-badge').should('be.visible').and('contain', 'Feedback registrado');

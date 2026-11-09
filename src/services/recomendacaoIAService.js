@@ -8,6 +8,13 @@
  * - Captação Híbrida de Preferências do Cliente (Explícita via formulário/chat + Implícita via compras)
  */
 
+import dns from 'node:dns';
+import { localStore } from '../data/localStore.js';
+
+try {
+  dns.setDefaultResultOrder('ipv4first');
+} catch (e) {}
+
 const CATEGORIAS_OFICIAIS = [
   'Literatura Brasileira',
   'Engenharia de Software',
@@ -585,13 +592,10 @@ export async function testarEConfigurarGeminiKey(chave) {
 
   const promptTeste = 'Responda apenas "OK" em uma única palavra para validar a conexão.';
   const modelos = [
-    'gemini-3.5-flash',
-    'gemini-3.7-flash',
-    'gemini-3.8-flash',
-    'gemini-flash-latest',
-    'gemini-2.5-flash',
-    'gemini-2.0-flash',
-    'gemini-1.5-flash'
+    'gemini-3.1-flash-lite',
+    'gemini-3.5-flash-lite',
+    'gemini-flash-lite-latest',
+    'gemini-3.5-flash'
   ];
   let ultimoErro = '';
 
@@ -631,15 +635,14 @@ export async function testarEConfigurarGeminiKey(chave) {
 
 export async function chamarGeminiAPI(prompt, geminiKey) {
   const modelos = [
-    'gemini-3.5-flash',
-    'gemini-3.7-flash',
-    'gemini-3.8-flash',
-    'gemini-flash-latest',
-    'gemini-2.5-flash',
-    'gemini-2.0-flash',
-    'gemini-1.5-flash'
+    'gemini-3.1-flash-lite',
+    'gemini-3.5-flash-lite',
+    'gemini-flash-lite-latest',
+    'gemini-3.5-flash'
   ];
   for (const modelo of modelos) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
     try {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${geminiKey}`;
       const resp = await fetch(url, {
@@ -647,9 +650,11 @@ export async function chamarGeminiAPI(prompt, geminiKey) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.6, maxOutputTokens: 1200 }
-        })
+          generationConfig: { temperature: 0.5, maxOutputTokens: 2048 }
+        }),
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
       if (resp.ok) {
         const data = await resp.json();
         const texto = data?.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -659,8 +664,13 @@ export async function chamarGeminiAPI(prompt, geminiKey) {
       } else {
         const errJson = await resp.json().catch(() => ({}));
         console.warn(`[GEMINI API] ${modelo} respondeu ${resp.status}: ${errJson?.error?.message || ''}`);
+        if (resp.status === 429) {
+          // Cota diária excedida na API externa, aciona motor neural local sem atraso
+          break;
+        }
       }
     } catch (e) {
+      clearTimeout(timeoutId);
       console.warn(`[GEMINI API] Erro ao chamar ${modelo}: ${e.message}`);
     }
   }
@@ -677,11 +687,13 @@ export async function processarMensagemChatbot({
   pedidosRaw = []
 }) {
   const inicioMs = Date.now();
-  const livros = normalizarLivrosCatalogo(livrosRaw);
+  const livrosBase = (livrosRaw && livrosRaw.length > 0) ? livrosRaw : (localStore.dados?.livros || []);
+  const pedidosBase = (pedidosRaw && pedidosRaw.length > 0) ? pedidosRaw : (localStore.dados?.pedidos || []);
+  const livros = normalizarLivrosCatalogo(livrosBase);
   const texto = String(mensagem || '').trim();
   const textoLower = texto.toLowerCase();
 
-  const perfilRec = obterRecomendacoesPersonalizadas(clienteId, livrosRaw, pedidosRaw, 4);
+  const perfilRec = obterRecomendacoesPersonalizadas(clienteId, livrosBase, pedidosBase, 4);
   const topLivros = perfilRec.recomendacoes;
   const pref = perfilRec.preferencias;
 
@@ -798,12 +810,9 @@ function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros
       intencao: 'DUVIDA_SOBRE_LIVRO',
       livrosSugeridos: livrosMencionados.slice(0, 3),
       resposta:
-        `Sobre a obra **${obra.titulo}**, de **${obra.autor}** (*${obra.categoria}*):\n\n` +
-        `📖 **Análise & Enredo:** ${detalhes.curiosidades || obra.sinopse}\n\n` +
-        `🎯 **Para quem é indicado:** ${detalhes.publicoAlvo || 'Leitores que buscam obras clássicas de referência.'}\n\n` +
-        `📋 **Ficha Técnica & Disponibilidade:**\n` +
-        `• **Preço:** R$ ${obra.preco.toFixed(2).replace('.', ',')} | **Estoque:** ${statusEstoque}\n` +
-        `• **Editora:** ${obra.editora} (${obra.ano}) | **Páginas:** ${obra.paginas} págs. | **ISBN:** ${obra.isbn}`
+        `Sobre **${obra.titulo}**, de **${obra.autor}** (*${obra.categoria}* — R$ ${obra.preco.toFixed(2).replace('.', ',')} | ${statusEstoque}):\n\n` +
+        `📖 **Síntese:** ${detalhes.curiosidades || obra.sinopse}\n\n` +
+        `🎯 **Indicação:** ${detalhes.publicoAlvo || 'Leitores de obras clássicas essenciais.'} (${obra.paginas} págs., ${obra.editora}).`
     };
   }
 
@@ -941,25 +950,25 @@ function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros
       .filter(Boolean);
 
     const listaForm = livrosMatch
-      .map((l, idx) => `${idx + 1}. **${l.titulo}** (*${l.autor}* — R$ ${l.preco.toFixed(2).replace('.', ',')}) — *${l.categoria}*\n   ↳ *Ponte com o seu interesse em ${matchGeneroFora.termo}:* ${conhecimentoDetalhadoObras[l.id]?.curiosidades || l.sinopse}`)
-      .join('\n\n');
+      .map((l, idx) => `• **${l.titulo}** (*${l.autor}* — R$ ${l.preco.toFixed(2).replace('.', ',')}): ${(conhecimentoDetalhadoObras[l.id]?.curiosidades || l.sinopse).split('.')[0]}.`)
+      .join('\n');
 
     return {
       intencao: 'RECOMENDACAO_GENERO_CORRELATO',
       livrosSugeridos: livrosMatch,
       resposta:
-        `Olá, **${nomeCliente}**! O catálogo da **Livraria Alexandria** é focado em **Literatura Brasileira Clássica**, **Obras Raras**, **Filosofia** e **Engenharia de Software** (não dispomos de uma seção comercial de ${matchGeneroFora.termo} moderna).\n\n` +
-        `Contudo, analisando os pesos ajustados do modelo (**${estadoModeloIA.versaoAjusteFino}**) e o seu perfil, selecionei as obras do nosso acervo com os mais ricos elementos de **${matchGeneroFora.motivo}** que certamente você vai apreciar:\n\n` +
+        `Olá, **${nomeCliente}**! Nosso acervo é especializado em **Literatura Brasileira Clássica**, **Obras Raras**, **Filosofia** e **Engenharia de Software**.\n\n` +
+        `Para dialogar com o seu gosto por **${matchGeneroFora.termo}**, destaco estas obras com elementos fantásticos e mitológicos:\n\n` +
         `${listaForm}\n\n` +
-        `Qual dessas obras desperta mais a sua curiosidade? Avalie esta resposta com **👍 Útil** ou **👎 Não útil** abaixo para continuar calibrando a IA!`
+        `Qual delas mais chama a sua atenção? Avalie esta resposta com **👍 Útil** ou **👎 Não útil** para calibrar a IA!`
     };
   }
 
   // F) Recomendação Personalizada Padrão baseada no Histórico de Compras + Preferências + Modelo Treinado (Cenários 2 e 3)
   const livrosHistoricoStr =
     historicoResumo.livrosCompradosTitulos.length > 0
-      ? historicoResumo.livrosCompradosTitulos.slice(0, 3).join(', ')
-      : 'suas interações recentes na livraria';
+      ? historicoResumo.livrosCompradosTitulos.slice(0, 2).join(', ')
+      : 'suas compras anteriores';
 
   const catTop = Object.entries(pesosCategoriasTreinados || {})
     .sort((a, b) => b[1] - a[1])
@@ -970,42 +979,41 @@ function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros
   const recomendacoesFormatadas = top3
     .map(
       (l, idx) =>
-        `${idx + 1}. **${l.titulo}** (*${l.autor}* — R$ ${l.preco.toFixed(2).replace('.', ',')}) — **${l.afinidadePercentual}% de afinidade**\n   ↳ *Justificativa do Modelo:* ${l.motivoPersonalizado}`
+        `${idx + 1}. **${l.titulo}** (*${l.autor}* — R$ ${l.preco.toFixed(2).replace('.', ',')} | **${l.afinidadePercentual}%**): ${l.motivoPersonalizado}`
     )
-    .join('\n\n');
+    .join('\n');
 
   return {
     intencao: 'RECOMENDACAO_PERSONALIZADA',
     livrosSugeridos: top3,
     resposta:
-      `Olá, **${nomeCliente}**! Com base no seu **histórico de compras** (*${livrosHistoricoStr}*), nas suas **preferências** (*${(preferencias?.temasInteresse || []).slice(0, 3).join(', ')}*) e nos pesos ajustados do modelo **${estadoModeloIA.versaoAjusteFino}** (afinidade treinada: *${catTop}*), selecionei estas **3 recomendações personalizadas**:\n\n` +
+      `Olá, **${nomeCliente}**! Com base no seu histórico (*${livrosHistoricoStr}*), preferências e afinidade calculada pelo modelo **${estadoModeloIA.versaoAjusteFino}** (*${catTop}*), recomendo:\n\n` +
       `${recomendacoesFormatadas}\n\n` +
-      `Avalie esta resposta com **👍 Útil** ou **👎 Não útil** abaixo para recalibrar continuamente os pesos do seu modelo!`
+      `Esta sugestão foi útil? Avalie abaixo com **👍 Útil** ou **👎 Não útil**!`
   };
 }
 
 function construirPromptFineTunedGemini(perguntaUsuario, perfilRec, livros) {
   const resumoCatalogo = livros
-    .map(l => `• [${l.id}] "${l.titulo}", de ${l.autor} | Categoria: ${l.categoria} | R$ ${l.preco.toFixed(2).replace('.', ',')} | Estoque: ${l.estoque} un.`)
+    .map(l => `• [${l.id}] "${l.titulo}", de ${l.autor} | ${l.categoria} | R$ ${l.preco.toFixed(2).replace('.', ',')} | Est: ${l.estoque} un.`)
     .join('\n');
 
-  return `Você é o Livreiro Virtual e Assistente Especialista da Livraria Alexandria, um e-commerce de edições especiais, clássicos e bibliografias essenciais (LES 2026 - RNF0044).
-Contexto do Cliente Ativo:
-- Nome: ${perfilRec.nomeCliente} (${perfilRec.clienteId})
-- Histórico de Compras: ${perfilRec.historicoResumo.livrosCompradosTitulos.join(', ') || 'Nenhuma compra anterior'}
-- Preferências Cadastradas: Categorias: ${perfilRec.preferencias.categoriasFavoritas.join(', ')}; Temas: ${perfilRec.preferencias.temasInteresse.join(', ')}
-- Top Recomendações dos Pesos do Modelo Treinado (${estadoModeloIA.versaoAjusteFino}): ${perfilRec.recomendacoes.map(r => `"${r.titulo}" (${r.afinidadePercentual}% afinidade)`).join(', ')}
+  return `Você é o Livreiro Virtual da Livraria Alexandria (LES 2026 - RNF0044).
+Perfil: ${perfilRec.nomeCliente} | Histórico: ${perfilRec.historicoResumo.livrosCompradosTitulos.slice(0, 2).join(', ') || 'Sem compras'} | Pref: ${perfilRec.preferencias.categoriasFavoritas.join(', ')} (${perfilRec.preferencias.temasInteresse.slice(0, 2).join(', ')})
+Modelo: ${estadoModeloIA.versaoAjusteFino} (RLHF)
 
-Catálogo Oficial Disponível no Acervo (apenas estas 12 obras existem na loja):
+Acervo Oficial (apenas estas obras existem):
 ${resumoCatalogo}
 
-Diretrizes de Atendimento:
-1. Responda em português com tom culto, prestativo e cordial de um livreiro experiente.
-2. Quando o cliente perguntar sobre gêneros ou temas que não são o foco principal do catálogo (por exemplo: "fantasia", "ficção científica", "policial"), explique com simpatia que o acervo da Alexandria é focado em Literatura Brasileira Clássica, Obras Raras, Filosofia e Engenharia de Software. Em seguida, faça pontes inteligentes e recomende as obras do acervo que mais se aproximam daquele interesse (exemplo: se pedir fantasia, recomende "Os Lusíadas" por ter a Ilha dos Amores e o gigante mitológico Adamastor, ou "Grande Sertão: Veredas" pelo pacto com o Diabo e misticismo popular, ou "Memórias Póstumas" pelo narrador defunto autor).
-3. Se o cliente pedir busca, dúvidas de enredo ou detalhes de preço, consulte e cite com precisão as obras reais do catálogo acima.
-4. Ao final da resposta, convide o cliente a avaliar a resposta com 👍 Útil ou 👎 Não útil para continuar calibrando o modelo.
+REGRA CRÍTICA DE FORMATO E EXTENSÃO:
+- Seja BREVE, DIRETO e ELEGANTE. O cliente quer rapidez e clareza, evite qualquer texto prolixo.
+- Responda em no máximo 2 a 3 parágrafos curtos no total.
+- Se recomendar livros, cite no máximo 2 ou 3 obras em tópicos de 1 a 2 linhas cada (título em negrito, autor, preço e porquê em uma única frase).
+- Mantenha o tom culto, gentil e profissional de um livreiro refinado.
+- Se pedirem gêneros fora do acervo (como fantasia ou policial), diga gentilmente em 1 frase o foco do acervo e indique 2 obras nossas com elementos semelhantes.
+- Encerre com uma frase rápida convidando à avaliação com 👍 Útil ou 👎 Não útil.
 
-Mensagem do Cliente: "${perguntaUsuario}"`;
+Pergunta do Cliente: "${perguntaUsuario}"`;
 }
 
 // ============================================================================
