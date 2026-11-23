@@ -13,19 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
     </button>
 
     <div id="chat-modal-window" class="chat-modal-box" style="width: 410px; height: 590px; max-height: 86vh; display: none; flex-direction: column; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 45px rgba(15,23,42,0.28); border: 1px solid #cbd5e1; z-index: 9999;">
-      <!-- Cabeçalho com Seletor de Cliente e Link para Painel de Fine-Tuning -->
+      <!-- Cabeçalho com Seletor de Cliente -->
       <div class="chat-modal-header" style="background: #1b2a47; color: #fff; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <span style="display:inline-block; width:9px; height:9px; border-radius:50%; background:#22c55e;"></span>
-            <strong style="font-size: 0.95rem; letter-spacing: 0.2px;">Livreiro Virtual IA (Gemini FT)</strong>
+            <strong style="font-size: 0.95rem; letter-spacing: 0.2px;">Livreiro Virtual</strong>
           </div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <a href="/chatbot.html" id="link-abrir-painel-ia" title="Abrir Chatbot em tela cheia" style="color: #fbbf24; font-size: 0.75rem; text-decoration: none; font-weight: 700; background: rgba(255,255,255,0.12); padding: 4px 8px; border-radius: 4px;">
-              Tela Cheia
-            </a>
-            <button id="chat-close-btn" style="background:none; border:none; color:white; font-size:1.1rem; cursor:pointer; font-weight:bold;">✕</button>
-          </div>
+          <button id="chat-close-btn" style="background:none; border:none; color:white; font-size:1.1rem; cursor:pointer; font-weight:bold;" title="Fechar Chatbot">✕</button>
         </div>
 
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.76rem; background: rgba(255,255,255,0.1); padding: 6px 8px; border-radius: 6px;">
