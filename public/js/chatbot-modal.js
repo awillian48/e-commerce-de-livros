@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
             <a href="/chatbot.html" id="link-abrir-painel-ia" title="Abrir Chatbot em tela cheia" style="color: #fbbf24; font-size: 0.75rem; text-decoration: none; font-weight: 700; background: rgba(255,255,255,0.12); padding: 4px 8px; border-radius: 4px;">
-              Tela Cheia ↗
+              Tela Cheia
             </a>
             <button id="chat-close-btn" style="background:none; border:none; color:white; font-size:1.1rem; cursor:pointer; font-weight:bold;">✕</button>
           </div>
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       botMsg.innerHTML = `
         <div style="font-size: 0.7rem; color: #64748b; margin-bottom: 5px; display: flex; justify-content: space-between;">
-          <span> <strong>${dados.versaoModelo || 'alexandria-ft'}</strong></span>
+          <span><strong>Livreiro Virtual (${dados.versaoModelo || 'alexandria-ft'})</strong></span>
           <span>Cliente: <strong>${dados.clienteId || clienteId}</strong></span>
         </div>
         <div class="chat-resposta-texto">${formatarMarkdownSimples(dados.resposta || 'Recomendação gerada com sucesso.')}</div>
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const resFb = await rFb.json();
             const barra = botMsg.querySelector('.chat-feedback-bar');
             if (barra) {
-              barra.innerHTML = `<span class="feedback-confirmado-msg" style="color: #047857; font-weight: 700;">✓ Feedback (${avaliacao === 'UTIL' ? 'Útil' : 'Não útil'}) registrado! Modelo ajustado (${resFb.modeloAtualizado?.versaoAjusteFino || 'RLHF'}).</span>`;
+              barra.innerHTML = `<span class="feedback-confirmado-msg" style="color: #047857; font-weight: 700;">Feedback (${avaliacao === 'UTIL' ? 'Útil' : 'Não útil'}) registrado! Modelo ajustado (${resFb.modeloAtualizado?.versaoAjusteFino || 'RLHF'}).</span>`;
             }
           } catch (err) {}
         });
