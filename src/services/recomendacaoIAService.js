@@ -681,8 +681,9 @@ export async function testarEConfigurarGeminiKey(chave) {
 
   const promptTeste = 'Responda apenas "OK" em uma única palavra para validar a conexão.';
   const modelos = [
+    'gemini-flash-lite-latest',
     'gemini-3.5-flash-lite',
-    'gemini-3.1-flash-lite',
+    'gemini-flash-latest',
     'gemini-3.8-flash'
   ];
   let ultimoErro = '';
@@ -723,13 +724,14 @@ export async function testarEConfigurarGeminiKey(chave) {
 
 export async function chamarGeminiAPI(prompt, geminiKey) {
   const modelos = [
+    'gemini-flash-lite-latest',
     'gemini-3.5-flash-lite',
-    'gemini-3.1-flash-lite',
+    'gemini-flash-latest',
     'gemini-3.8-flash'
   ];
   for (const modelo of modelos) {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000);
+    const timeoutId = setTimeout(() => controller.abort(), 9500);
     try {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${geminiKey}`;
       const resp = await fetch(url, {
@@ -764,6 +766,62 @@ export async function chamarGeminiAPI(prompt, geminiKey) {
   return { sucesso: false };
 }
 
+// Auxiliar para detecção inteligente de categoria no texto da pergunta (com suporte a erros de digitação como 'tenologia')
+export function detectarCategoriaNaMensagem(texto = '') {
+  const t = String(texto || '').toLowerCase();
+  // Tecnologia / Engenharia de Software (cobre erros de digitação comuns de usuários como 'tenologia', 'programaçao', 'ti')
+  if (/(tecnolog|tenolog|software|program|c[oó]dig|desenvolv|clean code|clean arch|refactor|computa|\bti\b|\btech\b)/i.test(t)) {
+    return 'Engenharia de Software';
+  }
+  // Filosofia
+  if (/(filosof|kant|nietzsche|moral|[eé]tica|epistemol|raz[aã]o pura|genealogia)/i.test(t)) {
+    return 'Filosofia';
+  }
+  // Obras Raras
+  if (/(obras? raras?|livros? raros?|rar[ao]s?|colecionad|lus[ií]ada|cam[oõ]es|sert[aã]o|fac-similar|facsimilar)/i.test(t)) {
+    return 'Obras Raras';
+  }
+  // Literatura Brasileira
+  if (/(literatura|brasileir|machado|corti[cç]o|clarice|hora da estrela|p[oó]stuma|alienista|romance nacional|realismo)/i.test(t)) {
+    return 'Literatura Brasileira';
+  }
+  return null;
+}
+
+// Auxiliar para extrair com precisão os livros mencionados ou sugerir livros da categoria prioritária
+function extrairLivrosMencionadosOuRelevantes(textoResposta, textoPergunta, livros, categoriaDetectada, topLivrosPadrao) {
+  const respLower = (textoResposta || '').toLowerCase();
+  const encontrados = [];
+
+  livros.forEach(livro => {
+    const titLower = livro.titulo.toLowerCase();
+    const tituloCurto = titLower.split(/[:(]/)[0].trim();
+    const matchTitulo = titLower.length > 5 && respLower.includes(titLower);
+    const matchCurto = tituloCurto.length > 4 && respLower.includes(tituloCurto);
+    const matchId = respLower.includes(livro.id.toLowerCase());
+
+    if (matchTitulo || matchCurto || matchId) {
+      if (!encontrados.some(e => e.id === livro.id)) {
+        encontrados.push(livro);
+      }
+    }
+  });
+
+  if (encontrados.length > 0) {
+    return encontrados.slice(0, 3);
+  }
+
+  // Se a pergunta era explicitamente sobre uma categoria, prioriza livros dessa categoria
+  if (categoriaDetectada) {
+    const daCategoria = livros.filter(l => l.categoria === categoriaDetectada);
+    if (daCategoria.length > 0) {
+      return daCategoria.slice(0, 3);
+    }
+  }
+
+  return (topLivrosPadrao || []).slice(0, 3);
+}
+
 // ============================================================================
 // 7. MOTOR DE RESPOSTA CONVERSACIONAL + INTEGRAÇÃO GEMINI (CRITÉRIOS 3.a-3.e)
 // ============================================================================
@@ -784,20 +842,22 @@ export async function processarMensagemChatbot({
   const topLivros = perfilRec.recomendacoes;
   const pref = perfilRec.preferencias;
 
+  const catDetectada = detectarCategoriaNaMensagem(texto);
+
   let respostaTexto = '';
-  let intencaoDetectada = 'CONVERSA_LIVRE';
+  let intencaoDetectada = catDetectada ? 'RECOMENDACAO_CATEGORIA_SOLICITADA' : 'CONVERSA_LIVRE';
   let livrosSugeridos = [];
   let motorUtilizado = `Motor Neural Local Embarcado (${estadoModeloIA.versaoAjusteFino})`;
 
   // 1. Tenta acionar API externa do Google Gemini caso GEMINI_API_KEY esteja definida
   const geminiKey = process.env.GEMINI_API_KEY;
   if (geminiKey && geminiKey.length > 15) {
-    const promptSistema = construirPromptFineTunedGemini(texto, perfilRec, livros);
+    const promptSistema = construirPromptFineTunedGemini(texto, perfilRec, livros, catDetectada);
     const resultadoGemini = await chamarGeminiAPI(promptSistema, geminiKey);
     if (resultadoGemini.sucesso) {
       respostaTexto = resultadoGemini.texto;
       motorUtilizado = `Google Gemini (${resultadoGemini.modelo}) Live + Pesos Fine-Tuned (${estadoModeloIA.versaoAjusteFino})`;
-      intencaoDetectada = 'GEMINI_GENERATIVO_LIVE';
+      intencaoDetectada = catDetectada ? 'RECOMENDACAO_CATEGORIA_SOLICITADA' : 'GEMINI_GENERATIVO_LIVE';
 
       // Detecta se a resposta foi uma recusa de guardrail
       const isRecusaGuardrail = respostaTexto.includes('meu atendimento é dedicado exclusivamente');
@@ -805,24 +865,19 @@ export async function processarMensagemChatbot({
         intencaoDetectada = 'FORA_DO_ESCOPO_GUARDRAIL';
         livrosSugeridos = [];
       } else {
-        // Detecta obras do catálogo mencionadas na resposta do Gemini para renderizar os cards interativos
-        const mencionados = livros.filter(l =>
-          respostaTexto.toLowerCase().includes(l.titulo.toLowerCase()) ||
-          respostaTexto.toLowerCase().includes(l.autor.toLowerCase().split(' ').slice(-1)[0])
-        );
-        livrosSugeridos = mencionados.length > 0 ? mencionados.slice(0, 3) : topLivros.slice(0, 3);
+        livrosSugeridos = extrairLivrosMencionadosOuRelevantes(respostaTexto, texto, livros, catDetectada, topLivros);
       }
     }
   }
 
   // 2. Motor Generativo Semântico Embarcado + Pesos do Modelo Treinado (Fallback ou Modo Offline)
   if (!respostaTexto) {
-    const analise = gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros);
+    const analise = gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros, catDetectada);
     respostaTexto = analise.resposta;
     intencaoDetectada = analise.intencao;
     livrosSugeridos = analise.livrosSugeridos;
-  } else if (!livrosSugeridos.length) {
-    livrosSugeridos = topLivros.slice(0, 3);
+  } else if (!livrosSugeridos.length && intencaoDetectada !== 'FORA_DO_ESCOPO_GUARDRAIL') {
+    livrosSugeridos = extrairLivrosMencionadosOuRelevantes('', texto, livros, catDetectada, topLivros);
   }
 
   const interacaoId = `INT-${Date.now().toString().slice(-6)}-${Math.floor(Math.random() * 90 + 10)}`;
@@ -857,7 +912,7 @@ export async function processarMensagemChatbot({
   return registroInteracao;
 }
 
-function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros) {
+function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros, catDetectada = null) {
   const { nomeCliente, historicoResumo, preferencias, recomendacoes, pesosCategoriasTreinados } = perfilRec;
   const top3 = recomendacoes.slice(0, 3);
   const textoTrim = textoLower.trim();
@@ -1163,20 +1218,54 @@ function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros
     };
   }
 
+  // Prioridade de Recomendação por Categoria Solicitada na Pergunta (ex: tecnologia, tenologia, engenharia de software, filosofia, obras raras, literatura)
+  if (catDetectada && (
+    textoLower.includes('gosto') ||
+    textoLower.includes('indic') ||
+    textoLower.includes('recomen') ||
+    textoLower.includes('sug') ||
+    textoLower.includes('tem livro') ||
+    textoLower.includes('quais livro') ||
+    textoLower.includes('livro') ||
+    textoLower.includes('obra') ||
+    textoLower.includes('procur') ||
+    textoLower.includes('busca') ||
+    textoLower.includes('ler') ||
+    textoLower.includes('interesse') ||
+    textoLower.includes('estud')
+  )) {
+    const daCategoria = livros.filter(l => l.categoria === catDetectada);
+    const listaFormatada = daCategoria.slice(0, 3).map(l =>
+      `• **${l.titulo}** (*${l.autor}* — R$ ${l.preco.toFixed(2).replace('.', ',')}): ${(conhecimentoDetalhadoObras[l.id]?.curiosidades || l.sinopse).split('.')[0]}.`
+    ).join('\n');
+
+    let nomeAmigavel = catDetectada;
+    if (catDetectada === 'Engenharia de Software') nomeAmigavel = 'Tecnologia & Engenharia de Software';
+
+    return {
+      intencao: 'RECOMENDACAO_CATEGORIA_SOLICITADA',
+      livrosSugeridos: daCategoria.slice(0, 3),
+      resposta:
+        `Com certeza, **${nomeCliente}**! Para seu interesse em **${nomeAmigavel}**, nosso catálogo conta com obras consagradas de referência mundial:\n\n` +
+        `${listaFormatada}\n\n` +
+        `Qual destas obras você gostaria de conhecer melhor ou adicionar ao seu carrinho? Avalie esta recomendação com **Útil** ou **Não útil**.`
+    };
+  }
+
   // C) Sugestão de conteúdos relevantes / trilhas de leitura / guias de estudo (Cenário 6)
-  if (
-    textoLower.includes('conteúdo') ||
-    textoLower.includes('conteudo') ||
+  const isPedidoTrilha =
     textoLower.includes('trilha') ||
-    textoLower.includes('roteiro') ||
-    textoLower.includes('estudo') ||
-    textoLower.includes('dica') ||
-    textoLower.includes('aprender') ||
-    textoLower.includes('começar') ||
-    textoLower.includes('sugerir') ||
-    textoLower.includes('sugestão')
-  ) {
-    const catPrincipal = preferencias?.categoriasFavoritas?.[0] || 'Literatura Brasileira';
+    (textoLower.includes('conteúdo') && textoLower.includes('relevante')) ||
+    (textoLower.includes('conteudo') && textoLower.includes('relevante')) ||
+    textoLower.includes('roteiro de leitura') ||
+    textoLower.includes('guia de leitura') ||
+    textoLower.includes('plano de leitura') ||
+    textoLower.includes('roteiro de estudo') ||
+    textoLower.includes('etapas de leitura') ||
+    textoLower.includes('por onde começar a ler');
+
+  if (isPedidoTrilha) {
+    const catPrincipal = catDetectada || preferencias?.categoriasFavoritas?.[0] || 'Literatura Brasileira';
     const livrosTrilha = livros.filter(l => l.categoria === catPrincipal).slice(0, 3);
     const l1 = livrosTrilha[0] || top3[0];
     const l2 = livrosTrilha[1] || top3[1];
@@ -1319,10 +1408,19 @@ function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros
   };
 }
 
-function construirPromptFineTunedGemini(perguntaUsuario, perfilRec, livros) {
+function construirPromptFineTunedGemini(perguntaUsuario, perfilRec, livros, categoriaDetectada = null) {
   const resumoCatalogo = livros
     .map(l => `• [${l.id}] "${l.titulo}", de ${l.autor} | ${l.categoria} | R$ ${l.preco.toFixed(2).replace('.', ',')} | Est: ${l.estoque} un.`)
     .join('\n');
+
+  let diretivaPrioridade = '';
+  if (categoriaDetectada) {
+    diretivaPrioridade = `
+ATENÇÃO MANDATÓRIA DE PRIORIDADE:
+- O cliente solicitou ou expressou interesse na categoria "${categoriaDetectada}" (ou em tecnologia/computação/programação).
+- Você DEVE OBRIGATORIAMENTE RECOMENDAR obras desta categoria (${categoriaDetectada}) do acervo oficial acima, MESMO QUE o cliente possua histórico de compras em outras categorias!
+- Para tecnologia/computação/engenharia de software, recomende: "Clean Code", "Clean Architecture" e "Refactoring".`;
+  }
 
   return `Você é o Livreiro Virtual da Livraria Alexandria (LES 2026 - RNF0044).
 Cliente Ativo: ${perfilRec.nomeCliente} | Histórico: ${perfilRec.historicoResumo.livrosCompradosTitulos.slice(0, 2).join(', ') || 'Sem compras'} | Preferências: ${perfilRec.preferencias.categoriasFavoritas.join(', ')} (${perfilRec.preferencias.temasInteresse.slice(0, 2).join(', ')})
@@ -1330,6 +1428,7 @@ Modelo: ${estadoModeloIA.versaoAjusteFino} (RLHF)
 
 Acervo Oficial da Livraria Alexandria (APENAS estas 12 obras existem na loja):
 ${resumoCatalogo}
+${diretivaPrioridade}
 
 BASE DE DADOS INSTITUCIONAL DA LIVRARIA ALEXANDRIA:
 - Endereço Físico: Rua das Letras Clássicas, nº 1899, Bairro Imperial, Rio de Janeiro - RJ (CEP: 20040-002), próximo à Confeitaria Colombo e ao Centro Cultural da Marinha. Possui salão clássico e balcão de retirada presencial.
@@ -1343,9 +1442,11 @@ BASE DE DADOS INSTITUCIONAL DA LIVRARIA ALEXANDRIA:
 
 DIRETRIZES DE ESCOPO E GUARDRAILS MANDATÓRIOS (REQUISITO RNF0044):
 - Seu atendimento é EXCLUSIVAMENTE sobre a Livraria Alexandria, seu acervo de 12 livros, autores, preços, estoque, histórico de compras, recomendações literárias e informações institucionais acima.
+- Compreenda erros de digitação comuns de leitores (ex: "tenologia" refere-se à tecnologia / Engenharia de Software).
 - SE A PERGUNTA FOR FORA DO ESCOPO DA LIVRARIA OU DE LIVROS (por exemplo: receitas de cozinha, esportes, futebol, previsão do tempo, cinema/fofocas, política externa, matemática pura, piadas):
   RECUSE EDUCADA E ELEGANTEMENTE NO TOM REFINADO DO LIVREIRO, DIZENDO EXATAMENTE:
   "Como assistente da Livraria Alexandria, meu atendimento é dedicado exclusivamente ao acervo de livros, autores clássicos e técnicos, pedidos, políticas de entrega e troca e ao funcionamento de nossa casa literária. Em que posso auxiliá-lo a respeito de nossas obras ou de nossos serviços?"
+- Perguntas sobre livros de tecnologia, programação, engenharia de software, filosofia, literatura brasileira ou obras raras NUNCA devem ser recusadas.
 
 DIRETRIZES DE FORMATO E ESTILO:
 - REGRA ABSOLUTA: NUNCA USE NENHUM EMOJI EM SUAS RESPOSTAS (terminantemente proibido o uso de robôs, livros, carinhas, polegares, estrelas ou qualquer emoji). Use apenas texto refinado e pontuação convencional.
