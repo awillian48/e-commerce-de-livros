@@ -192,6 +192,90 @@ const avaliacoesFeedback = [
     comentario: 'Grande Sertão: Veredas e Os Lusíadas (1572) são joias do acervo.',
     incorporadoAoModelo: true,
     criadoEm: '2026-10-19T14:30:00Z'
+  },
+  {
+    id: 'FB-006',
+    interacaoId: 'INT-1006',
+    clienteId: 'CLI-001',
+    pergunta: 'Gostaria de ler uma narrativa sobre a transição do romantismo para o realismo.',
+    livrosRecomendados: ['LIV-009', 'LIV-001'],
+    categoriaFoco: 'Literatura Brasileira',
+    avaliacao: 'UTIL',
+    comentario: 'Memórias Póstumas e Dom Casmurro sintetizam o gênio de Machado de Assis.',
+    incorporadoAoModelo: true,
+    criadoEm: '2026-10-22T09:20:00Z'
+  },
+  {
+    id: 'FB-007',
+    interacaoId: 'INT-1007',
+    clienteId: 'CLI-002',
+    pergunta: 'Gostaria de uma recomendação sobre refatoração e boas práticas de código.',
+    livrosRecomendados: ['LIV-008', 'LIV-007'],
+    categoriaFoco: 'Engenharia de Software',
+    avaliacao: 'UTIL',
+    comentario: 'Refactoring de Martin Fowler em conjunto com Clean Architecture acelerou meus estudos técnicos.',
+    incorporadoAoModelo: true,
+    criadoEm: '2026-10-25T16:15:00Z'
+  },
+  {
+    id: 'FB-008',
+    interacaoId: 'INT-1008',
+    clienteId: 'CLI-002',
+    pergunta: 'Vocês têm tratados de epistemologia e teoria do conhecimento?',
+    livrosRecomendados: ['LIV-006'],
+    categoriaFoco: 'Filosofia',
+    avaliacao: 'UTIL',
+    comentario: 'Crítica da Razão Pura de Kant é exatamente a base que eu procurava.',
+    incorporadoAoModelo: true,
+    criadoEm: '2026-10-28T11:45:00Z'
+  },
+  {
+    id: 'FB-009',
+    interacaoId: 'INT-1009',
+    clienteId: 'CLI-001',
+    pergunta: 'Me indique uma leitura com ironia refinada e sátira social.',
+    livrosRecomendados: ['LIV-012', 'LIV-002'],
+    categoriaFoco: 'Literatura Brasileira',
+    avaliacao: 'UTIL',
+    comentario: 'O Alienista e O Cortiço capturam a crítica social e a sátira com maestria.',
+    incorporadoAoModelo: true,
+    criadoEm: '2026-11-02T14:10:00Z'
+  },
+  {
+    id: 'FB-010',
+    interacaoId: 'INT-1010',
+    clienteId: 'CLI-001',
+    pergunta: 'Procuro livros didáticos sobre bancos de dados relacionais e SQL.',
+    livrosRecomendados: ['LIV-007'],
+    categoriaFoco: 'Engenharia de Software',
+    avaliacao: 'NAO_UTIL',
+    comentario: 'Minha coleção na Livraria Alexandria é voltada exclusivamente a clássicos e edições raras.',
+    incorporadoAoModelo: true,
+    criadoEm: '2026-11-05T17:30:00Z'
+  },
+  {
+    id: 'FB-011',
+    interacaoId: 'INT-1011',
+    clienteId: 'CLI-003',
+    pergunta: 'Quais clássicos da poesia épica e obras raras vocês possuem?',
+    livrosRecomendados: ['LIV-010', 'LIV-005'],
+    categoriaFoco: 'Obras Raras',
+    avaliacao: 'UTIL',
+    comentario: 'A edição fac-similar de Os Lusíadas de 1572 é uma preciosidade bibliográfica.',
+    incorporadoAoModelo: true,
+    criadoEm: '2026-11-10T10:00:00Z'
+  },
+  {
+    id: 'FB-012',
+    interacaoId: 'INT-1012',
+    clienteId: 'CLI-002',
+    pergunta: 'Sugira uma trilha sobre moral, vontade de poder e crítica aos valores tradicionais.',
+    livrosRecomendados: ['LIV-011', 'LIV-006'],
+    categoriaFoco: 'Filosofia',
+    avaliacao: 'UTIL',
+    comentario: 'Genealogia da Moral associado à Razão Pura compõem uma trilha filosófica sólida.',
+    incorporadoAoModelo: true,
+    criadoEm: '2026-11-15T13:25:00Z'
   }
 ];
 

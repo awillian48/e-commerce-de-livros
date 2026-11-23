@@ -1156,6 +1156,474 @@
           "status": "APROVADO"
         }
       ]
+    },
+    {
+      "id": "PED-2026-024",
+      "cliente_id": "CLI-001",
+      "data": "2026-05-22",
+      "valor_subtotal": 150.5,
+      "valor_frete": 15.0,
+      "valor_desconto": 0.0,
+      "valor_total": 165.5,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-024-1",
+          "pedido_id": "PED-2026-024",
+          "livro_id": "b1010001-0000-0000-0000-000000000012",
+          "titulo_livro": "O Alienista & Contos Fluminenses",
+          "autor": "Machado de Assis",
+          "categoria": "Literatura Brasileira",
+          "quantidade": 2,
+          "preco_unitario": 54.0,
+          "status_item": "ENTREGUE"
+        },
+        {
+          "id": "it-024-2",
+          "pedido_id": "PED-2026-024",
+          "livro_id": "b1010001-0000-0000-0000-000000000004",
+          "titulo_livro": "A Hora da Estrela (Capa Dura)",
+          "autor": "Clarice Lispector",
+          "categoria": "Literatura Brasileira",
+          "quantidade": 1,
+          "preco_unitario": 42.5,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-024-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 165.5,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-025",
+      "cliente_id": "CLI-001",
+      "data": "2026-06-15",
+      "valor_subtotal": 450.0,
+      "valor_frete": 0.0,
+      "valor_desconto": 0.0,
+      "valor_total": 450.0,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-025-1",
+          "pedido_id": "PED-2026-025",
+          "livro_id": "b1010001-0000-0000-0000-000000000010",
+          "titulo_livro": "Primeira Edição Fac-similar: Os Lusíadas (1572)",
+          "autor": "Luís de Camões",
+          "categoria": "Obras Raras",
+          "quantidade": 1,
+          "preco_unitario": 450.0,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-025-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 450.0,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-026",
+      "cliente_id": "CLI-001",
+      "data": "2026-07-20",
+      "valor_subtotal": 124.8,
+      "valor_frete": 15.0,
+      "valor_desconto": 0.0,
+      "valor_total": 139.8,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-026-1",
+          "pedido_id": "PED-2026-026",
+          "livro_id": "b1010001-0000-0000-0000-000000000001",
+          "titulo_livro": "Dom Casmurro (Edição Luxo)",
+          "autor": "Machado de Assis",
+          "categoria": "Literatura Brasileira",
+          "quantidade": 1,
+          "preco_unitario": 45.9,
+          "status_item": "ENTREGUE"
+        },
+        {
+          "id": "it-026-2",
+          "pedido_id": "PED-2026-026",
+          "livro_id": "b1010001-0000-0000-0000-000000000009",
+          "titulo_livro": "Memórias Póstumas de Brás Cubas",
+          "autor": "Machado de Assis",
+          "categoria": "Literatura Brasileira",
+          "quantidade": 1,
+          "preco_unitario": 78.9,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-026-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 139.8,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-027",
+      "cliente_id": "CLI-001",
+      "data": "2026-08-11",
+      "valor_subtotal": 76.0,
+      "valor_frete": 15.0,
+      "valor_desconto": 0.0,
+      "valor_total": 91.0,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-027-1",
+          "pedido_id": "PED-2026-027",
+          "livro_id": "b1010001-0000-0000-0000-000000000002",
+          "titulo_livro": "O Cortiço",
+          "autor": "Aluísio Azevedo",
+          "categoria": "Literatura Brasileira",
+          "quantidade": 2,
+          "preco_unitario": 38.0,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-027-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 91.0,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-028",
+      "cliente_id": "CLI-001",
+      "data": "2026-09-04",
+      "valor_subtotal": 352.5,
+      "valor_frete": 0.0,
+      "valor_desconto": 0.0,
+      "valor_total": 352.5,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-001",
+        "codigo": "CLI-001",
+        "nome": "Machado de Assis",
+        "cpf": "123.456.789-00",
+        "email": "machado@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-028-1",
+          "pedido_id": "PED-2026-028",
+          "livro_id": "b1010001-0000-0000-0000-000000000004",
+          "titulo_livro": "A Hora da Estrela (Capa Dura)",
+          "autor": "Clarice Lispector",
+          "categoria": "Literatura Brasileira",
+          "quantidade": 1,
+          "preco_unitario": 42.5,
+          "status_item": "ENTREGUE"
+        },
+        {
+          "id": "it-028-2",
+          "pedido_id": "PED-2026-028",
+          "livro_id": "b1010001-0000-0000-0000-000000000005",
+          "titulo_livro": "Grande Sertão: Veredas (Edição Especial)",
+          "autor": "João Guimarães Rosa",
+          "categoria": "Obras Raras",
+          "quantidade": 1,
+          "preco_unitario": 310.0,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-028-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 352.5,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-029",
+      "cliente_id": "CLI-002",
+      "data": "2026-02-14",
+      "valor_subtotal": 195.0,
+      "valor_frete": 15.0,
+      "valor_desconto": 0.0,
+      "valor_total": 210.0,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-002",
+        "codigo": "CLI-002",
+        "nome": "Clarice Lispector",
+        "cpf": "987.654.321-99",
+        "email": "clarice@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-029-1",
+          "pedido_id": "PED-2026-029",
+          "livro_id": "b1010001-0000-0000-0000-000000000006",
+          "titulo_livro": "Crítica da Razão Pura",
+          "autor": "Immanuel Kant",
+          "categoria": "Filosofia",
+          "quantidade": 1,
+          "preco_unitario": 110.0,
+          "status_item": "ENTREGUE"
+        },
+        {
+          "id": "it-029-2",
+          "pedido_id": "PED-2026-029",
+          "livro_id": "b1010001-0000-0000-0000-000000000011",
+          "titulo_livro": "Genealogia da Moral",
+          "autor": "Friedrich Nietzsche",
+          "categoria": "Filosofia",
+          "quantidade": 1,
+          "preco_unitario": 85.0,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-029-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 210.0,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-030",
+      "cliente_id": "CLI-002",
+      "data": "2026-03-25",
+      "valor_subtotal": 238.9,
+      "valor_frete": 0.0,
+      "valor_desconto": 0.0,
+      "valor_total": 238.9,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-002",
+        "codigo": "CLI-002",
+        "nome": "Clarice Lispector",
+        "cpf": "987.654.321-99",
+        "email": "clarice@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-030-1",
+          "pedido_id": "PED-2026-030",
+          "livro_id": "b1010001-0000-0000-0000-000000000007",
+          "titulo_livro": "Clean Architecture: A Craftsman Guide to Software Structure",
+          "autor": "Robert C. Martin",
+          "categoria": "Engenharia de Software",
+          "quantidade": 1,
+          "preco_unitario": 149.0,
+          "status_item": "ENTREGUE"
+        },
+        {
+          "id": "it-030-2",
+          "pedido_id": "PED-2026-030",
+          "livro_id": "b1010001-0000-0000-0000-000000000003",
+          "titulo_livro": "Clean Code: A Handbook of Agile Software Craftsmanship",
+          "autor": "Robert C. Martin",
+          "categoria": "Engenharia de Software",
+          "quantidade": 1,
+          "preco_unitario": 89.9,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-030-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 238.9,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-034",
+      "cliente_id": "CLI-002",
+      "data": "2026-08-27",
+      "valor_subtotal": 265.4,
+      "valor_frete": 0.0,
+      "valor_desconto": 0.0,
+      "valor_total": 265.4,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-002",
+        "codigo": "CLI-002",
+        "nome": "Clarice Lispector",
+        "cpf": "987.654.321-99",
+        "email": "clarice@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-034-1",
+          "pedido_id": "PED-2026-034",
+          "livro_id": "b1010001-0000-0000-0000-000000000008",
+          "titulo_livro": "Refactoring: Improving the Design of Existing Code",
+          "autor": "Martin Fowler",
+          "categoria": "Engenharia de Software",
+          "quantidade": 1,
+          "preco_unitario": 175.5,
+          "status_item": "ENTREGUE"
+        },
+        {
+          "id": "it-034-2",
+          "pedido_id": "PED-2026-034",
+          "livro_id": "b1010001-0000-0000-0000-000000000003",
+          "titulo_livro": "Clean Code: A Handbook of Agile Software Craftsmanship",
+          "autor": "Robert C. Martin",
+          "categoria": "Engenharia de Software",
+          "quantidade": 1,
+          "preco_unitario": 89.9,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-034-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 265.4,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-035",
+      "cliente_id": "CLI-003",
+      "data": "2026-05-08",
+      "valor_subtotal": 539.9,
+      "valor_frete": 0.0,
+      "valor_desconto": 0.0,
+      "valor_total": 539.9,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-003",
+        "codigo": "CLI-003",
+        "nome": "Carlos Drummond",
+        "cpf": "111.222.333-44",
+        "email": "drummond@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-035-1",
+          "pedido_id": "PED-2026-035",
+          "livro_id": "b1010001-0000-0000-0000-000000000003",
+          "titulo_livro": "Clean Code: A Handbook of Agile Software Craftsmanship",
+          "autor": "Robert C. Martin",
+          "categoria": "Engenharia de Software",
+          "quantidade": 1,
+          "preco_unitario": 89.9,
+          "status_item": "ENTREGUE"
+        },
+        {
+          "id": "it-035-2",
+          "pedido_id": "PED-2026-035",
+          "livro_id": "b1010001-0000-0000-0000-000000000010",
+          "titulo_livro": "Primeira Edição Fac-similar: Os Lusíadas (1572)",
+          "autor": "Luís de Camões",
+          "categoria": "Obras Raras",
+          "quantidade": 1,
+          "preco_unitario": 450.0,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-035-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 539.9,
+          "status": "APROVADO"
+        }
+      ]
+    },
+    {
+      "id": "PED-2026-036",
+      "cliente_id": "CLI-003",
+      "data": "2026-09-18",
+      "valor_subtotal": 324.5,
+      "valor_frete": 0.0,
+      "valor_desconto": 0.0,
+      "valor_total": 324.5,
+      "status": "ENTREGUE",
+      "clientes": {
+        "id": "CLI-003",
+        "codigo": "CLI-003",
+        "nome": "Carlos Drummond",
+        "cpf": "111.222.333-44",
+        "email": "drummond@alexandria.com.br"
+      },
+      "itens_pedido": [
+        {
+          "id": "it-036-1",
+          "pedido_id": "PED-2026-036",
+          "livro_id": "b1010001-0000-0000-0000-000000000007",
+          "titulo_livro": "Clean Architecture: A Craftsman Guide to Software Structure",
+          "autor": "Robert C. Martin",
+          "categoria": "Engenharia de Software",
+          "quantidade": 1,
+          "preco_unitario": 149.0,
+          "status_item": "ENTREGUE"
+        },
+        {
+          "id": "it-036-2",
+          "pedido_id": "PED-2026-036",
+          "livro_id": "b1010001-0000-0000-0000-000000000008",
+          "titulo_livro": "Refactoring: Improving the Design of Existing Code",
+          "autor": "Martin Fowler",
+          "categoria": "Engenharia de Software",
+          "quantidade": 1,
+          "preco_unitario": 175.5,
+          "status_item": "ENTREGUE"
+        }
+      ],
+      "pagamentos_pedido": [
+        {
+          "id": "pag-036-1",
+          "forma_pagamento": "CARTAO_CREDITO",
+          "valor": 324.5,
+          "status": "APROVADO"
+        }
+      ]
     }
   ],
   "trocas": [],
