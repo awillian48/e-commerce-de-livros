@@ -861,9 +861,17 @@ export async function processarMensagemChatbot({
 
       // Detecta se a resposta foi uma recusa de guardrail
       const isRecusaGuardrail = respostaTexto.includes('meu atendimento é dedicado exclusivamente');
-      if (isRecusaGuardrail) {
+      const isPerguntaSobreLivros = /(livro|obra|autor|leitura|ler|poesia|poema|romance|literatura|filosof|tecnolog|software|cl[aá]ssic|indic|suger|gosto)/i.test(textoLower);
+
+      if (isRecusaGuardrail && !isPerguntaSobreLivros) {
         intencaoDetectada = 'FORA_DO_ESCOPO_GUARDRAIL';
         livrosSugeridos = [];
+      } else if (isRecusaGuardrail && isPerguntaSobreLivros) {
+        // Fallback inteligente: se a IA generativa externa alucinar recusa para um tema de livro/leitura, o motor neural local atende com precisão
+        const analise = gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros, catDetectada);
+        respostaTexto = analise.resposta;
+        intencaoDetectada = analise.intencao;
+        livrosSugeridos = analise.livrosSugeridos;
       } else {
         livrosSugeridos = extrairLivrosMencionadosOuRelevantes(respostaTexto, texto, livros, catDetectada, topLivros);
       }
@@ -1347,7 +1355,7 @@ function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros
     };
   }
 
-  // E) Menção a gêneros ou temas específicos fora do catálogo padrão (Fantasia, Ficção Científica, Suspense, Terror, Aventura, Mitologia)
+  // E) Menção a gêneros ou temas específicos fora do catálogo padrão (Fantasia, Ficção Científica, Suspense, Terror, Aventura, Mitologia, Poesia, Psicologia, História, Política)
   const generosFora = [
     { termo: 'fantasia', sugestoes: ['LIV-010', 'LIV-005', 'LIV-009'], motivo: 'epopeias com monstros e mitologias ou narrativas com elementos fantásticos e sobrenaturais' },
     { termo: 'ficção científica', sugestoes: ['LIV-012', 'LIV-006', 'LIV-003'], motivo: 'discussões sobre ciência, razão e tecnologia aplicadas à sociedade' },
@@ -1355,7 +1363,24 @@ function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros
     { termo: 'sci-fi', sugestoes: ['LIV-012', 'LIV-006', 'LIV-003'], motivo: 'discussões sobre ciência, razão e tecnologia aplicadas à sociedade' },
     { termo: 'terror', sugestoes: ['LIV-005', 'LIV-012', 'LIV-009'], motivo: 'pactos com o Diabo, hospícios sinistros e narrativas de defuntos' },
     { termo: 'suspense', sugestoes: ['LIV-001', 'LIV-012', 'LIV-005'], motivo: 'enigmas psicológicos, dúvidas sobre adultério e conflitos armados no sertão' },
-    { termo: 'mitologia', sugestoes: ['LIV-010', 'LIV-011', 'LIV-006'], motivo: 'epopeias com deuses do Olimpo, ninfas e grandes figuras heroicas' }
+    { termo: 'mistério', sugestoes: ['LIV-001', 'LIV-012', 'LIV-005'], motivo: 'enigmas psicológicos e investigações sobre a loucura e a moral humana' },
+    { termo: 'misterio', sugestoes: ['LIV-001', 'LIV-012', 'LIV-005'], motivo: 'enigmas psicológicos e investigações sobre a loucura e a moral humana' },
+    { termo: 'mitologia', sugestoes: ['LIV-010', 'LIV-011', 'LIV-006'], motivo: 'epopeias com deuses do Olimpo, ninfas e grandes figuras heroicas' },
+    { termo: 'poesia', sugestoes: ['LIV-010', 'LIV-005', 'LIV-004'], motivo: 'poesia épica camoniana em Os Lusíadas, lirismo existencial e prosa poética de alta densidade' },
+    { termo: 'poema', sugestoes: ['LIV-010', 'LIV-005', 'LIV-004'], motivo: 'poesia épica camoniana em cantos e estrofes rimadas no padrão clássico' },
+    { termo: 'psicologia', sugestoes: ['LIV-012', 'LIV-001', 'LIV-011'], motivo: 'investigações profundas da mente humana, neuroses do ciúme e patologias sociais' },
+    { termo: 'psicológico', sugestoes: ['LIV-012', 'LIV-001', 'LIV-011'], motivo: 'análise de caracteres, dissimulações psíquicas e dilemas morais' },
+    { termo: 'psicologico', sugestoes: ['LIV-012', 'LIV-001', 'LIV-011'], motivo: 'análise de caracteres, dissimulações psíquicas e dilemas morais' },
+    { termo: 'história', sugestoes: ['LIV-002', 'LIV-009', 'LIV-010'], motivo: 'reconstituição histórica do Brasil colonial e imperial e das grandes navegações marítimas' },
+    { termo: 'historia', sugestoes: ['LIV-002', 'LIV-009', 'LIV-010'], motivo: 'reconstituição histórica do Brasil colonial e imperial e das grandes navegações marítimas' },
+    { termo: 'política', sugestoes: ['LIV-002', 'LIV-011', 'LIV-012'], motivo: 'crítica aos aparelhos de poder, moral de senhores e escravos e institucionalismo' },
+    { termo: 'politica', sugestoes: ['LIV-002', 'LIV-011', 'LIV-012'], motivo: 'crítica aos aparelhos de poder, moral de senhores e escravos e institucionalismo' },
+    { termo: 'distopia', sugestoes: ['LIV-012', 'LIV-011', 'LIV-006'], motivo: 'controle autoritário da sociedade sob pretextos científicos e coerção estatal' },
+    { termo: 'drama', sugestoes: ['LIV-004', 'LIV-002', 'LIV-001'], motivo: 'dilemas existenciais comoventes, miséria humana e tragédias do cotidiano' },
+    { termo: 'aventura', sugestoes: ['LIV-010', 'LIV-005', 'LIV-002'], motivo: 'navegações oceânicas épicas e travessias pelo sertão bravio' },
+    { termo: 'biografia', sugestoes: ['LIV-009', 'LIV-004', 'LIV-005'], motivo: 'narrativas memoriais em primeira pessoa e biografias de almas singulares' },
+    { termo: 'humor', sugestoes: ['LIV-009', 'LIV-012', 'LIV-001'], motivo: 'ironia fina machadiana, sátira da sociedade burguesa e sarcasmo reflexivo' },
+    { termo: 'ironia', sugestoes: ['LIV-009', 'LIV-012', 'LIV-001'], motivo: 'a mais refinada ironia e ceticismo machadiano das letras em língua portuguesa' }
   ];
 
   const matchGeneroFora = generosFora.find(g => textoLower.includes(g.termo));
