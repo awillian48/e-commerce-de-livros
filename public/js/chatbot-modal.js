@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <strong style="font-size: 0.95rem; letter-spacing: 0.2px;">Livreiro Virtual IA (Gemini FT)</strong>
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
-            <a href="/chatbot.html" id="link-abrir-painel-ia" title="Abrir Central Completa e Painel de Fine-Tuning (RNF0044)" style="color: #fbbf24; font-size: 0.75rem; text-decoration: none; font-weight: 700; background: rgba(255,255,255,0.12); padding: 4px 8px; border-radius: 4px;">
-              Painel IA & Treino ↗
+            <a href="/chatbot.html" id="link-abrir-painel-ia" title="Abrir Chatbot em tela cheia" style="color: #fbbf24; font-size: 0.75rem; text-decoration: none; font-weight: 700; background: rgba(255,255,255,0.12); padding: 4px 8px; border-radius: 4px;">
+              Tela Cheia ↗
             </a>
             <button id="chat-close-btn" style="background:none; border:none; color:white; font-size:1.1rem; cursor:pointer; font-weight:bold;">✕</button>
           </div>

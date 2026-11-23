@@ -1026,8 +1026,13 @@ function construirPromptFineTunedGemini(perguntaUsuario, perfilRec, livros) {
 Perfil: ${perfilRec.nomeCliente} | Histórico: ${perfilRec.historicoResumo.livrosCompradosTitulos.slice(0, 2).join(', ') || 'Sem compras'} | Pref: ${perfilRec.preferencias.categoriasFavoritas.join(', ')} (${perfilRec.preferencias.temasInteresse.slice(0, 2).join(', ')})
 Modelo: ${estadoModeloIA.versaoAjusteFino} (RLHF)
 
-Acervo Oficial (apenas estas obras existem):
+Acervo Oficial da Livraria Alexandria (APENAS estas 12 obras existem na loja):
 ${resumoCatalogo}
+
+REGRA MANDATÓRIA — RESPOSTAS BASEADAS EXCLUSIVAMENTE NOS NOSSOS LIVROS:
+- Todas as suas recomendações, citações de títulos e sugestões DEVEM SER FEITAS COM BASE ESTRITAMENTE NOS NOSSOS LIVROS listados no catálogo oficial acima.
+- NUNCA recomende livros externos nem invente títulos que não pertençam ao catálogo oficial.
+- Se o cliente perguntar sobre fantasia, ficção científica ou outros gêneros, esclareça em 1 frase elegante o foco do nosso acervo e sugira quais obras do NOSSO catálogo melhor se aproximam dessa temática (como Grande Sertão: Veredas ou Os Lusíadas).
 
 DIRETRIZES DE ESTILO, EXTENSÃO E FORMATO:
 - Seja BREVE, DIRETO, ELEGANTE e CULTO (tom refinado de um experiente livreiro clássico).

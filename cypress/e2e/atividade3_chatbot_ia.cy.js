@@ -194,11 +194,12 @@ describe('Atividade 3 — Chatbot de Recomendação Personalizada com IA Generat
 
     cy.get('.feedback-registrado-badge').should('be.visible').and('contain', 'Feedback registrado');
 
-    // Cenário 8: Demonstração do Treinamento / Ajuste Fino e Matriz de Pesos
+    // Cenário 8: Demonstração do Treinamento / Ajuste Fino e Matriz de Pesos no Painel Admin
+    cy.visit('/admin/ia.html');
     cy.window().then((win) =>
       mostrarBannerPassos(
         win,
-        'Cenário 8: Apresentação do Treinamento / Ajuste Fino Contínuo',
+        'Cenário 8: Apresentação do Treinamento / Ajuste Fino Contínuo no Painel Admin',
         'Re-treinando o modelo com dados de vendas + feedbacks e inspecionando a Matriz Neural e Dataset .JSONL'
       )
     );
