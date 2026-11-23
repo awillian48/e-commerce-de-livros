@@ -9,7 +9,7 @@
  */
 
 import dns from 'node:dns';
-import { localStore } from '../data/localStore.js';
+import { localStore, DADOS_INSTITUCIONAIS_LIVRARIA } from '../data/localStore.js';
 
 try {
   dns.setDefaultResultOrder('ipv4first');
@@ -715,12 +715,19 @@ export async function processarMensagemChatbot({
       motorUtilizado = `Google Gemini (${resultadoGemini.modelo}) Live + Pesos Fine-Tuned (${estadoModeloIA.versaoAjusteFino})`;
       intencaoDetectada = 'GEMINI_GENERATIVO_LIVE';
 
-      // Detecta obras do catálogo mencionadas na resposta do Gemini para renderizar os cards interativos
-      const mencionados = livros.filter(l =>
-        respostaTexto.toLowerCase().includes(l.titulo.toLowerCase()) ||
-        respostaTexto.toLowerCase().includes(l.autor.toLowerCase().split(' ').slice(-1)[0])
-      );
-      livrosSugeridos = mencionados.length > 0 ? mencionados.slice(0, 3) : topLivros.slice(0, 3);
+      // Detecta se a resposta foi uma recusa de guardrail
+      const isRecusaGuardrail = respostaTexto.includes('meu atendimento é dedicado exclusivamente');
+      if (isRecusaGuardrail) {
+        intencaoDetectada = 'FORA_DO_ESCOPO_GUARDRAIL';
+        livrosSugeridos = [];
+      } else {
+        // Detecta obras do catálogo mencionadas na resposta do Gemini para renderizar os cards interativos
+        const mencionados = livros.filter(l =>
+          respostaTexto.toLowerCase().includes(l.titulo.toLowerCase()) ||
+          respostaTexto.toLowerCase().includes(l.autor.toLowerCase().split(' ').slice(-1)[0])
+        );
+        livrosSugeridos = mencionados.length > 0 ? mencionados.slice(0, 3) : topLivros.slice(0, 3);
+      }
     }
   }
 
@@ -791,7 +798,218 @@ function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros
     };
   }
 
-  // A) Verifica se a pergunta menciona algum livro específico do catálogo ou tema de obra (Cenário 5: Dúvidas sobre livros)
+    // ==========================================================================
+  // GUARDRAILS DE ESCOPO: Bloqueio estrito para perguntas fora do escopo da livraria
+  // ==========================================================================
+  const termosForaEscopo = [
+    'receita', 'bolo', 'culinaria', 'culinária', 'comida', 'cozinhar', 'ingrediente', 'panela',
+    'fogão', 'jantar', 'almoço', 'previsão do tempo', 'previsao do tempo', 'vai chover', 'clima amanhã',
+    'futebol', 'copa do mundo', 'campeonato', 'flamengo', 'palmeiras', 'corinthians', 'brasileirão',
+    'escalação', 'gol de', 'neymar', 'messi', 'cr7', 'filme da marvel', 'hollywood', 'netflix',
+    'fofoca', 'celebridade', 'equação do segundo grau', 'fórmula de bhaskara', 'bhaskara',
+    'integral de', 'derivada de', 'distância da terra', 'quantos planetas', 'carro elétrico',
+    'moto esportiva', 'eleição americana', 'eleicoes americanas', 'piada', 'conte uma piada'
+  ];
+
+  if (termosForaEscopo.some(t => textoLower.includes(t))) {
+    return {
+      intencao: 'FORA_DO_ESCOPO_GUARDRAIL',
+      livrosSugeridos: [],
+      resposta:
+        `Como assistente da Livraria Alexandria, meu atendimento é dedicado exclusivamente ao acervo de livros, autores clássicos e técnicos, pedidos, políticas de entrega e troca e ao funcionamento de nossa casa literária.\n\n` +
+        `Em que posso auxiliá-lo a respeito de nossas obras ou de nossos serviços?`
+    };
+  }
+
+  // ==========================================================================
+  // CONSULTAS INSTITUCIONAIS: Endereço, Horário, Contatos, Frete, Pagamento, Trocas
+  // ==========================================================================
+
+  // 1. Endereço Físico e Localização da Livraria
+  if (
+    textoLower.includes('endereço') ||
+    textoLower.includes('endereco') ||
+    textoLower.includes('onde fica') ||
+    textoLower.includes('onde estão') ||
+    textoLower.includes('localiza') ||
+    textoLower.includes('bairro imperial') ||
+    textoLower.includes('cep')
+  ) {
+    const end = DADOS_INSTITUCIONAIS_LIVRARIA?.endereco || {};
+    return {
+      intencao: 'INSTITUCIONAL_ENDERECO',
+      livrosSugeridos: top3.slice(0, 2),
+      resposta:
+        `A Livraria Alexandria está situada no seguinte endereço:\n\n` +
+        `• **Logradouro:** ${end.logradouro || 'Rua das Letras Clássicas, nº 1899'}\n` +
+        `• **Complemento:** ${end.complemento || 'Edifício Machado de Assis, Salão Principal'}\n` +
+        `• **Bairro:** ${end.bairro || 'Bairro Imperial'} — ${end.cidade || 'Rio de Janeiro'}/${end.estado || 'RJ'} (CEP: ${end.cep || '20040-002'})\n` +
+        `• **Ponto de Referência:** ${end.referencia || 'Próximo à Confeitaria Colombo e ao Centro Cultural da Marinha'}.\n\n` +
+        `Dispomos de salão de leitura climatizado, cafeteria literária e balcão para retirada expressa de pedidos!`
+    };
+  }
+
+  // 2. Horário de Funcionamento e Atendimento
+  if (
+    textoLower.includes('horário') ||
+    textoLower.includes('horario') ||
+    textoLower.includes('funcionamento') ||
+    textoLower.includes('funciona') ||
+    textoLower.includes('abre') ||
+    textoLower.includes('fecha') ||
+    textoLower.includes('aberto') ||
+    textoLower.includes('sábado') ||
+    textoLower.includes('sabado') ||
+    textoLower.includes('domingo')
+  ) {
+    const hor = DADOS_INSTITUCIONAIS_LIVRARIA?.horarioFuncionamento || {};
+    return {
+      intencao: 'INSTITUCIONAL_HORARIO',
+      livrosSugeridos: top3.slice(0, 2),
+      resposta:
+        `Nossos horários de atendimento são:\n\n` +
+        `• **Loja Física e Balcão de Retirada:** ${hor.lojaFisica || 'Segunda a Sexta-feira das 08h30 às 19h00; Sábados das 09h00 às 14h00'}.\n` +
+        `• **Atendimento Virtual e E-commerce:** ${hor.atendimentoOnline || 'Disponível 24 horas por dia via Chatbot e site; suporte humano de Segunda a Sábado das 08h00 às 20h00'}.\n\n` +
+        `Aos domingos e feriados nacionais, a loja física permanece fechada.`
+    };
+  }
+
+  // 3. Contatos, Telefone, E-mail e WhatsApp
+  if (
+    textoLower.includes('contato') ||
+    textoLower.includes('telefone') ||
+    textoLower.includes('email') ||
+    textoLower.includes('e-mail') ||
+    textoLower.includes('whatsapp') ||
+    textoLower.includes('ouvidoria') ||
+    textoLower.includes('falar com')
+  ) {
+    const c = DADOS_INSTITUCIONAIS_LIVRARIA?.contatos || {};
+    return {
+      intencao: 'INSTITUCIONAL_CONTATO',
+      livrosSugeridos: top3.slice(0, 2),
+      resposta:
+        `Você pode entrar em contato com a Livraria Alexandria pelos seguintes canais:\n\n` +
+        `• **E-mail:** ${c.email || 'contato@alexandria.com.br'}\n` +
+        `• **Telefone:** ${c.telefone || '(21) 3210-1899'}\n` +
+        `• **WhatsApp:** ${c.whatsapp || '(21) 98765-1899'}\n` +
+        `• **Ouvidoria:** ${c.ouvidoria || 'ouvidoria@alexandria.com.br'}\n\n` +
+        `Nossa equipe de atendimento atua de segunda a sábado das 08h00 às 20h00.`
+    };
+  }
+
+  // 4. Frete, Entregas, Prazos e Retirada
+  if (
+    textoLower.includes('frete') ||
+    textoLower.includes('entrega') ||
+    textoLower.includes('prazo de entrega') ||
+    textoLower.includes('quanto custa o frete') ||
+    textoLower.includes('envio') ||
+    textoLower.includes('retirada') ||
+    textoLower.includes('balcão') ||
+    textoLower.includes('balcao')
+  ) {
+    return {
+      intencao: 'INSTITUCIONAL_FRETE',
+      livrosSugeridos: top3.slice(0, 2),
+      resposta:
+        `Sobre nossa política de frete e prazos de entrega:\n\n` +
+        `• **Frete Grátis:** Concedido para compras a partir de **R$ 200,00** para todo o território nacional.\n` +
+        `• **Região Sudeste (SP, RJ, MG, ES):** R$ 15,00 (2 a 4 dias úteis).\n` +
+        `• **Região Sul (PR, SC, RS):** R$ 20,00 (3 a 5 dias úteis).\n` +
+        `• **Centro-Oeste & Nordeste:** R$ 25,00 (5 a 8 dias úteis).\n` +
+        `• **Região Norte:** R$ 28,00 (7 a 10 dias úteis).\n` +
+        `• **Retirada no Balcão:** Gratuita em nossa loja no Rio de Janeiro, liberada em até 2 horas úteis após aprovação.`
+    };
+  }
+
+  // 5. Formas de Pagamento, Parcelamento, Múltiplos Cartões e Cupons
+  if (
+    textoLower.includes('pagamento') ||
+    textoLower.includes('forma de pagamento') ||
+    textoLower.includes('formas de pagamento') ||
+    textoLower.includes('cartão') ||
+    textoLower.includes('cartao') ||
+    textoLower.includes('parcela') ||
+    textoLower.includes('dois cartões') ||
+    textoLower.includes('dois cartoes') ||
+    textoLower.includes('múltiplos cartões') ||
+    textoLower.includes('multiplos cartoes') ||
+    (textoLower.includes('cupom') && !textoLower.includes('recomend'))
+  ) {
+    return {
+      intencao: 'INSTITUCIONAL_PAGAMENTO',
+      livrosSugeridos: top3.slice(0, 2),
+      resposta:
+        `Aceitamos as seguintes formas de pagamento na Livraria Alexandria:\n\n` +
+        `• **Cartão de Crédito:** Bandeiras Visa, Mastercard, Elo e Amex em até **4x sem juros** (ou até 10x com encargos operacionais).\n` +
+        `• **Pagamento com Múltiplos Cartões (RF0036):** O cliente pode dividir o pagamento entre dois ou mais cartões de crédito em uma mesma compra.\n` +
+        `• **Cupons Promocionais:** Aplicáveis no checkout (por exemplo, cupom **PROMO10** com 10% de desconto).\n` +
+        `• **Cupons de Troca (RF0044):** Gerados a partir de trocas autorizadas, vinculados ao CPF do cliente, sem prazo de validade e cumulativos com cartão.`
+    };
+  }
+
+  // 6. Política de Trocas e Devoluções (RF0040 a RF0044)
+  if (
+    textoLower.includes('troca') ||
+    textoLower.includes('trocar') ||
+    textoLower.includes('devolu') ||
+    textoLower.includes('devolver') ||
+    textoLower.includes('estorno')
+  ) {
+    return {
+      intencao: 'INSTITUCIONAL_TROCA',
+      livrosSugeridos: top3.slice(0, 2),
+      resposta:
+        `Nossa política de trocas e devoluções segue estritamente os requisitos do DRS (RF0040 a RF0044):\n\n` +
+        `• **Prazo de Solicitação:** Até **7 dias corridos** após a entrega confirmada (status **ENTREGUE**).\n` +
+        `• **Como Solicitar:** Diretamente na página **Meus Pedidos**, podendo trocar um item específico ou a compra inteira (RF0040).\n` +
+        `• **Ciclo de Aprovação:** O pedido entra em **EM TROCA** e é avaliado pelo Administrador. Ao ser aprovado, passa para **TROCA AUTORIZADA** com notificação ao cliente (RNF0046).\n` +
+        `• **Conclusão:** Ao receber os itens, o administrador confirma (**TROCADO**), os livros retornam ao estoque (RN0042) e é gerado automaticamente um **Cupom de Troca** vinculado ao seu CPF (RF0043, RF0044).`
+    };
+  }
+
+  // 7. História, Fundação e Missão
+  if (
+    textoLower.includes('fundação') ||
+    textoLower.includes('fundacao') ||
+    textoLower.includes('história') ||
+    textoLower.includes('historia') ||
+    textoLower.includes('quem fundou') ||
+    textoLower.includes('sobre a livraria') ||
+    textoLower.includes('origem')
+  ) {
+    return {
+      intencao: 'INSTITUCIONAL_HISTORIA',
+      livrosSugeridos: top3.slice(0, 2),
+      resposta:
+        `A **Livraria Alexandria** foi fundada em 1899 no Rio de Janeiro com a vocação de ser um refúgio literário clássico.\n\n` +
+        `Nossa missão é preservar e difundir os maiores monumentos da Literatura Brasileira, obras raras de coleção, tratados fundamentais da Filosofia e obras de referência em Engenharia e Arquitetura de Software.\n\n` +
+        `Hoje unimos o respeito à tradição livreira com tecnologia generativa de ponta para guiar nossos leitores.`
+    };
+  }
+
+  // 8. LGPD, Privacidade e Segurança
+  if (
+    textoLower.includes('lgpd') ||
+    textoLower.includes('privacidade') ||
+    textoLower.includes('segurança') ||
+    textoLower.includes('seguranca') ||
+    textoLower.includes('dados')
+  ) {
+    return {
+      intencao: 'INSTITUCIONAL_LGPD',
+      livrosSugeridos: top3.slice(0, 2),
+      resposta:
+        `A Livraria Alexandria atua em total conformidade com a **Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018)**:\n\n` +
+        `• Todos os dados pessoais e cadastrais são armazenados com criptografia e estrito sigilo.\n` +
+        `• Os pagamentos por cartão utilizam tokenização bancária segura; não retemos dados sensíveis de segurança.\n` +
+        `• Suas preferências e históricos de leitura são utilizados exclusivamente para calibração personalizada do seu perfil no sistema.`
+    };
+  }
+
+  
+// A) Verifica se a pergunta menciona algum livro específico do catálogo ou tema de obra (Cenário 5: Dúvidas sobre livros)
   const livrosMencionados = livros.filter(l => {
     const titLower = l.titulo.toLowerCase();
     const autLower = l.autor.toLowerCase();
@@ -826,7 +1044,7 @@ function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros
           `Excelente pergunta, **${nomeCliente}**! Aqui está a comparação entre **${o1.titulo}** e **${o2.titulo}**:\n\n` +
           `• **${o1.titulo}** (*${o1.autor}* — R$ ${o1.preco.toFixed(2).replace('.', ',')}): Pertence à categoria *${o1.categoria}*. ${conhecimentoDetalhadoObras[o1.id]?.curiosidades || o1.sinopse}\n\n` +
           `• **${o2.titulo}** (*${o2.autor}* — R$ ${o2.preco.toFixed(2).replace('.', ',')}): Pertence à categoria *${o2.categoria}*. ${conhecimentoDetalhadoObras[o2.id]?.curiosidades || o2.sinopse}\n\n` +
-          `💡 **Análise do Modelo (${estadoModeloIA.versaoAjusteFino}):** Ambos constam no nosso catálogo com ficha técnica completa abaixo!`
+          `**Análise do Modelo (${estadoModeloIA.versaoAjusteFino}):** Ambos constam no nosso catálogo com ficha técnica completa abaixo!`
       };
     }
 
@@ -835,8 +1053,8 @@ function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros
       livrosSugeridos: livrosMencionados.slice(0, 3),
       resposta:
         `Sobre **${obra.titulo}**, de **${obra.autor}** (*${obra.categoria}* — R$ ${obra.preco.toFixed(2).replace('.', ',')} | ${statusEstoque}):\n\n` +
-        `📖 **Síntese:** ${(detalhes.curiosidades || obra.sinopse).split('.').slice(0, 2).join('.')}.\n\n` +
-        `🎯 **Perfil indicado:** ${detalhes.publicoAlvo || 'Leitores de clássicos indispensáveis.'}`
+        `**Síntese:** ${(detalhes.curiosidades || obra.sinopse).split('.').slice(0, 2).join('.')}.\n\n` +
+        `**Perfil indicado:** ${detalhes.publicoAlvo || 'Leitores de clássicos indispensáveis.'}`
     };
   }
 
@@ -884,10 +1102,10 @@ function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros
       livrosSugeridos: [l1, l2, l3].filter(Boolean),
       resposta:
         `Preparei uma **Trilha de Leitura Guiada** personalizada em **${catPrincipal}** para você, **${nomeCliente}**:\n\n` +
-        `📚 **Etapa 1 (Introdução):** **${l1.titulo}** (*${l1.autor}*) — obra ideal para imersão inicial.\n` +
-        `🚀 **Etapa 2 (Aprofundamento):** **${l2.titulo}** (*${l2.autor}*) — desenvolvimento crítico e estilístico.\n` +
-        `🏆 **Etapa 3 (Obra Magna):** **${l3.titulo}** (*${l3.autor}*) — leitura de referência obrigatória.\n\n` +
-        `Esta trilha faz sentido para seu momento de leitura? Avalie com 👍 Útil ou 👎 Não útil.`
+        `**Etapa 1 (Introdução):** **${l1.titulo}** (*${l1.autor}*) — obra ideal para imersão inicial.\n` +
+        `**Etapa 2 (Aprofundamento):** **${l2.titulo}** (*${l2.autor}*) — desenvolvimento crítico e estilístico.\n` +
+        `**Etapa 3 (Obra Magna):** **${l3.titulo}** (*${l3.autor}*) — leitura de referência obrigatória.\n\n` +
+        `Esta trilha faz sentido para seu momento de leitura? Avalie com Útil ou Não útil.`
     };
   }
 
@@ -984,7 +1202,7 @@ function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros
         `Prezado **${nomeCliente}**, nosso catálogo foca em **Literatura Brasileira Clássica**, **Filosofia**, **Obras Raras** e **Engenharia de Software**.\n\n` +
         `Para contemplar seu interesse por **${matchGeneroFora.termo}**, destaco estas obras que dialogam com essa temática:\n\n` +
         `${listaForm}\n\n` +
-        `Espero que goste da seleção! Avalie esta resposta com **👍 Útil** ou **👎 Não útil**.`
+        `Espero que goste da seleção! Avalie esta resposta com **Útil** ou **Não útil**.`
     };
   }
 
@@ -1013,7 +1231,7 @@ function gerarRespostaGenerativaInteligente(texto, textoLower, perfilRec, livros
     resposta:
       `Olá, **${nomeCliente}**! Com base no seu histórico (*${livrosHistoricoStr}*) e preferências calibradas pelo modelo **${estadoModeloIA.versaoAjusteFino}** (*${catTop}*), selecionei estas recomendações para você:\n\n` +
       `${recomendacoesFormatadas}\n\n` +
-      `Esta seleção atende ao que procura? Avalie abaixo com **👍 Útil** ou **👎 Não útil** para recalibrar o modelo!`
+      `Esta seleção atende ao que procura? Avalie abaixo com **Útil** ou **Não útil** para recalibrar o modelo!`
   };
 }
 
@@ -1023,26 +1241,33 @@ function construirPromptFineTunedGemini(perguntaUsuario, perfilRec, livros) {
     .join('\n');
 
   return `Você é o Livreiro Virtual da Livraria Alexandria (LES 2026 - RNF0044).
-Perfil: ${perfilRec.nomeCliente} | Histórico: ${perfilRec.historicoResumo.livrosCompradosTitulos.slice(0, 2).join(', ') || 'Sem compras'} | Pref: ${perfilRec.preferencias.categoriasFavoritas.join(', ')} (${perfilRec.preferencias.temasInteresse.slice(0, 2).join(', ')})
+Cliente Ativo: ${perfilRec.nomeCliente} | Histórico: ${perfilRec.historicoResumo.livrosCompradosTitulos.slice(0, 2).join(', ') || 'Sem compras'} | Preferências: ${perfilRec.preferencias.categoriasFavoritas.join(', ')} (${perfilRec.preferencias.temasInteresse.slice(0, 2).join(', ')})
 Modelo: ${estadoModeloIA.versaoAjusteFino} (RLHF)
 
 Acervo Oficial da Livraria Alexandria (APENAS estas 12 obras existem na loja):
 ${resumoCatalogo}
 
-REGRA MANDATÓRIA — RESPOSTAS BASEADAS EXCLUSIVAMENTE NOS NOSSOS LIVROS:
-- Todas as suas recomendações, citações de títulos e sugestões DEVEM SER FEITAS COM BASE ESTRITAMENTE NOS NOSSOS LIVROS listados no catálogo oficial acima.
-- NUNCA recomende livros externos nem invente títulos que não pertençam ao catálogo oficial.
-- Se o cliente perguntar sobre fantasia, ficção científica ou outros gêneros, esclareça em 1 frase elegante o foco do nosso acervo e sugira quais obras do NOSSO catálogo melhor se aproximam dessa temática (como Grande Sertão: Veredas ou Os Lusíadas).
+BASE DE DADOS INSTITUCIONAL DA LIVRARIA ALEXANDRIA:
+- Endereço Físico: Rua das Letras Clássicas, nº 1899, Bairro Imperial, Rio de Janeiro - RJ (CEP: 20040-002), próximo à Confeitaria Colombo e ao Centro Cultural da Marinha. Possui salão clássico e balcão de retirada presencial.
+- Horário de Funcionamento: Loja física de Segunda a Sexta das 08h30 às 19h00; Sábados das 09h00 às 14h00. Fechado aos domingos e feriados. Atendimento online contínuo 24h.
+- Contatos: contato@alexandria.com.br | Tel: (21) 3210-1899 | WhatsApp: (21) 98765-1899 | Ouvidoria: ouvidoria@alexandria.com.br.
+- Frete & Entrega: Frete Grátis a partir de R$ 200,00 para todo o Brasil. Sudeste R$ 15,00 (2 a 4 dias); Sul R$ 20,00 (3 a 5 dias); Centro-Oeste/Nordeste R$ 25,00 (5 a 8 dias); Norte R$ 28,00 (7 a 10 dias). Retirada no balcão gratuita em até 2 horas.
+- Pagamentos: Cartão de crédito (Visa, Mastercard, Elo, Amex) em até 4x sem juros (ou até 10x). Permite pagamento com múltiplos cartões de crédito na mesma compra (RF0036). Aceita Cupons de Troca (sem expiração) e Cupons Promocionais (ex: PROMO10).
+- Política de Trocas e Devoluções (RF0040-RF0044): Prazo de 7 dias após entrega (ENTREGUE). Solicitação em 'Meus Pedidos'. Autorizado pelo admin (TROCA AUTORIZADA), cliente envia as obras, recebimento confirmado (TROCADO), estoque é reintegrado e é emitido Cupom de Troca vinculado ao CPF.
+- LGPD: Conformidade estrita com a LGPD (Lei nº 13.709/2018), criptografia de ponta e tokenização segura.
+- Fundação: Fundada em 1899 no Rio de Janeiro com foco em literatura clássica, filosofia e engenharia do conhecimento.
 
-DIRETRIZES DE ESTILO, EXTENSÃO E FORMATO:
-- Seja BREVE, DIRETO, ELEGANTE e CULTO (tom refinado de um experiente livreiro clássico).
-- Evite prolixidade: responda em no máximo 2 a 3 parágrafos curtos.
-- SAUDAÇÃO INICIAL: Se o cliente apenas cumprimentar ("Olá", "Oi", "Boa tarde", "Quem é você?", "Como funciona?"), dê as boas-vindas cordialmente e diga sucintamente como pode auxiliá-lo (recomendações personalizadas, busca no acervo, dúvidas sobre clássicos ou trilhas de leitura). NÃO liste livros se ele não pediu recomendações.
-- RECOMENDAÇÃO: Se o cliente pedir recomendações ou falar de preferências, cite no máximo 2 a 3 obras em tópicos de 1 linha cada: • **Título**, de Autor (R$ Preço) — motivo direto em uma única frase.
-- DÚVIDAS SOBRE OBRAS (ex: Dom Casmurro, Capitu): responda com clareza em 1 a 2 parágrafos curtos.
-- GÊNEROS FORA DO ACERVO (ex: fantasia, ficção científica): explique em 1 frase nosso foco e sugira 2 obras do acervo correlatas.
-- TRILHA OU ROTEIRO: use a expressão 'Trilha de Leitura' com Etapas 1, 2 e 3 em tópicos concisos.
-- Encerre com uma frase rápida convidando à avaliação com 👍 Útil ou 👎 Não útil.
+DIRETRIZES DE ESCOPO E GUARDRAILS MANDATÓRIOS (REQUISITO RNF0044):
+- Seu atendimento é EXCLUSIVAMENTE sobre a Livraria Alexandria, seu acervo de 12 livros, autores, preços, estoque, histórico de compras, recomendações literárias e informações institucionais acima.
+- SE A PERGUNTA FOR FORA DO ESCOPO DA LIVRARIA OU DE LIVROS (por exemplo: receitas de cozinha, esportes, futebol, previsão do tempo, cinema/fofocas, política externa, matemática pura, piadas):
+  RECUSE EDUCADA E ELEGANTEMENTE NO TOM REFINADO DO LIVREIRO, DIZENDO EXATAMENTE:
+  "Como assistente da Livraria Alexandria, meu atendimento é dedicado exclusivamente ao acervo de livros, autores clássicos e técnicos, pedidos, políticas de entrega e troca e ao funcionamento de nossa casa literária. Em que posso auxiliá-lo a respeito de nossas obras ou de nossos serviços?"
+
+DIRETRIZES DE FORMATO E ESTILO:
+- REGRA ABSOLUTA: NUNCA USE NENHUM EMOJI EM SUAS RESPOSTAS (terminantemente proibido o uso de robôs, livros, carinhas, polegares, estrelas ou qualquer emoji). Use apenas texto refinado e pontuação convencional.
+- Seja BREVE, CULTO e DIRETO: responda em no máximo 2 a 3 parágrafos curtos.
+- RECOMENDAÇÃO: cite no máximo 2 a 3 obras em tópicos de 1 linha cada: • **Título**, de Autor (R$ Preço) — motivo direto em uma frase.
+- Encerre com a frase: Avalie esta resposta com Útil ou Não útil para calibrar nosso modelo.
 
 Pergunta do Cliente: "${perguntaUsuario}"`;
 }

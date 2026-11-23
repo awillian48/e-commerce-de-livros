@@ -41,16 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
       <!-- Barra de Ações Rápidas para Demonstração -->
       <div style="background: #f1f5f9; padding: 7px 10px; border-bottom: 1px solid #e2e8f0; display: flex; gap: 6px; overflow-x: auto; flex-shrink: 0;">
         <button type="button" class="chat-quick-btn" data-prompt="Me recomende livros personalizados com base no meu histórico de compras e preferências" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 999px; padding: 4px 10px; font-size: 0.73rem; font-weight: 600; color: #1e293b; cursor: pointer; white-space: nowrap;">
-          ✨ Recomendar p/ Meu Perfil
+          Recomendar p/ Meu Perfil
         </button>
         <button type="button" class="chat-quick-btn" data-prompt="Sugira uma trilha de conteúdo relevante para meus estudos" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 999px; padding: 4px 10px; font-size: 0.73rem; font-weight: 600; color: #1e293b; cursor: pointer; white-space: nowrap;">
-          📚 Sugerir Conteúdo
+          Sugerir Conteúdo
         </button>
         <button type="button" class="chat-quick-btn" data-prompt="Quais livros de Engenharia de Software ou Filosofia estão disponíveis?" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 999px; padding: 4px 10px; font-size: 0.73rem; font-weight: 600; color: #1e293b; cursor: pointer; white-space: nowrap;">
-          🔍 Buscar Livros
+          Buscar Livros
         </button>
         <button type="button" class="chat-quick-btn" data-prompt="Sobre o que fala o livro Dom Casmurro e Capitu traiu ou não?" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 999px; padding: 4px 10px; font-size: 0.73rem; font-weight: 600; color: #1e293b; cursor: pointer; white-space: nowrap;">
-          ❓ Dúvida de Obra
+          Dúvida de Obra
         </button>
       </div>
 
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       botMsg.innerHTML = `
         <div style="font-size: 0.7rem; color: #64748b; margin-bottom: 5px; display: flex; justify-content: space-between;">
-          <span>🤖 <strong>${dados.versaoModelo || 'alexandria-ft'}</strong></span>
+          <span> <strong>${dados.versaoModelo || 'alexandria-ft'}</strong></span>
           <span>Cliente: <strong>${dados.clienteId || clienteId}</strong></span>
         </div>
         <div class="chat-resposta-texto">${formatarMarkdownSimples(dados.resposta || 'Recomendação gerada com sucesso.')}</div>
@@ -189,10 +189,10 @@ document.addEventListener('DOMContentLoaded', () => {
           <span style="color: #475569; font-weight: 600;">Esta resposta foi útil?</span>
           <div style="display: flex; gap: 6px;">
             <button type="button" class="btn-feedback-chat btn-feedback-util" data-avaliacao="UTIL" data-interacao="${interacaoId}" data-cliente="${clienteId}" data-categoria="${dados.categoriaFoco || ''}" data-livros="${livrosIdsJson}" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; border-radius: 4px; padding: 3px 9px; font-size: 0.73rem; font-weight: 700; cursor: pointer;">
-              👍 Útil
+              Útil
             </button>
             <button type="button" class="btn-feedback-chat btn-feedback-nao-util" data-avaliacao="NAO_UTIL" data-interacao="${interacaoId}" data-cliente="${clienteId}" data-categoria="${dados.categoriaFoco || ''}" data-livros="${livrosIdsJson}" style="background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; border-radius: 4px; padding: 3px 9px; font-size: 0.73rem; font-weight: 700; cursor: pointer;">
-              👎 Não útil
+              Não útil
             </button>
           </div>
         </div>
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const resFb = await rFb.json();
             const barra = botMsg.querySelector('.chat-feedback-bar');
             if (barra) {
-              barra.innerHTML = `<span class="feedback-confirmado-msg" style="color: #047857; font-weight: 700;">✓ Feedback (${avaliacao === 'UTIL' ? '👍 Útil' : '👎 Não útil'}) registrado! Modelo ajustado (${resFb.modeloAtualizado?.versaoAjusteFino || 'RLHF'}).</span>`;
+              barra.innerHTML = `<span class="feedback-confirmado-msg" style="color: #047857; font-weight: 700;">✓ Feedback (${avaliacao === 'UTIL' ? 'Útil' : 'Não útil'}) registrado! Modelo ajustado (${resFb.modeloAtualizado?.versaoAjusteFino || 'RLHF'}).</span>`;
             }
           } catch (err) {}
         });

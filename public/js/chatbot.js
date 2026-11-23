@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const renderBox = (dados) => `
         <div style="font-weight: 800; color: #1b2a47; font-size: 0.86rem; margin-bottom: 4px;">
-          👤 ${dados.clienteId} — ${dados.nomeCliente}
+          ${dados.clienteId} — ${dados.nomeCliente}
         </div>
         <div style="font-size: 0.74rem; color: #475569; margin-bottom: 6px;">
           <strong>Preferências:</strong> ${(dados.preferencias?.categoriasFavoritas || []).join(', ')}<br>
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       botDiv.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.73rem; color: #64748b; margin-bottom: 6px; border-bottom: 1px solid #f1f5f9; padding-bottom: 4px;">
-          <span>🤖 <strong>Livreiro Virtual</strong> (${dados.motorIA?.includes('Gemini') ? 'Google Gemini Live' : 'Motor Neural Local'})</span>
+          <span><strong>Livreiro Virtual</strong> (${dados.motorIA?.includes('Gemini') ? 'Google Gemini Live' : 'Motor Neural Local'})</span>
           <span>Cliente: <strong>${dados.nomeCliente || dados.clienteId}</strong> | <strong>${dados.tempoRespostaMs || 12}ms</strong></span>
         </div>
         <div class="chat-resposta-conteudo">${formatarMarkdown(dados.resposta)}</div>
@@ -171,10 +171,10 @@ document.addEventListener('DOMContentLoaded', () => {
           <span style="color: #334155; font-weight: 600;">Esta resposta foi útil?</span>
           <div style="display: flex; gap: 8px;">
             <button type="button" class="btn-avaliar-resposta btn-feedback-util" data-avaliacao="UTIL" data-interacao="${interacaoId}" data-cliente="${clienteId}" data-categoria="${dados.categoriaFoco || ''}" data-livros="${livrosIdsJson}" style="background: #ecfdf5; color: #047857; border: 1px solid #6ee7b7; padding: 5px 12px; border-radius: 6px; font-weight: 800; font-size: 0.76rem; cursor: pointer;">
-              👍 Útil
+              Útil
             </button>
             <button type="button" class="btn-avaliar-resposta btn-feedback-nao-util" data-avaliacao="NAO_UTIL" data-interacao="${interacaoId}" data-cliente="${clienteId}" data-categoria="${dados.categoriaFoco || ''}" data-livros="${livrosIdsJson}" style="background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; padding: 5px 12px; border-radius: 6px; font-weight: 800; font-size: 0.76rem; cursor: pointer;">
-              👎 Não útil
+              Não útil
             </button>
           </div>
         </div>
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (containerAval) {
             containerAval.innerHTML = `
               <span class="feedback-registrado-badge" style="color: #047857; font-weight: 800;">
-                ✓ Feedback registrado (${avaliacao === 'UTIL' ? '👍 Útil' : '👎 Não útil'}) e incorporado ao modelo (${resFb.modeloAtualizado?.versaoAjusteFino || 'RLHF'})!
+                Feedback registrado (${avaliacao === 'UTIL' ? 'Útil' : 'Não útil'}) e incorporado ao modelo (${resFb.modeloAtualizado?.versaoAjusteFino || 'RLHF'})!
               </span>
             `;
           }

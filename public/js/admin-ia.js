@@ -36,11 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const lblGemini = document.getElementById('lbl-status-gemini');
       const txtStatusGemini = document.getElementById('txt-status-chave-atual');
       if (data.geminiConfigurado) {
-        if (lblGemini) lblGemini.innerHTML = `<span style="color: #047857;">🟢 Gemini Live Conectado (${data.geminiKeyMascarada})</span>`;
-        if (txtStatusGemini) txtStatusGemini.innerHTML = `<span style="color: #166534; font-weight: 700;">🟢 Chave configurada e conectada (${data.geminiKeyMascarada}). Respostas generativas em tempo real ativas via gemini-3.5-flash-lite!</span>`;
+        if (lblGemini) lblGemini.innerHTML = `<span style="color: #047857;">Gemini Live Conectado (${data.geminiKeyMascarada})</span>`;
+        if (txtStatusGemini) txtStatusGemini.innerHTML = `<span style="color: #166534; font-weight: 700;">Chave configurada e conectada (${data.geminiKeyMascarada}). Respostas generativas em tempo real ativas via gemini-3.5-flash-lite!</span>`;
       } else {
-        if (lblGemini) lblGemini.innerHTML = `<span style="color: #b45309;">🟡 Motor Neural Local Embarcado</span>`;
-        if (txtStatusGemini) txtStatusGemini.innerHTML = `<span style="color: #b45309;">🟡 Nenhuma chave externa configurada. O sistema está usando o Motor Neural Local Embarcado (${mod.versaoAjusteFino}).</span>`;
+        if (lblGemini) lblGemini.innerHTML = `<span style="color: #b45309;">Motor Neural Local Embarcado</span>`;
+        if (txtStatusGemini) txtStatusGemini.innerHTML = `<span style="color: #b45309;">Nenhuma chave externa configurada. O sistema está usando o Motor Neural Local Embarcado (${mod.versaoAjusteFino}).</span>`;
       }
 
       // Matriz de Pesos Sinápticos por Categoria
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
               fb => `
               <div style="background: ${fb.avaliacao === 'UTIL' ? '#f0fdf4' : '#fef2f2'}; border: 1px solid ${fb.avaliacao === 'UTIL' ? '#bbf7d0' : '#fecaca'}; border-radius: 6px; padding: 7px 10px;">
                 <div style="display: flex; justify-content: space-between; font-weight: 700;">
-                  <span>${fb.avaliacao === 'UTIL' ? '👍 ÚTIL (+0.45 RLHF)' : '👎 NÃO ÚTIL (-0.80 RLHF)'} — ${fb.clienteId}</span>
+                  <span>${fb.avaliacao === 'UTIL' ? 'UTIL (+0.45 RLHF)' : 'NAO UTIL (-0.80 RLHF)'} — ${fb.clienteId}</span>
                   <span style="color: #64748b; font-size: 0.7rem;">${fb.categoriaFoco || ''}</span>
                 </div>
                 <div style="color: #334155; margin-top: 2px;">"${fb.pergunta}"</div>
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const renderBox = (dados) => `
         <div style="font-weight: 800; color: #1b2a47; font-size: 0.88rem; margin-bottom: 4px;">
-          👤 ${dados.clienteId} — ${dados.nomeCliente}
+          ${dados.clienteId} — ${dados.nomeCliente}
         </div>
         <div style="font-size: 0.75rem; color: #475569; margin-bottom: 6px;">
           <strong>Preferências:</strong> ${(dados.preferencias?.categoriasFavoritas || []).join(', ')}<br>
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Erro ao disparar treinamento.');
       } finally {
         btnRetreinar.disabled = false;
-        btnRetreinar.textContent = '⚡ Executar Ajuste Fino Agora';
+        btnRetreinar.textContent = 'Executar Ajuste Fino Agora';
       }
     });
   }
@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
             msgRetornoGemini.style.background = '#ecfdf5';
             msgRetornoGemini.style.color = '#065f46';
             msgRetornoGemini.style.border = '1px solid #a7f3d0';
-            msgRetornoGemini.textContent = `✓ ${res.mensagem || 'Chave configurada com sucesso!'}`;
+            msgRetornoGemini.textContent = `${res.mensagem || 'Chave configurada com sucesso!'}`;
             inputGeminiKey.value = '';
           } else {
             msgRetornoGemini.style.background = '#fef2f2';

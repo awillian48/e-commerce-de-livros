@@ -13,6 +13,71 @@ import fs from 'fs';
 import path from 'path';
 
 const STORE_FILE = path.resolve('src/data/localStore.json');
+export const DADOS_INSTITUCIONAIS_LIVRARIA = {
+  "nome": "Livraria Alexandria",
+  "slogan": "Acervo Clássico & Obras Históricas",
+  "anoFundacao": 1899,
+  "fundadores": "Comendador Bento Santiago e livreiros do Rio de Janeiro Imperial",
+  "missao": "Preservar e difundir os maiores clássicos da literatura brasileira, mundial e da engenharia do conhecimento com rigor curatorial e edições de excelência.",
+  "endereco": {
+    "logradouro": "Rua das Letras Clássicas, nº 1899",
+    "complemento": "Edifício Machado de Assis, Salão Principal",
+    "bairro": "Bairro Imperial",
+    "cidade": "Rio de Janeiro",
+    "estado": "RJ",
+    "cep": "20040-002",
+    "referencia": "Próximo à histórica Confeitaria Colombo e ao Centro Cultural da Marinha"
+  },
+  "horarioFuncionamento": {
+    "lojaFisica": "Segunda a Sexta-feira das 08h30 às 19h00; Sábados das 09h00 às 14h00. Fechado aos domingos e feriados nacionais.",
+    "atendimentoOnline": "Atendimento virtual contínuo 24h via Chatbot e e-commerce; suporte humano de Segunda a Sábado das 08h00 às 20h00."
+  },
+  "contatos": {
+    "email": "contato@alexandria.com.br",
+    "telefone": "(21) 3210-1899",
+    "whatsapp": "(21) 98765-1899",
+    "ouvidoria": "ouvidoria@alexandria.com.br"
+  },
+  "politicaFrete": {
+    "regras": "Cálculo baseado no CEP de entrega e no peso/dimensões dos livros (RF0034). Compras a partir de R$ 200,00 contam com Frete Grátis para todo o Brasil.",
+    "tarifasRegionais": [
+      {
+        "regiao": "Sudeste (SP, RJ, MG, ES)",
+        "valor": 15.0,
+        "prazo": "2 a 4 dias úteis"
+      },
+      {
+        "regiao": "Sul (PR, SC, RS)",
+        "valor": 20.0,
+        "prazo": "3 a 5 dias úteis"
+      },
+      {
+        "regiao": "Centro-Oeste & Nordeste",
+        "valor": 25.0,
+        "prazo": "5 a 8 dias úteis"
+      },
+      {
+        "regiao": "Norte",
+        "valor": 28.0,
+        "prazo": "7 a 10 dias úteis"
+      }
+    ],
+    "retiradaBalcao": "Disponível gratuitamente em nossa loja física no Bairro Imperial (Rio de Janeiro), liberada em até 2 horas úteis após a aprovação do pedido."
+  },
+  "politicaPagamento": {
+    "cartaoCredito": "Aceitamos as bandeiras Visa, Mastercard, Elo e Amex em até 4x sem juros (ou até 10x com acréscimo operacional). É permitido o pagamento utilizando múltiplos cartões de crédito em uma mesma compra (RF0036).",
+    "cupons": "Aceitamos Cupons Promocionais (ex.: PROMO10 concedendo 10% de desconto) e Cupons de Troca gerados pelo sistema vinculados ao CPF do cliente, cumulativos com cartão de crédito (RF0036, RF0044)."
+  },
+  "politicaTrocasDevolucoes": {
+    "prazo": "O cliente pode solicitar a troca de um item específico ou de todo o pedido em até 7 dias corridos após a entrega confirmada (status ENTREGUE, RF0040, RN0041).",
+    "fluxo": "A solicitação é feita diretamente na tela 'Meus Pedidos'. O pedido passa para 'EM TROCA' (RF0042) e é analisado pelo Administrador. Ao ser autorizada (status 'TROCA AUTORIZADA', RF0041), o cliente envia as obras. Ao confirmar o recebimento (status 'TROCADO', RF0043, RN0042), os itens retornam automaticamente ao saldo de estoque disponível (RN0042, RF0054) e o sistema emite um Cupom de Troca no valor exato dos produtos, sem prazo de expiração, vinculado ao CPF do cliente (RF0043, RF0044).",
+    "reversaoEstoque": "Ao confirmar o recebimento do item em troca, os exemplares são reintegrados automaticamente ao saldo de estoque disponível (RN0042, RF0054)."
+  },
+  "politicaPrivacidadeLGPD": {
+    "resumo": "A Livraria Alexandria cumpre rigorosamente as diretrizes da LGPD (Lei nº 13.709/2018). Todos os dados cadastrais, senhas com hash seguro e pagamentos com tokenização bancária são protegidos com total sigilo e não são compartilhados com terceiros."
+  }
+};
+
 
 // 12 Livros Oficiais do Catálogo
 const LIVROS_INICIAIS = [
@@ -629,7 +694,8 @@ class LocalStore {
       cupons: obterCuponsPadrao(),
       pedidos: obterPedidosPadrao(),
       trocas: [],
-      notificacoes: []
+      notificacoes: [],
+      institucional: DADOS_INSTITUCIONAIS_LIVRARIA
     };
     this.salvar(inicial);
     return inicial;
@@ -650,7 +716,8 @@ class LocalStore {
       cupons: obterCuponsPadrao(),
       pedidos: obterPedidosPadrao(),
       trocas: [],
-      notificacoes: []
+      notificacoes: [],
+      institucional: DADOS_INSTITUCIONAIS_LIVRARIA
     };
     this.salvar();
     return { ok: true, mensagem: 'Base local reinicializada para demonstracao com sucesso.' };
